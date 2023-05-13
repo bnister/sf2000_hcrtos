@@ -1,0 +1,10 @@
+menuconfig BR2_PACKAGE_APPS_HCUSBCAST
+	bool "hcusbcast"
+	select BR2_PACKAGE_PREBUILTS_LIBGE
+	select BR2_PACKAGE_LIBLVGL
+	select BR2_PACKAGE_HCFOTA
+	select BR2_PACKAGE_HCCAST
+
+if BR2_PACKAGE_APPS_HCUSBCAST
+source "source/Kconfig"
+endif

@@ -1,0 +1,9 @@
+menu "Display library"
+
+source "libusbmirror/Kconfig"
+source "libaircast/Kconfig"
+source "libdlna/Kconfig"
+source "libmiracast/Kconfig"
+source "libyoutube/Kconfig"
+
+endmenu

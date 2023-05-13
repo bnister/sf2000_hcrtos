@@ -1,0 +1,4 @@
+menuconfig BR2_PACKAGE_LIBTOE
+	bool "libtoe"
+	select BR2_PACKAGE_PREBUILTS_TOE
+	default n

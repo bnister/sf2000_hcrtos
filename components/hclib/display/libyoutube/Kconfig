@@ -1,0 +1,9 @@
+config BR2_PACKAGE_DISP_IPTV_YT
+	bool "IPTV YT service Lib"
+	default n
+	select BR2_PACKAGE_PCRE
+	select BR2_PACKAGE_CJSON
+	select BR2_PACKAGE_LIBCURL
+	select BR2_PACKAGE_HCCAST_IPTV
+	help
+	  Support IPTV YT Service API

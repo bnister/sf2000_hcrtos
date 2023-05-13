@@ -1,0 +1,13 @@
+diff --git a/examples/precomp2.c b/examples/precomp2.c
+index 3216cd9..0768030 100644
+--- a/examples/precomp2.c
++++ b/examples/precomp2.c
+@@ -69,7 +69,7 @@ lzo1y_999_compress_internal ( const lzo_bytep in , lzo_uint  in_len,
+                                     lzo_uint32_t flags );
+ 
+ #define USE_LZO1X 1
+-#define USE_LZO1Y 1
++//#define USE_LZO1Y 1
+ 
+ #define PARANOID 1
+ 

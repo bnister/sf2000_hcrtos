@@ -1,0 +1,54 @@
+diff --git a/Makefile.in b/Makefile.in
+index 5a77949..80e4067 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -144,16 +144,16 @@ match.lo: match.S
+ 	rm -f _match.s
+ 
+ example.o: $(SRCDIR)test/example.c $(SRCDIR)zlib.h zconf.h
+-	$(CC) $(CFLAGS) $(ZINCOUT) -c -o $@ $(SRCDIR)test/example.c
++	#$(CC) $(CFLAGS) $(ZINCOUT) -c -o $@ $(SRCDIR)test/example.c
+ 
+ minigzip.o: $(SRCDIR)test/minigzip.c $(SRCDIR)zlib.h zconf.h
+-	$(CC) $(CFLAGS) $(ZINCOUT) -c -o $@ $(SRCDIR)test/minigzip.c
++	#$(CC) $(CFLAGS) $(ZINCOUT) -c -o $@ $(SRCDIR)test/minigzip.c
+ 
+ example64.o: $(SRCDIR)test/example.c $(SRCDIR)zlib.h zconf.h
+-	$(CC) $(CFLAGS) $(ZINCOUT) -D_FILE_OFFSET_BITS=64 -c -o $@ $(SRCDIR)test/example.c
++	#$(CC) $(CFLAGS) $(ZINCOUT) -D_FILE_OFFSET_BITS=64 -c -o $@ $(SRCDIR)test/example.c
+ 
+ minigzip64.o: $(SRCDIR)test/minigzip.c $(SRCDIR)zlib.h zconf.h
+-	$(CC) $(CFLAGS) $(ZINCOUT) -D_FILE_OFFSET_BITS=64 -c -o $@ $(SRCDIR)test/minigzip.c
++	#$(CC) $(CFLAGS) $(ZINCOUT) -D_FILE_OFFSET_BITS=64 -c -o $@ $(SRCDIR)test/minigzip.c
+ 
+ 
+ adler32.o: $(SRCDIR)adler32.c
+@@ -286,22 +286,22 @@ placebo $(SHAREDLIBV): $(PIC_OBJS) libz.a
+ 	-@rmdir objs
+ 
+ example$(EXE): example.o $(STATICLIB)
+-	$(CC) $(CFLAGS) -o $@ example.o $(TEST_LDFLAGS)
++	#$(CC) $(CFLAGS) -o $@ example.o $(TEST_LDFLAGS)
+ 
+ minigzip$(EXE): minigzip.o $(STATICLIB)
+-	$(CC) $(CFLAGS) -o $@ minigzip.o $(TEST_LDFLAGS)
++	#$(CC) $(CFLAGS) -o $@ minigzip.o $(TEST_LDFLAGS)
+ 
+ examplesh$(EXE): example.o $(SHAREDLIBV)
+-	$(CC) $(CFLAGS) -o $@ example.o -L. $(SHAREDLIBV)
++	#$(CC) $(CFLAGS) -o $@ example.o -L. $(SHAREDLIBV)
+ 
+ minigzipsh$(EXE): minigzip.o $(SHAREDLIBV)
+-	$(CC) $(CFLAGS) -o $@ minigzip.o -L. $(SHAREDLIBV)
++	#$(CC) $(CFLAGS) -o $@ minigzip.o -L. $(SHAREDLIBV)
+ 
+ example64$(EXE): example64.o $(STATICLIB)
+-	$(CC) $(CFLAGS) -o $@ example64.o $(TEST_LDFLAGS)
++	#$(CC) $(CFLAGS) -o $@ example64.o $(TEST_LDFLAGS)
+ 
+ minigzip64$(EXE): minigzip64.o $(STATICLIB)
+-	$(CC) $(CFLAGS) -o $@ minigzip64.o $(TEST_LDFLAGS)
++	#$(CC) $(CFLAGS) -o $@ minigzip64.o $(TEST_LDFLAGS)
+ 
+ install-libs: $(LIBS)
+ 	-@if [ ! -d $(DESTDIR)$(exec_prefix)  ]; then mkdir -p $(DESTDIR)$(exec_prefix); fi

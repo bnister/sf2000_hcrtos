@@ -1,0 +1,35 @@
+diff -Naur ffmpeg.old/configure ffmpeg.new/configure
+--- ffmpeg.old/configure	2021-07-27 15:39:34.007590190 +0800
++++ ffmpeg.new/configure	2021-07-27 15:40:29.350365877 +0800
+@@ -6104,18 +6104,18 @@
+ esac
+ 
+ check_func_headers malloc.h _aligned_malloc     && enable aligned_malloc
+-check_func  ${malloc_prefix}memalign            && enable memalign
++enable memalign
+ check_func  ${malloc_prefix}posix_memalign      && enable posix_memalign
+ 
+ check_func  access
+ check_func_headers stdlib.h arc4random
+-check_lib   clock_gettime time.h clock_gettime || check_lib clock_gettime time.h clock_gettime -lrt
+-check_func  fcntl
++enable clock_gettime
++enable fcntl
+ check_func  fork
+ check_func  gethrtime
+ check_func  getopt
+ check_func  getrusage
+-check_func  gettimeofday
++enable gettimeofday
+ check_func  isatty
+ check_func  mkstemp
+ check_func  mmap
+@@ -6128,7 +6128,7 @@
+ check_func  strerror_r
+ check_func  sysconf
+ check_func  sysctl
+-check_func  usleep
++enable usleep
+ 
+ check_func_headers conio.h kbhit
+ check_func_headers io.h setmode

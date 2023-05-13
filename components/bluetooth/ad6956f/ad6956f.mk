@@ -1,0 +1,5 @@
+AD6956F_SUPPORT_SEPARATE_OUTPUT = YES
+
+AD6956F_DEPENDENCIES += kernel
+
+$(eval $(generic-package))

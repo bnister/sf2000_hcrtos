@@ -1,0 +1,78 @@
+
+src := $(obj)
+srctree ?= ./
+
+PHONY := __build
+__build:
+
+build := -f $(BR2_BUILD) obj
+
+targets :=
+
+kbuild-dir := $(if $(filter /%,$(src)),$(src),$(srctree)/$(src))
+kbuild-file := $(kbuild-dir)/Makefile
+
+src := $(kbuild-dir)
+
+include $(BR2_AUTOCONF)
+-include $(BR2_PKG_AUTOCONF)
+include $(kbuild-file)
+include $(BR2_RULES)
+
+# extract directories from obj-y
+__subdir-y	:= $(patsubst %/,%,$(filter %/, $(obj-y)))
+subdir-y	+= $(__subdir-y)
+
+# built-in.o to be linked with upper directory
+build-obj-y	:= $(patsubst %, %/built-in.o, $(subdir-y))
+
+objs		:= $(filter %.o,$(obj-y))
+
+# single name supported for now
+objs-name	:= $(patsubst %.o,%,$(objs))
+objs-y		:= $($(objs-name)-y)
+ifeq ($(objs-y),)
+ifeq ($(build-obj-y),)
+objs-y		+= .built-in-dummy.o
+endif
+endif
+
+# Add subdir path
+build-obj-y	:= $(addprefix $(obj)/,$(build-obj-y))
+objs		:= $(addprefix $(obj)/,$(objs))
+subdir-y	:= $(addprefix $(obj)/,$(subdir-y))
+
+objs-y		:= $(addprefix $(obj)/,$(objs-y))
+
+_dummy := $(shell [ -d $(obj) ] || mkdir -p $(obj))
+
+__build: $(obj)/built-in.o
+	@:
+
+# create built-in.o
+$(obj)/built-in.o: $(subdir-y) $(objs-y)
+	$(Q)$(LD) -EL -r -o $@ $(objs-y) $(build-obj-y)
+
+$(obj)/.built-in-dummy.c:
+	touch $@
+
+# Descending
+$(subdir-y):
+	$(Q)$(MAKE) $(build)=$@
+
+targets += $(objs-y)
+targets := $(wildcard $(sort $(targets)))
+d_files := $(wildcard $(foreach f,$(targets),$(dir $(f)).$(notdir $(f)).d))
+
+ifneq ($(d_files),)
+  include $(d_files)
+endif
+
+PHONY += $(subdir-y)
+
+# Add FORCE to the prequisites of a target to force it to be always rebuilt.
+PHONY += FORCE
+
+FORCE:
+
+.PHONY: $(PHONY)

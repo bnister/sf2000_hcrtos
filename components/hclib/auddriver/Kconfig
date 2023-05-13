@@ -1,0 +1,11 @@
+menuconfig BR2_PACKAGE_AUDDRIVER
+	bool "audio driver"
+	default n
+
+if BR2_PACKAGE_AUDDRIVER
+
+config CONFIG_AUDDRIVER_DEBUG
+	bool "Enable debug"
+	default n
+
+endif

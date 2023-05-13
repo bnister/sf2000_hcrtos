@@ -1,0 +1,5 @@
+config BR2_PACKAGE_LIBLZO
+	bool "liblzo"
+	default n
+	help
+	  Lzo decompress algo with USE_LZO1X only

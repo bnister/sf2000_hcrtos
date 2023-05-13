@@ -1,0 +1,9 @@
+menuconfig BR2_PACKAGE_LIBOPENSSL
+	bool "libopenssl"
+	depends on CONFIG_NET
+
+if BR2_PACKAGE_LIBOPENSSL
+config BR2_PACKAGE_LIBOPENSSL_DH_SUPPORT
+	bool "dh support"
+	default n
+endif

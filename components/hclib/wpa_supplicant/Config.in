@@ -1,0 +1,35 @@
+menuconfig BR2_PACKAGE_WPA_SUPPLICANT
+	bool "wpa_supplicant"
+	select CONFIG_NET
+	select CONFIG_DEV_URANDOM
+	help
+	  WPA supplicant for secure wireless networks
+
+	  http://w1.fi/wpa_supplicant/
+
+
+if BR2_PACKAGE_WPA_SUPPLICANT
+choice
+	prompt "select wpa_supplicant version"
+	default BR2_PACKAGE_WPA_SUPPLICANT_RTL_V2_7
+	help
+	  select wpa_supplicant version
+
+config BR2_PACKAGE_WPA_SUPPLICANT_RTL_V0_8
+	bool "wpa_supplicant 0.8 provied by Realtek"
+	help
+	  select wpa_supplicant 0.8
+
+config BR2_PACKAGE_WPA_SUPPLICANT_RTL_V2_7
+	bool "wpa_supplicant 2.7 provied by Realtek"
+	#select BR2_LIBNL_V1
+	help
+	  select wpa_supplicant 2.0
+
+endchoice
+
+if BR2_PACKAGE_WPA_SUPPLICANT_RTL_V2
+source wpa_supplicant-rtl/wpa_supplicant/Config.in
+endif
+
+endif

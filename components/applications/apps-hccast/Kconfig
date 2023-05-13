@@ -1,0 +1,9 @@
+menuconfig BR2_PACKAGE_APPS_HCCAST
+	bool "hccast"
+	select BR2_PACKAGE_PREBUILTS_LIBGE
+	select BR2_PACKAGE_LIBLVGL
+	select BR2_PACKAGE_HCFOTA
+
+if BR2_PACKAGE_APPS_HCCAST
+source "source/Kconfig"
+endif

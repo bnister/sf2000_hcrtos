@@ -1,0 +1,68 @@
+build := -f $(BR2_BUILD) obj
+clean := -f $(BR2_CLEAN) obj
+include $(BR2_AUTOCONF)
+include $(BR2_RULES)
+
+ifeq ($(KBUILD_SRC),)
+
+ifeq ("$(origin O)", "command line")
+  KBUILD_OUTPUT := $(O)
+endif
+
+# That's our default target when none is given on the command line
+PHONY := _all
+_all:
+
+# Cancel implicit rules on top Makefile
+$(CURDIR)/Makefile Makefile: ;
+
+ifneq ($(KBUILD_OUTPUT),)
+$(info "KBUILD_OUTPUT is $(KBUILD_OUTPUT)")
+# Invoke a second make in the output directory, passing relevant variables
+# check that the output directory actually exists
+saved-output := $(KBUILD_OUTPUT)
+KBUILD_OUTPUT := $(shell mkdir -p $(KBUILD_OUTPUT) && cd $(KBUILD_OUTPUT) \
+								&& /bin/pwd)
+$(if $(KBUILD_OUTPUT),, \
+     $(error failed to create output directory "$(saved-output)"))
+
+PHONY += $(MAKECMDGOALS) sub-make
+
+$(filter-out _all sub-make $(CURDIR)/Makefile, $(MAKECMDGOALS)) _all: sub-make
+	@:
+
+sub-make: FORCE
+	$(Q)$(MAKE) -C $(KBUILD_OUTPUT) KBUILD_SRC=$(CURDIR) \
+	-f $(CURDIR)/Makefile $(filter-out _all sub-make,$(MAKECMDGOALS))
+
+# Leave processing to above invocation of make
+skip-makefile := 1
+endif # ifneq ($(KBUILD_OUTPUT),)
+endif # ifeq ($(KBUILD_SRC),)
+
+PHONY += FORCE
+FORCE:
+
+.PHONY: $(PHONY)
+
+ifeq ($(skip-makefile),)
+
+ifeq ($(KBUILD_SRC),)
+        # building in the source tree
+        srctree := ./
+else
+        ifeq ($(KBUILD_SRC)/,$(dir $(CURDIR)))
+                # building in a subdirectory of the source tree
+                srctree := ../
+        else
+                srctree := $(KBUILD_SRC)/
+        endif
+endif
+objtree		:= ./
+
+export srctree objtree
+
+# Make sure CDPATH settings don't interfere
+unexport CDPATH
+
+endif	# skip-makefile

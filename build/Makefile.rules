@@ -1,0 +1,121 @@
+
+# activate debug with V=1
+ifeq ($(V),1)
+Q =
+else
+Q = @
+endif
+
+export cflags-y
+
+cflags += -Werror -Wstrict-prototypes \
+	-fno-builtin-printf \
+	-Wstack-protector
+
+cxxflags += -Werror \
+	-fno-builtin-printf \
+	-Wstack-protector
+
+# to generate dependancies between source code and compiled objects
+cflags += -MD -MP
+cxxflags += -MD -MP
+
+#cxxflags += -std=gnu++11
+
+# to enable debug
+cflags += -D__DEBUG__
+cxxflags += -D__DEBUG__
+
+cflags += -D__HCRTOS__
+cxxflags += -D__HCRTOS__
+
+# link with start address
+ldflags-y += $(LDFLAGS)
+
+ldflags-y += --wrap memset --wrap memcpy --wrap memmove --wrap strcpy --wrap strcat --wrap strncat --wrap strncpy --wrap __errno --wrap rename
+
+# Strip all symbols.
+# ldflags-y += -s
+
+# Do not page align data
+ldflags-y += -n
+
+MAKEFLAGS += --no-print-directory
+
+AS := $(CROSS_COMPILE)gcc
+CC := $(CROSS_COMPILE)gcc
+CXX := $(CROSS_COMPILE)g++
+LD := $(CROSS_COMPILE)ld
+AR := $(CROSS_COMPILE)ar
+OBJCOPY := $(CROSS_COMPILE)objcopy
+STRIP := $(CROSS_COMPILE)strip
+
+CFLAGS_NOINC = $(filter-out -I%, $(CFLAGS))
+CFLAGS_INC = $(filter -I%, $(CFLAGS))
+
+CXXFLAGS_NOINC = $(filter-out -I%, $(CXXFLAGS))
+CXXFLAGS_INC = $(filter -I%, $(CXXFLAGS))
+
+cflags_y_noinc = $(filter-out -I%, $(cflags-y))
+cflags_y_inc = $(filter -I%, $(cflags-y))
+
+ccflags_y_noinc = $(filter-out -I%, $(ccflags-y))
+ccflags_y_inc = $(filter -I%, $(ccflags-y))
+
+__asflags-y  = $(CFLAGS_NOINC)
+__asflags-y += $(cflags)
+__asflags-y += $(cflags_y_noinc)
+__asflags-y += $(cflags_y_inc)
+__asflags-y += $(CFLAGS_INC)
+__asflags-y += $(EXTRA_CFLAGS)
+
+__cflags-y  = $(CFLAGS_NOINC)
+__cflags-y += $(cflags)
+__cflags-y += $(cflags_y_noinc)
+__cflags-y += $(ccflags_y_noinc)
+__cflags-y += $(cflags_y_inc)
+__cflags-y += $(ccflags_y_inc)
+__cflags-y += $(CFLAGS_INC)
+__cflags-y += $(EXTRA_CFLAGS)
+
+__ccflags-y  = $(CXXFLAGS_NOINC)
+__ccflags-y += $(cxxflags)
+__ccflags-y += $(cflags_y_noinc)
+__ccflags-y += $(ccflags_y_noinc)
+__ccflags-y += $(cflags_y_inc)
+__ccflags-y += $(ccflags_y_inc)
+__ccflags-y += $(CXXFLAGS_INC)
+__ccflags-y += $(EXTRA_CFLAGS)
+
+$(obj)/%.o: $(src)/%.S
+	@echo "Compiling $@"
+	@mkdir -p $(@D)
+	$(Q)$(AS) -c $(__asflags-y) $(CFLAGS_$(@F)) -o $@ $<
+	@mv $(@:.o=.d) $(dir $@).$(notdir $(@:.o=.o.d))
+
+$(obj)/%.o: $(src)/%.c
+	@echo "Compiling $@"
+	@mkdir -p $(@D)
+	$(Q)$(CC) -c $(__cflags-y) $(CFLAGS_$(@F)) -o $@ $<
+	@mv $(@:.o=.d) $(dir $@).$(notdir $(@:.o=.o.d))
+
+$(obj)/%built-in-dummy.o: $(obj)/%built-in-dummy.c
+	@echo "Compiling $@"
+	@mkdir -p $(@D)
+	$(Q)$(CC) -c $(__cflags-y) $(CFLAGS_$(@F)) -o $@ $<
+	@mv $(@:.o=.d) $(dir $@).$(notdir $(@:.o=.o.d))
+
+$(obj)/%.o: $(src)/%.cpp
+	@echo "Compiling $@"
+	@mkdir -p $(@D)
+	$(Q)$(CXX) -c $(__ccflags-y) $(CFLAGS_$(@F)) -o $@ $<
+	@mv $(@:.o=.d) $(dir $@).$(notdir $(@:.o=.o.d))
+
+$(obj)/%.o: $(src)/%.a
+	@echo "Compiling $@"
+	@rm -rf $(dir $@).$(notdir $(@:.o=.o.t))
+	@mkdir -p $(dir $@).$(notdir $(@:.o=.o.t))
+	@cp $< $(dir $@).$(notdir $(@:.o=.o.t))
+	$(Q)cd $(dir $@).$(notdir $(@:.o=.o.t)) && $(AR) -x $(<F)
+	@rm $(dir $@).$(notdir $(@:.o=.o.t))/$(<F)
+	$(Q)$(LD) -EL -r -o $@ $(dir $@).$(notdir $(@:.o=.o.t))/*.o

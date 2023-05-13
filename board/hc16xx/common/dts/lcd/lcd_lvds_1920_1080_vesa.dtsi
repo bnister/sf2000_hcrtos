@@ -1,0 +1,107 @@
+&lvds{
+	reg = <0xB8860000 0x200>, <0xB8800000 0x500>;
+
+	/*
+		* "lvds"		: LVDS screen
+		* "rgb888" 	: RGB screen
+		* "rgb666" 	: RGB screen
+		* "rgb565" 	: RGB screen
+		* "i2so"		: I2S OUT
+		* "gpio"		: only GPIO out
+		*/
+	lvds_ch0-type = "lvds";
+	lvds_ch1-type = "lvds";
+
+	/*
+	* 0: E_CHANNEL_MODE_SINGLE_IN_SINGLE_OUT ,
+	* 1: E_CHANNEL_MODE_SINGLE_IN_DUAL_OUT
+	*/
+	channel-mode = <1>;
+	/*
+	* 0: E_MAP_MODE_VESA_24BIT ,
+	* 1: E_MAP_MODE_VESA_18BIT_OR_JEDIA
+	*/
+	map-mode = <0>;
+	ch0-src_sel = <0>;
+	ch1-src_sel = <0>;
+	ch0-invert_clk_sel = <0>;
+	ch1-invert_clk_sel = <0>;
+	ch0-clk_gate = <0>;
+	ch1-clk_gate = <0>;
+	hsync-polarity = <1>;
+	vsync-polarity = <1>;
+	/*
+	* 0: E_ADJUST_MODE_FRAME_START
+	* 1: E_ADJUST_MODE_HSYNC_POS
+	* 2:E_ADJUST_MODE_VSYNC_POS
+	*/
+	even-odd-adjust-mode = <1>;
+	even-odd-init-value = <0>;
+	/*
+	* 0: E_SRC_SEL_FXDE = 0
+	* 1: E_SRC_SEL_4KDE
+	* 2: E_SRC_SEL_HDMI_RX
+	*/
+	src-sel = <CONFIG_DE4K_OUTPUT_SUPPORT>;
+	// status = "okay";
+};
+
+&DE {
+	tvtype = <11>;
+	VPInitInfo {
+		rgb-cfg{
+			b-rgb-enable = <1>;
+			/*
+			 * 0: MODE_PRGB
+			 * 1: MODE_SRGB
+			 */
+			rgb-mode = <0>;
+			/*
+			 * 0: MODE_PRGB_888_10bit 
+			 * 1: MODE_PRGB_666
+			 */
+			prgb-mode = <0>; 
+			lcd-width = <1920>;
+			timing-para {
+				/* bool type, 0 or 1*/
+				b-enable = <0>;
+				/*
+				 * VPO_RGB_CLOCK_27M = 1,
+				 * VPO_RGB_CLOCK_33M = 2,
+				 * VPO_RGB_CLOCK_49M = 3,
+				 * VPO_RGB_CLOCK_66M = 4,
+				 * VPO_RGB_CLOCK_74M = 5,
+				 * VPO_RGB_CLOCK_85M = 6,
+				 * VPO_RGB_CLOCK_108M = 7,//H1600
+				 * VPO_RGB_CLOCK_6_6M = 8,
+				 * VPO_RGB_CLOCK_9M = 9,
+				 * VPO_RGB_CLOCK_39_6M = 10,
+				 * VPO_RGB_CLOCK_74_25M = 11,//H1600
+				 * VPO_RGB_CLOCK_148_5M = 12,//H1600
+				 * VPO_RGB_CLOCK_54M = 13,//H1600
+				 * VPO_RGB_CLOCK_132M = 14,//H1600
+				*/
+				output-clock = <0>;
+
+				h-total-len = <0>;
+				v-total-len = <0>;
+
+				h-active-len = <0>;
+				v-active-len = <0>;
+
+				h_front-len = <0>;
+				h-sync-len = <0>;
+				h-back-len = <0>;
+
+				v-front-len = <0>;
+				v-sync-len = <0>;
+				v-back-len = <0>;
+				/* bool type, 0 or 1*/
+				h-sync-level = <0>;
+				/* bool type, 0 or 1*/
+				v-sync-level = <0>;
+				frame-rate = <60000>;
+			};
+		};
+	};
+};

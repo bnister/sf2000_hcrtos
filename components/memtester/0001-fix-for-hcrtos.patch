@@ -1,0 +1,191 @@
+diff --git a/Makefile b/Makefile
+index 123f7bc..9e7ef07 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,85 +1,32 @@
+-#
+-# Makefile for memtester by Charles Cazabon.
+-#
+-# Copyright (C) 1999 Simon Kirby.
+-# Copyright (C) 1999-2020 Charles Cazabon.
+-# Licensed under the GNU General Public License version 2.  See the file
+-# COPYING for details.
+-#
++include $(BR2_MKENTRY)
++ifeq ($(skip-makefile),)
+ 
+-# You don't need to edit these; change the contents of the conf-cc and conf-ld
+-# files if you need to change the compile/link commands.  See the README for
+-# more information.
+-CC			= $(shell head -n 1 conf-cc)
+-LD			= $(shell head -n 1 conf-ld)
++cflags-y += -Wno-strict-prototypes -Wno-maybe-uninitialized -Wno-sign-compare -Wno-error=format=
+ 
+-SOURCES		= memtester.c tests.c
+-OBJECTS		= $(SOURCES:.c=.o)
+-HEADERS		= memtester.h
+-TARGETS     = *.o compile load auto-ccld.sh find-systype make-compile make-load systype extra-libs
+-INSTALLPATH	= /usr/local
++TARGETS := libmemtester.a
+ 
+-#
+-# Targets
+-#
+-all: memtester
++__main-y := memtester.o tests.o
+ 
+-install: all
+-	mkdir -m 755 -p $(INSTALLPATH)/bin
+-	install -m 755 memtester $(INSTALLPATH)/bin/
+-	mkdir -m 755 -p $(INSTALLPATH)/man/man8
+-	gzip -c memtester.8 >memtester.8.gz ; install -m 644 memtester.8.gz $(INSTALLPATH)/man/man8/
++obj-y = __main.o
+ 
+-auto-ccld.sh: \
+-conf-cc conf-ld warn-auto.sh
+-	( cat warn-auto.sh; \
+-	echo CC=\'`head -1 conf-cc`\'; \
+-	echo LD=\'`head -1 conf-ld`\' \
+-	) > auto-ccld.sh
++all : $(TARGETS) FORCE
+ 
+-compile: \
+-make-compile warn-auto.sh systype
+-	( cat warn-auto.sh; ./make-compile "`cat systype`" ) > \
+-	compile
+-	chmod 755 compile
++$(TARGETS): built-in.o
++	rm -f $@
++	$(Q)$(AR) -rc $@ $^
+ 
+-find-systype: \
+-find-systype.sh auto-ccld.sh
+-	cat auto-ccld.sh find-systype.sh > find-systype
+-	chmod 755 find-systype
++built-in.o: FORCE
++	$(Q)$(MAKE) $(build)=.
+ 
+-make-compile: \
+-make-compile.sh auto-ccld.sh
+-	cat auto-ccld.sh make-compile.sh > make-compile
+-	chmod 755 make-compile
++install: FORCE
++	install -m 0664 $(TARGETS) $(STAGING_DIR)/usr/lib/$(TARGETS)
+ 
+-make-load: \
+-make-load.sh auto-ccld.sh
+-	cat auto-ccld.sh make-load.sh > make-load
+-	chmod 755 make-load
++clean: FORCE
++	$(Q)$(MAKE) $(clean)=.
++	rm -f $(TARGETS)
+ 
+-systype: \
+-find-systype trycpp.c
+-	./find-systype > systype
++.PHONY: FORCE
+ 
+-extra-libs: \
+-extra-libs.sh systype
+-	./extra-libs.sh "`cat systype`" >extra-libs
++FORCE:
+ 
+-load: \
+-make-load warn-auto.sh systype
+-	( cat warn-auto.sh; ./make-load "`cat systype`" ) > load
+-	chmod 755 load
+-
+-clean:
+-	rm -f memtester $(TARGETS) $(OBJECTS) core
+-
+-memtester: \
+-$(OBJECTS) memtester.c tests.h tests.c tests.h conf-cc Makefile load extra-libs
+-	./load memtester tests.o `cat extra-libs`
+-
+-memtester.o: memtester.c tests.h conf-cc Makefile compile
+-	./compile memtester.c
+-
+-tests.o: tests.c tests.h conf-cc Makefile compile
+-	./compile tests.c
++endif	# skip-makefile
+diff --git a/memtester.c b/memtester.c
+index 46a427b..c99a48d 100644
+--- a/memtester.c
++++ b/memtester.c
+@@ -33,7 +33,7 @@
+ #define EXIT_FAIL_ADDRESSLINES  0x02
+ #define EXIT_FAIL_OTHERTEST     0x04
+ 
+-struct test tests[] = {
++static struct test tests[] = {
+     { "Random Value", test_random_value },
+     { "Compare XOR", test_xor_comparison },
+     { "Compare SUB", test_sub_comparison },
+@@ -56,9 +56,16 @@ struct test tests[] = {
+     { NULL, NULL }
+ };
+ 
++#define exit(...) do {} while (0)
++#define mlock(...) (0)
++#define munlock(...) (0)
++
++#undef _SC_VERSION
++#undef _SC_PAGE_SIZE
++
+ /* Sanity checks and portability helper macros. */
+ #ifdef _SC_VERSION
+-void check_posix_system(void) {
++static void check_posix_system(void) {
+     if (sysconf(_SC_VERSION) < 198808L) {
+         fprintf(stderr, "A POSIX system is required.  Don't be surprised if "
+             "this craps out.\n");
+@@ -70,7 +77,7 @@ void check_posix_system(void) {
+ #endif
+ 
+ #ifdef _SC_PAGE_SIZE
+-int memtester_pagesize(void) {
++static int memtester_pagesize(void) {
+     int pagesize = sysconf(_SC_PAGE_SIZE);
+     if (pagesize == -1) {
+         perror("get page size failed");
+@@ -80,7 +87,7 @@ int memtester_pagesize(void) {
+     return pagesize;
+ }
+ #else
+-int memtester_pagesize(void) {
++static int memtester_pagesize(void) {
+     printf("sysconf(_SC_PAGE_SIZE) not supported; using pagesize of 8192\n");
+     return 8192;
+ }
+@@ -93,21 +100,21 @@ int memtester_pagesize(void) {
+ #endif
+ 
+ /* Function declarations */
+-void usage(char *me);
++static void usage(char *me);
+ 
+ /* Global vars - so tests have access to this information */
+ int use_phys = 0;
+ off_t physaddrbase = 0;
+ 
+ /* Function definitions */
+-void usage(char *me) {
++static void usage(char *me) {
+     fprintf(stderr, "\n"
+             "Usage: %s [-p physaddrbase [-d device]] <mem>[B|K|M|G] [loops]\n",
+             me);
+     exit(EXIT_FAIL_NONSTARTER);
+ }
+ 
+-int main(int argc, char **argv) {
++static int memtester_main(int argc, char **argv) {
+     ul loops, loop, i;
+     size_t pagesize, wantraw, wantmb, wantbytes, wantbytes_orig, bufsize,
+          halflen, count;
+@@ -416,3 +423,6 @@ int main(int argc, char **argv) {
+     fflush(stdout);
+     exit(exit_code);
+ }
++
++#include <kernel/lib/console.h>
++CONSOLE_CMD(memtester, NULL, memtester_main, CONSOLE_CMD_MODE_SELF, "memtester")

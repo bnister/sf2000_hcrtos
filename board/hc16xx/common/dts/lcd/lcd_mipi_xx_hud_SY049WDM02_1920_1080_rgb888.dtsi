@@ -1,0 +1,204 @@
+&mipi {
+		reg = <0xb884A000 0x300>, <0xb8800444 0x8>,<0xb8800080 0x8>;
+
+		/*
+		 * MIPI_COLOR_RGB565_0	=	0
+		 * MIPI_COLOR_RGB565_1	=	1
+		 * MIPI_COLOR_RGB565_2	=	2
+		 * MIPI_COLOR_RGB666_0	=	3
+		 * MIPI_COLOR_RGB666_1	=	4
+		 * MIPI_COLOR_RGB888	=	5
+		*/
+		dsi,format =<5>;
+
+		dsi,lanes = <4>;
+
+		/*
+		 * bit 6:5 MIPI_Virtual_Channel_Generic_ID
+		 * bit 4 :MIPI_CRC
+		 * bit 3 :MIPI_ECC
+		 * bit 2 :MIPI_Bus_Turn_request.
+		 * bit 1 :MIPI_EOTp
+		 * bit 0 :MIPI_EOTp
+		 */
+		dsi,cfg = <0x1C>;
+
+		/*
+		 * 0: E_SRC_SEL_FXDE = 0
+		 * 1: E_SRC_SEL_4KDE
+		 * 2: E_SRC_SEL_HDMI_RX
+		 */
+		src-sel = <CONFIG_DE4K_OUTPUT_SUPPORT>;
+		// clock-frequency = <910000000>;
+		clock-frequency = <0>;
+		// status = "okay";
+	};
+&DE {
+	tvtype = <15>;
+	VPInitInfo {
+		rgb-cfg{
+			b-rgb-enable = <1>;
+			/*
+				* 0: MODE_PRGB
+				* 1: MODE_SRGB
+				*/
+			rgb-mode = <0>;
+			/*
+				* 0: MODE_PRGB_888_10bit
+				* 1: MODE_PRGB_666
+				*/
+			prgb-mode = <0>; 
+			lcd-width = <1920>;
+			screen_timing: timing-para {
+				/* bool type, 0 or 1*/
+				b-enable = <1>;
+				/*
+					* VPO_RGB_CLOCK_27M = 1,
+					* VPO_RGB_CLOCK_33M = 2,
+					* VPO_RGB_CLOCK_49M = 3,
+					* VPO_RGB_CLOCK_66M = 4,
+					* VPO_RGB_CLOCK_74M = 5,
+					* VPO_RGB_CLOCK_85M = 6,
+					* VPO_RGB_CLOCK_108M = 7,
+					* VPO_RGB_CLOCK_6_6M = 8,
+					* VPO_RGB_CLOCK_9M = 9,
+					* VPO_RGB_CLOCK_39_6M = 10,
+					* VPO_RGB_CLOCK_74_25M = 11,//H1600
+					* VPO_RGB_CLOCK_148_5M = 12,//H1600
+				*/
+				output-clock = <12>;
+				h-total-len = <2240>;
+				v-total-len = <1134>;
+
+				h-active-len = <1920>;
+				v-active-len = <1080>;
+
+				h-front-len = <128>;
+				h-sync-len = <44>;
+				h-back-len = <148>;
+
+				v-front-len = <5>;
+				v-sync-len = <5>;
+				v-back-len = <36>;
+				/* bool type, 0 or 1*/
+				h-sync-level = <0>;
+				/* bool type, 0 or 1*/
+				v-sync-level = <0>;
+				frame-rate = <60000>;
+			};
+		};
+	};
+};
+&mipi{
+panel-init-sequence = [
+	05 78 01 01
+	15 00 02 53 29 
+	39 00 03 51 ff 01 
+	15 00 02 30 00 
+	39 00 07 80 00 E0 E0 0E 00 31 
+	39 00 08 81 03 04 00 29 00 05 00 
+	39 00 08 82 03 04 00 29 00 05 01 
+	15 00 02 35 00 
+	15 00 02 26 20 
+
+	39 00 03 f0 AA 11 
+	15 00 02 C0 00 
+	39 00 09 C2 03 FF 03 FF 03 FF 03 FF 
+	39 00 03 F0 AA 12 
+	39 00 03 BF 37 A9 
+	39 00 03 FF 5A 80 
+	15 00 02 65 2F 
+	15 00 02 F2 01 
+	39 00 03 FF 5A 81 
+	15 00 02 65 05 
+	15 00 02 F2 22 
+	15 00 02 65 0A 
+	15 00 02 F2 00 
+	15 00 02 65 17 
+	39 00 0e F9 5E 62 66 6A 6F 73 77 7B 7F 84 88 8C 90 
+#if 0
+	15 78 02 36 03
+	39 00 03 F0 aa 13
+	15 00 02 65 01
+	15 00 02 c1 a2
+	39 00 07 C4 12 53 64 31 42 56
+	39 00 03 F0 aa 16
+	39 00 07 b6 12 53 64 31 42 56
+	39 00 03 b0 aa 55
+	39 00 03 f0 aa 10
+	15 00 02 b8 f1
+#endif
+	05 78 01 11 
+	05 78 01 29 
+	39 00 03 F0 aA 11 
+	15 78 02 c0 ff 
+	];
+};
+#if 0//show ok
+&mipi{
+panel-init-sequence = [
+	05 78 01 01
+	15 00 02 53 29 
+	39 00 03 51 ff 01 
+	15 00 02 30 00 
+	39 00 07 80 00 E0 E0 0E 00 31 
+	39 00 08 81 03 04 00 29 00 05 00 
+	39 00 08 82 03 04 00 29 00 05 01 
+	15 00 02 35 00 
+	15 00 02 26 20 
+	39 00 03 f0 AA 11 
+	15 00 02 C0 00 
+	39 00 09 C2 03 FF 03 FF 03 FF 03 FF 
+	39 00 03 F0 AA 12 
+	39 00 03 BF 37 A9 
+	39 00 03 FF 5A 80 
+	15 00 02 65 2F 
+	15 00 02 F2 01 
+	39 00 03 FF 5A 81 
+	15 00 02 65 05 
+	15 00 02 F2 22 
+	15 00 02 65 0A 
+	15 00 02 F2 00 
+	15 00 02 65 17 
+	39 00 0e F9 5E 62 66 6A 6F 73 77 7B 7F 84 88 8C 90 
+	05 78 01 11 
+	05 78 01 29 
+	39 00 03 F0 aA 11 
+	15 78 02 c0 ff 
+	// 15 78 02 36 03 
+	];
+};
+#endif
+#if 0 // TEST SHOW CMDS
+&mipi{
+panel-init-sequence = [
+	15 00 02 53 29 
+	39 00 03 51 ff 01 
+	15 00 02 30 00 
+	39 00 07 80 00 E0 E0 0E 00 31 
+	39 00 08 81 03 04 00 29 00 05 00 
+	39 00 08 82 03 04 00 29 00 05 01 
+	15 00 02 35 00 
+	15 00 02 26 20 
+	39 00 03 f0 AA 11 
+	15 00 02 C0 00 
+	39 00 09 C2 03 FF 03 FF 03 FF 03 FF 
+	39 00 03 F0 AA 12 
+	39 00 03 BF 37 A9 
+	39 00 03 FF 5A 80 
+	15 00 02 65 2F 
+	15 00 02 F2 01 
+	39 00 03 FF 5A 81 
+	15 00 02 65 05 
+	15 00 02 F2 22 
+	15 00 02 65 0A 
+	15 00 02 F2 00 
+	15 00 02 65 17 
+	39 00 0e F9 5E 62 66 6A 6F 73 77 7B 7F 84 88 8C 90 
+	05 78 01 11 
+	05 78 01 29 
+	39 00 03 F0 aA 11 
+	15 00 02 c0 ff 
+	];
+};
+#endif

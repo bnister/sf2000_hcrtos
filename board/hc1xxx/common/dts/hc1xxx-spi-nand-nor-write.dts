@@ -1,0 +1,97 @@
+/dts-v1/;
+
+#include <dt-bindings/gpio/gpio.h>
+#include <uapi/hcuapi/pinpad.h>
+
+#define CONFIG_MEMORY_SIZE 0x01000000
+
+#define HCRTOS_SYSMEM_SIZE (CONFIG_MEMORY_SIZE)
+#define HCRTOS_SYSMEM_OFFSET (0)
+
+#define HCRTOS_BOOTMEM_SIZE (CONFIG_MEMORY_SIZE)
+#define HCRTOS_BOOTMEM_OFFSET (0)
+
+/{
+hcrtos {
+	#address-cells = <1>;
+	#size-cells = <1>;
+	memory-mapping {
+		#address-cells = <1>;
+		#size-cells = <1>;
+		bootmem {
+			reg = <HCRTOS_BOOTMEM_OFFSET HCRTOS_BOOTMEM_SIZE>;
+		};
+
+		sysmem {
+			reg = <HCRTOS_SYSMEM_OFFSET HCRTOS_SYSMEM_SIZE>;
+		};
+	};
+
+	board {
+		label = "hc1xxx@db";
+	};
+
+	scpu {
+		/*
+		 * 0 : 594M
+		 * 1 : 396M
+		 * 2 : 297M
+		 * 3 : 198M
+		 * 4 : 198M
+		 * 5 : 198M
+		 * 6 : 198M
+		 * 7 : SCPU dig pll clk
+		 */
+		clock = <7>;
+		scpu-dig-pll-clk = <810>;
+	};
+
+	mcpu {
+		/*
+		 * 0 : 594M
+		 * 1 : 396M
+		 * 2 : 297M
+		 * 3 : 198M
+		 * 4 : 900M
+		 * 5 : 1188M
+		 * 6 : 24M
+		 * 7 : CPU dig pll clk
+		 */
+		clock = <4>;
+		mcpu-dig-pll-clk = <900>;
+	};
+
+	uart_dummy {
+		devpath = "/dev/uart_dummy";
+		status = "okay";
+	};
+
+	stdio {
+		serial0 = "/hcrtos/uart_dummy";
+	};
+
+	boot-stdio {
+		serial0 = "/hcrtos/uart_dummy";
+	};
+
+	sfspi {
+		sclk = <40000000>;
+		dma-mode = <1>;
+		status = "okay";
+
+		spi_nor_flash {
+			spi-tx-bus-width = <1>;
+			spi-rx-bus-width = <1>;
+			reg = <0>;
+			status = "okay";
+		};
+
+		spi_nand_flash {
+			spi-tx-bus-width = <1>;
+			spi-rx-bus-width = <1>;
+			reg = <0>;
+			status = "okay";
+		};
+	};
+};
+};

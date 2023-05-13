@@ -1,0 +1,16 @@
+diff -Naur newlib-2.5.0.20170922/newlib/libc/include/sys/config.h newlib-2.5.0.20170922.xs/newlib/libc/include/sys/config.h
+--- newlib-2.5.0.20170922/newlib/libc/include/sys/config.h	2017-09-20 04:36:12.000000000 +0800
++++ newlib-2.5.0.20170922.xs/newlib/libc/include/sys/config.h	2019-04-26 11:29:20.968096119 +0800
+@@ -4,6 +4,12 @@
+ #include <machine/ieeefp.h>  /* floating point macros */
+ #include <sys/features.h>	/* POSIX defs */
+ 
++#define MALLOC_PROVIDED
++//#define _REENT_SMALL
++//#define __DYNAMIC_REENT__
++//#define REENTRANT_SYSCALLS_PROVIDED
++
++
+ #ifdef __aarch64__
+ #define MALLOC_ALIGNMENT 16
+ #endif

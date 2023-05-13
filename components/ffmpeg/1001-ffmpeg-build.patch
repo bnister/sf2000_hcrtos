@@ -1,0 +1,21 @@
+diff -Naus ffmpeg-4.4.old/configure ffmpeg-4.4.new/configure
+--- ffmpeg-4.4.old/configure	2021-04-09 05:28:39.000000000 +0800
++++ ffmpeg-4.4.new/configure	2021-07-21 16:35:43.682086476 +0800
+@@ -6134,7 +6134,7 @@
+ check_func_headers io.h setmode
+ check_func_headers lzo/lzo1x.h lzo1x_999_compress
+ check_func_headers mach/mach_time.h mach_absolute_time
+-check_func_headers stdlib.h getenv
++check_func_headers stdlib.h getenv -lc
+ check_func_headers sys/stat.h lstat
+ 
+ check_func_headers windows.h GetModuleHandle
+@@ -6312,7 +6312,7 @@
+ # On some systems dynamic loading requires no extra linker flags
+ check_lib libdl dlfcn.h "dlopen dlsym" || check_lib libdl dlfcn.h "dlopen dlsym" -ldl
+ 
+-check_lib libm math.h sin -lm
++check_lib libm math.h sin -lm -lc
+ 
+ atan2f_args=2
+ copysign_args=2

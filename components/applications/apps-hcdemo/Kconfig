@@ -1,0 +1,10 @@
+menuconfig BR2_PACKAGE_APPS_HCDEMO
+	bool "hcdemo"
+	select BR2_PACKAGE_PREBUILTS_LIBGE
+	select BR2_PACKAGE_LIBLVGL
+	select BR2_PACKAGE_HCFOTA
+	select BR2_PACKAGE_BLUETOOTH
+
+if BR2_PACKAGE_APPS_HCDEMO
+source "source/Kconfig"
+endif

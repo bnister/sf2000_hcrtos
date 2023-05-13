@@ -1,0 +1,10 @@
+menuconfig BR2_PACKAGE_LIBDSC
+	bool "dsc library"
+
+if BR2_PACKAGE_LIBDSC
+
+config CONFIG_LIBDSC_DEBUG
+	bool "Enable debug"
+	default n
+endif
+

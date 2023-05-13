@@ -1,0 +1,131 @@
+LINKER_SCRIPTS := $(srctree)/entry.ld
+ifeq ($(CONFIG_SOC_HC15XX),y)
+LINKER_SCRIPTS += $(TOPDIR)/components/ld/hc15xx/peripherals.ld
+else ifeq ($(CONFIG_SOC_HC16XX),y)
+LINKER_SCRIPTS += $(TOPDIR)/components/ld/hc16xx/peripherals.ld
+endif
+LINKER_SCRIPTS += $(TOPDIR)/components/ld/ldscript.ld
+
+ldflags-$(CONFIG_CPU_MIPS32R1) += -defsym __mips32r1__=1
+ldflags-$(CONFIG_CPU_MIPS74KEF) += -defsym __mips32r2__=1
+ldflags-y += $(addprefix -T ,$(LINKER_SCRIPTS))
+ldflags-y += --gc-sections
+ldflags-y += -L$(PREBUILT_DIR)/usr/lib/aplugin
+
+ldlibs-y += -lm -lc -lgcc
+ldlibs-$(BR2_PACKAGE_KERNEL) += -lkernel -llnx
+ldlibs-$(BR2_PACKAGE_PTHREAD) += -lpthread
+ldlibs-$(BR2_PACKAGE_AD6956F) += -lad6956f
+ldlibs-$(BR2_PACKAGE_AC6955F) += -lac6955f
+ldlibs-$(BR2_PACKAGE_FFMPEG) += -lavformat -lavcodec -lavutil -lswscale
+ldlibs-$(BR2_PACKAGE_PREBUILTS_LIBGE) += -lge
+ldlibs-$(BR2_PACKAGE_PREBUILTS_SPECTRUM) += -lspectrum
+ldlibs-$(BR2_PACKAGE_PREBUILTS_3A) += -l3a
+ldlibs-$(BR2_PACKAGE_PREBUILTS_LIBWS2811) += -lws2811
+ldlibs-$(BR2_PACKAGE_HCFOTA) += -lhcfota
+ldlibs-$(BR2_PACKAGE_QUICKLZ) += -lquicklz
+ldlibs-$(BR2_PACKAGE_LIBLZO) += -llzo
+ldlibs-$(BR2_PACKAGE_ZLIB) += -lz
+ldlibs-$(BR2_PACKAGE_LIBCURL) += -lcurl
+ldlibs-$(BR2_PACKAGE_MBEDTLS) += -lmbedtls
+ldlibs-$(BR2_PACKAGE_UNITY) += -lunity
+ldlibs-$(BR2_PACKAGE_FREETYPE) += -lfreetype
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_FFPLAYER) += -lffplayer
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_LIBDSC) += -ldsc
+
+wholearchivelibs-$(BR2_PACKAGE_CMDS) += -lcmds
+wholearchivelibs-$(BR2_PACKAGE_LVGL) += -llvgl_app
+wholearchivelibs-$(BR2_PACKAGE_MEMTESTER) += -lmemtester
+
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_MP3DEC) += -lmp3nddec -lmp3
+ifeq ($(CONFIG_CPU_MIPS32R1),y)
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_AACDEC) += -laacdec
+else ifeq ($(CONFIG_CPU_MIPS74KEF),y)
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_AACDEC) += -laacmips74dec
+endif
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_PCMDVDDEC) += -lpcmdvddec
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_ALACDEC) += -lalacdec -lalac
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_AACELDEC) += -laaceldec -laaceld
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_AC3DEC) += -lac3dec
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_EAC3DEC) += -leac3dec
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_ADPCMDEC) += -ladpcmdec
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_PCMDEC) += -lpcmdec
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_FLACDEC) += -lflacdec -lflac
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_VORBISDEC) += -lvorbisdec -ltremor
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_WMADEC) += -lwmadec
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_WMAPRODEC) += -lwmaprodec -lwmapro
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_AMRDEC) += -lamrdec -lopencore-amrwb -lopencore-amrnb
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_OPUSDEC) += -lopusdec -lopus
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_RADEC) += -lradec -lra
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_APEDEC) += -lapedec
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_AUDDRIVER) += -lauddrv -lauddsp
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_HDMIRX) += -lviddrv_hdmirx
+ifeq ($(CONFIG_PREBUILT_SUBDIR), "")
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_H264DEC) += -lviddrv_h264dec
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_MPEG2DEC) += -lviddrv_mpeg2dec
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_RVDEC) += -lviddrv_rvdec
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_VC1DEC) += -lviddrv_vc1dec
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_VP8DEC) += -lviddrv_vp8dec
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_MPEG4DEC) += -lviddrv_mpeg4dec
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_IMAGEDEC) += -lviddrv_imagedec
+else
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_MPEG2DEC) += -lviddrv_mpeg2dec
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_IMAGEDEC) += -lviddrv_imagedec
+endif
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_USBDRIVER) += -lusbdrv
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_USBDRIVER_HID) += -lusbdrv_hid
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_USBGADGETDRIVER) += -lusbgadgetdrv
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_USBGADGETDRIVER_MSC) += -lusbgadgetdrv_msc
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_USBGADGETDRIVER_NCM) += -lusbgadgetdrv_ncm
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_USBGADGETDRIVER_SERIAL) += -lusbgadgetdrv_serial
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_USBGADGETDRIVER_HID) += -lusbgadgetdrv_hid
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_NTFS) += -lntfs
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_TOE) += -ltoe
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_TOE2) += -ltoe2_yt
+
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_DRC) += -ldrc
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_LIBTWOTONE) += -ltwotone
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_LIBLRBALANCE) += -llrbalance
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_LIBEQ6) += -leq6
+
+ifeq ($(CONFIG_SOC_HC15XX),y)
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_SDMMCDRIVER) += -lmmc -lmmchosthc15
+else ifeq ($(CONFIG_SOC_HC16XX),y)
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_SDMMCDRIVER) += -lmmc -lmmchosthc16
+endif
+
+viddrvappendix-y :=
+viddrvappendix-$(BR2_PACKAGE_PREBUILTS_VIDDRIVER_DECODER_FULL) :=
+
+ldlibs-$(BR2_PACKAGE_PREBUILTS_VIDDRIVER) += -lviddrv$(viddrvappendix-y)
+ldlibs-$(CONFIG_DRV_MIPI) += -lmipidrv
+
+wholearchivelibs-$(BR2_PACKAGE_HC_EXAMPLES) += -lhc-examples
+wholearchivelibs-$(BR2_PACKAGE_LIBLVGL) += -llvgl
+
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_LIBEFUSE) += -lefuse
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_RTL8188FU) += -lrtl8188fu
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_RTL8188EU) += -lrtl8188eu
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_RTL8811CU) += -lrtl8811cu
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_RTL8733BU) += -lrtl8733bu
+
+
+LIBAIRCAST_FILES=$(patsubst lib%.a, -l%, $(notdir $(wildcard $(PREBUILT_DIR)/usr/lib/libaircast.a $(PREBUILT_DIR)/usr/lib/libaircast_fake.a)))
+LIBUSBMIRROR_FILES=$(patsubst lib%.a, -l%, $(notdir $(wildcard $(PREBUILT_DIR)/usr/lib/libusbmirror.a $(PREBUILT_DIR)/usr/lib/libusbmirror_fake.a)))
+
+ldlibs-$(BR2_PACKAGE_LIBUSB) += -lusb
+ldlibs-$(BR2_PACKAGE_LIBOPENSSL) += -lssl -lcrypto
+ldlibs-$(BR2_PACKAGE_HCCAST) += -lhccast-com
+ldlibs-$(BR2_PACKAGE_HCCAST_USBMIRROR) += $(LIBUSBMIRROR_FILES) -lhccast-um
+ldlibs-$(BR2_PACKAGE_HCCAST_AIRCAST) += $(LIBAIRCAST_FILES) -lmdns
+ldlibs-$(BR2_PACKAGE_HCCAST_DLNA) += -ldlna
+ldlibs-$(BR2_PACKAGE_HCCAST_WIRELESS) += -lhccast-wl
+ldlibs-$(BR2_PACKAGE_CJSON) += -lcjson
+ldlibs-$(BR2_PACKAGE_HCCAST_NET) += -lhccast-net
+ldlibs-$(BR2_PACKAGE_HCCAST_MIRACAST) += -lmiracast
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_WPA_SUPPLICANT) += -lwpa_supplicant
+#ldlibs-$(BR2_PACKAGE_PREBUILTS_WPA_SUPPLICANT) += -lhostapd
+wholearchivelibs-$(BR2_PACKAGE_PREBUILTS_WIFI_WIRELESS_TOOLS) += -liw
+ldlibs-$(BR2_PACKAGE_PCRE) += -lpcre
+ldlibs-$(BR2_PACKAGE_PREBUILTS_LIBYOUTUBE) += -liptv_yt
+ldlibs-$(BR2_PACKAGE_HCCAST_IPTV) += -lhccast-iptv

@@ -1,0 +1,13 @@
+diff -Naur ffmpeg-4.4/configure ffmpeg-4.4.new/configure
+--- ffmpeg-4.4/configure	2022-04-14 17:07:54.560498160 +0800
++++ ffmpeg-4.4.new/configure	2022-04-14 17:11:02.798740941 +0800
+@@ -6304,8 +6304,7 @@
+     fi
+ fi
+ 
+-enabled  zlib && { check_pkg_config zlib zlib "zlib.h" zlibVersion ||
+-                   check_lib zlib   zlib.h      zlibVersion    -lz; }
++enable zlib
+ enabled bzlib && check_lib bzlib bzlib.h BZ2_bzlibVersion    -lbz2
+ enabled  lzma && check_lib lzma   lzma.h lzma_version_number -llzma
+ 

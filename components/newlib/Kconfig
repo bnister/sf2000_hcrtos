@@ -1,0 +1,9 @@
+menuconfig BR2_PACKAGE_NEWLIB
+	bool "Newlib"
+	default y
+
+if BR2_PACKAGE_NEWLIB
+config CONFIG_NEWLIB_USE_PREBUILT
+	bool "Use prebuilt newlib"
+	default y
+endif

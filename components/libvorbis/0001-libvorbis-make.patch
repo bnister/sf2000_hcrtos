@@ -1,0 +1,24 @@
+diff -Naur libvorbis/configure libvorbis.new/configure
+--- libvorbis/configure	2021-08-25 09:45:39.015636549 +0800
++++ libvorbis.new/configure	2021-08-25 09:47:39.030408878 +0800
+@@ -13098,7 +13098,7 @@
+ 
+ fi
+ 
+-HAVE_OGG=no
++HAVE_OGG=yes
+ if test "x$PKG_CONFIG" != "x"
+ then
+ 
+diff -Naur libvorbis/lib/Makefile.in libvorbis.new/lib/Makefile.in
+--- libvorbis/lib/Makefile.in	2021-08-25 09:46:19.840576537 +0800
++++ libvorbis.new/lib/Makefile.in	2021-08-25 09:51:25.739707623 +0800
+@@ -105,7 +105,7 @@
+ CONFIG_HEADER = $(top_builddir)/config.h
+ CONFIG_CLEAN_FILES =
+ CONFIG_CLEAN_VPATH_FILES =
+-am__EXEEXT_1 = test_sharedbook$(EXEEXT)
++#am__EXEEXT_1 = test_sharedbook$(EXEEXT)
+ PROGRAMS = $(noinst_PROGRAMS)
+ am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
+ am__vpath_adj = case $$p in \

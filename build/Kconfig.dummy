@@ -1,0 +1,4 @@
+menu "Dummy configurations"
+menu "Dummy configurations in release environment. Do not edit!"
+endmenu
+endmenu

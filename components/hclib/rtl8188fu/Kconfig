@@ -1,0 +1,6 @@
+config BR2_PACKAGE_RTL8188FU
+	bool "rtl8188fu wifi"
+	depends on CONFIG_NET
+	select CONFIG_DRV_LNXDRIVER
+	select CONFIG_DRV_SOFTIRQ
+	default n

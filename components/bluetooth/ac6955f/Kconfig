@@ -1,0 +1,4 @@
+config BR2_PACKAGE_AC6955F
+	bool "BT AC6955F"
+	help
+	  Bluetooth ac6955f module api

@@ -1,0 +1,5 @@
+config BR2_PACKAGE_FFPLAYER
+	bool "ffplayer"
+	select BR2_PACKAGE_FFMPEG
+	select BR2_PACKAGE_PTHREAD
+	default n

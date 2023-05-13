@@ -1,0 +1,4 @@
+config BR2_PACKAGE_AD6956F
+	bool "BT AD6956F"
+	help
+	  Bluetooth ad6956f module api

@@ -1,0 +1,13 @@
+
+choice
+	prompt "Chip"
+	default CONFIG_SOC_HC16XX
+
+config CONFIG_SOC_HC16XX
+	bool "hc16xx"
+
+config CONFIG_SOC_HC15XX
+	bool "hc15xx"
+
+endchoice
+

@@ -1,0 +1,6 @@
+menuconfig BR2_PACKAGE_APPS_AVP
+	bool "avp"
+
+if BR2_PACKAGE_APPS_AVP
+source "source/Kconfig"
+endif

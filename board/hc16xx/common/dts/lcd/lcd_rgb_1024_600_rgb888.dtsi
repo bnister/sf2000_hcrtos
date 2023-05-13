@@ -1,0 +1,91 @@
+&lvds {
+	reg = <0xB8860000 0x200>, <0xB8800000 0x500>;
+	/*
+		* "lvds"		: LVDS screen
+		* "rgb888" 	: RGB screen
+		* "rgb666" 	: RGB screen
+		* "rgb565" 	: RGB screen
+		* "i2so"		: I2S OUT
+		* "gpio"		: only GPIO out
+		*/
+	lvds_ch0-type = "rgb888";
+	lvds_ch1-type = "rgb888";
+
+	/*
+		* rgb ggb bgb
+		* rrb rgb rbb
+		* rgr rgg rgb
+	*/
+	rgb_src_sel = "rgb";
+
+
+	/*
+	* 0: E_SRC_SEL_FXDE = 0
+	* 1: E_SRC_SEL_4KDE
+	* 2: E_SRC_SEL_HDMI_RX
+	*/
+	src-sel = <CONFIG_DE4K_OUTPUT_SUPPORT>;
+	// status = "okay";
+};
+&DE {
+	tvtype = <15>;
+	VPInitInfo {
+		rgb-cfg{
+			b-rgb-enable = <1>;
+			/*
+				* 0: MODE_PRGB
+				* 1: MODE_SRGB
+				*/
+			rgb-mode = <0>;
+			/*
+				* 0: MODE_PRGB_888_10bit
+				* 1: MODE_PRGB_666
+				*/
+			prgb-mode = <0>;
+			lcd-width = <1024>;
+			timing-para {
+				/* bool type, 0 or 1*/
+				b-enable = <1>;
+				/*
+				 * VPO_RGB_CLOCK_27M = 1,
+				 * VPO_RGB_CLOCK_33M = 2,
+				 * VPO_RGB_CLOCK_49M = 3,
+				 * VPO_RGB_CLOCK_66M = 4,
+				 * VPO_RGB_CLOCK_74M = 5,
+				 * VPO_RGB_CLOCK_85M = 6,
+				 * VPO_RGB_CLOCK_108M = 7,//H1600
+				 * VPO_RGB_CLOCK_6_6M = 8,
+				 * VPO_RGB_CLOCK_9M = 9,
+				 * VPO_RGB_CLOCK_39_6M = 10,
+				 * VPO_RGB_CLOCK_74_25M = 11,//H1600
+				 * VPO_RGB_CLOCK_148_5M = 12,//H1600
+				 * VPO_RGB_CLOCK_54M = 13,//H1600
+				 * VPO_RGB_CLOCK_132M = 14,//H1600
+				*/
+				output-clock = <3>;
+
+				h-total-len = <1324>;
+				v-total-len = <625>;
+
+				h-active-len = <1024>;
+				v-active-len = <600>;
+
+				h_front-len = <140>;
+				h-sync-len = <20>;
+				h-back-len = <140>;
+
+				v-front-len = <12>;
+				v-sync-len = <3>;
+				v-back-len = <10>;
+				/* bool type, 0 or 1*/
+				h-sync-level = <1>;
+				/* bool type, 0 or 1*/
+				v-sync-level = <1>;
+
+				/* bool type, 0 or 1*/
+				active-polarity = <1>;
+				frame-rate = <60000>;
+			};
+		};
+	};
+};

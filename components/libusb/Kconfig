@@ -1,0 +1,13 @@
+config BR2_PACKAGE_LIBUSB
+	bool "libusb"
+	select BR2_PACKAGE_PREBUILTS_USBDRIVE
+	select CONFIG_PIPES
+	default n
+	help
+		userspace library for accessing USB devices 
+
+config BR2_PACKAGE_LIBUSB_EXAMPLES
+	bool "build libusb examples"
+	depends on BR2_PACKAGE_LIBUSB
+	select CONFIG_CMDS_LIBUSB_EXAMPLES
+

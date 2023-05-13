@@ -1,0 +1,46 @@
+menuconfig BR2_PACKAGE_LIBLVGL
+	bool "liblvgl"
+	default n
+	help
+	  LVGL library and test bench
+
+if BR2_PACKAGE_LIBLVGL
+#source "source/Kconfig"
+endif
+if BR2_PACKAGE_LIBLVGL
+
+
+config BR2_PACKAGE_LIBLVGL_CONFIG
+	string "liblvgl configuration file"
+	default "$(TOPDIR)/components/liblvgl/liblvgl.config"
+	help
+	  Path to the liblvgl configuration file.
+
+	  I you wish to use your own modified liblvgl configuration
+	  file specify the config file location with this option.
+
+#config BR2_LIBLVGL_ENABLE_DEMO
+	#bool "liblvgl demo app"
+	#default n
+
+#choice
+	#prompt "select lvgl demo case"
+	#depends on BR2_LIBLVGL_ENABLE_DEMO
+	#default BR2_LIBLVGL_DEMO_WIDGETS
+	#help
+	  #Select Hichip screen application
+
+#config BR2_LIBLVGL_DEMO_STRESS
+	#bool "demo stress"
+	#default n
+#config BR2_LIBLVGL_DEMO_MUSIC
+	#bool "demo music"
+	#default n
+#config BR2_LIBLVGL_DEMO_BENCHMARK
+	#bool "demo benchmark"
+	#default n
+#config BR2_LIBLVGL_DEMO_WIDGETS
+	#bool "demo widgets"
+	#default n
+#endchoice
+endif

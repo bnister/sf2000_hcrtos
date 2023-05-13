@@ -1,0 +1,3 @@
+config BR2_PACKAGE_OPENCORE_AMR
+	bool "Opencore-amr library"
+

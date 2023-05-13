@@ -1,0 +1,26 @@
+diff -ruN libopenssl-1.1.1k/crypto/threads_pthread.c libopenssl-1.1.1k_new/crypto/threads_pthread.c
+--- libopenssl-1.1.1k/crypto/threads_pthread.c	2021-03-25 21:28:38.000000000 +0800
++++ libopenssl-1.1.1k_new/crypto/threads_pthread.c	2022-09-28 13:59:40.543784803 +0800
+@@ -185,8 +185,10 @@
+ 
+ static void fork_once_func(void)
+ {
++#ifndef HC_RTOS
+     pthread_atfork(OPENSSL_fork_prepare,
+                    OPENSSL_fork_parent, OPENSSL_fork_child);
++#endif
+ }
+ # endif
+ 
+diff -ruN libopenssl-1.1.1k/crypto/uid.c libopenssl-1.1.1k_new/crypto/uid.c
+--- libopenssl-1.1.1k/crypto/uid.c	2021-03-25 21:28:38.000000000 +0800
++++ libopenssl-1.1.1k_new/crypto/uid.c	2022-09-28 14:00:02.333922591 +0800
+@@ -10,7 +10,7 @@
+ #include <openssl/crypto.h>
+ #include <openssl/opensslconf.h>
+ 
+-#if defined(OPENSSL_SYS_WIN32) || defined(OPENSSL_SYS_VXWORKS) || defined(OPENSSL_SYS_UEFI)
++#if defined(OPENSSL_SYS_WIN32) || defined(OPENSSL_SYS_VXWORKS) || defined(OPENSSL_SYS_UEFI) || defined(HC_RTOS)
+ 
+ int OPENSSL_issetugid(void)
+ {

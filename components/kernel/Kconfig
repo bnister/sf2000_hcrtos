@@ -1,0 +1,7 @@
+menuconfig BR2_PACKAGE_KERNEL
+	bool "kernel"
+	select BR2_PACKAGE_NEWLIB
+
+if BR2_PACKAGE_KERNEL
+source "source/Kconfig"
+endif

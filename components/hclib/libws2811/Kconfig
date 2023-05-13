@@ -1,0 +1,2 @@
+menuconfig BR2_PACKAGE_LIBWS2811
+	bool "libws2811"

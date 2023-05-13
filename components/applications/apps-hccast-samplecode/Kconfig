@@ -1,0 +1,6 @@
+menuconfig BR2_PACKAGE_APPS_HCCAST_SAMPLECODE
+	bool "hccast-sample"
+
+if BR2_PACKAGE_APPS_HCCAST_SAMPLECODE
+source "source/Kconfig"
+endif

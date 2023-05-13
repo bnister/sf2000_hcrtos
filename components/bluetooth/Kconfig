@@ -1,0 +1,24 @@
+menuconfig BR2_PACKAGE_BLUETOOTH
+    bool "bluetooth"
+    default n
+if BR2_PACKAGE_BLUETOOTH
+choice
+    prompt "bluetooth select"
+    default BR2_PACKAGE_AD6956F
+    source "ad6956f/Kconfig"
+    source "ac6955f/Kconfig"
+endchoice
+choice
+    prompt "facticity"
+	default BR2_PACKAGE_BLUETOOTH_FAKE
+	config BR2_PACKAGE_BLUETOOTH_TURE
+	bool "ture"
+	help
+		Bluetooth ad6956f module api
+
+	config BR2_PACKAGE_BLUETOOTH_FAKE
+	bool "fake"
+	help
+		Bluetooth ad6956f module api
+endchoice
+endif

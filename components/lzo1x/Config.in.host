@@ -1,0 +1,7 @@
+config BR2_PACKAGE_HOST_LZO1X
+	bool "lzo1x"
+	default n
+	help
+	  Portable lossless data compression library written in ANSI C.
+
+	  http://www.oberhumer.com/opensource/lzo/

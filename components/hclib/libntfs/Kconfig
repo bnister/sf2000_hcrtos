@@ -1,0 +1,12 @@
+menuconfig BR2_PACKAGE_LIBNTFS
+	bool "libntfs"
+	select BR2_PACKAGE_PREBUILTS_NTFS
+	default n
+
+if BR2_PACKAGE_LIBNTFS
+
+config CONFIG_LIBNTFS_DEBUG
+	bool "Enable debug"
+	default n
+
+endif

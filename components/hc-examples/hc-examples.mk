@@ -1,0 +1,5 @@
+HC_EXAMPLES_SUPPORT_SEPARATE_OUTPUT = YES
+
+HC_EXAMPLES_DEPENDENCIES = pthread
+
+$(eval $(generic-package))

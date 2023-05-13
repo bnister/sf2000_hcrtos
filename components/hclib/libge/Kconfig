@@ -1,0 +1,4 @@
+config BR2_PACKAGE_LIBGE
+	bool "libge"
+	default n
+	select CONFIG_DRV_HCGE

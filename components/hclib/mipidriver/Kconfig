@@ -1,0 +1,9 @@
+menuconfig BR2_PACKAGE_MIPIDRIVER
+	bool "mipi driver"
+	default n
+
+if BR2_PACKAGE_MIPIDRIVER
+config CONFIG_MIPIDRIVER_DEBUG
+	bool "Enable debug"
+	default n
+endif

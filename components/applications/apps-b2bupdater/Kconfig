@@ -1,0 +1,6 @@
+menuconfig BR2_PACKAGE_APPS_B2BUPDATER
+	bool "b2bupdater"
+
+if BR2_PACKAGE_APPS_B2BUPDATER
+source "source/Kconfig"
+endif

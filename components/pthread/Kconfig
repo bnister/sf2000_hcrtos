@@ -1,0 +1,3 @@
+config BR2_PACKAGE_PTHREAD
+	bool "pthread"
+	default y

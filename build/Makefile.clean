@@ -1,0 +1,73 @@
+
+src := $(obj)
+srctree ?= ./
+
+PHONY := __clean
+__clean:
+
+clean := -f $(BR2_CLEAN) obj
+
+kbuild-dir := $(if $(filter /%,$(src)),$(src),$(srctree)/$(src))
+kbuild-file := $(kbuild-dir)/Makefile
+
+src := $(kbuild-dir)
+
+include $(BR2_AUTOCONF)
+-include $(BR2_PKG_AUTOCONF)
+include $(kbuild-file)
+
+__subdir-y	:= $(patsubst %/,%,$(filter %/, $(obj-y)))
+subdir-y	+= $(__subdir-y)
+
+# built-in.o to be linked with upper directory
+build-obj-y	:= $(patsubst %, %/built-in.o, $(subdir-y))
+
+objs		:= $(filter %.o,$(obj-y))
+
+# single name supported for now
+objs-name	:= $(patsubst %.o,%,$(objs))
+objs-y		:= $($(objs-name)-y)
+ifeq ($(objs-y),)
+ifeq ($(build-obj-y),)
+objs-y		+= .built-in-dummy.o
+endif
+endif
+
+# Add subdir path
+build-obj-y	:= $(addprefix $(obj)/,$(build-obj-y))
+objs		:= $(addprefix $(obj)/,$(objs))
+subdir-y	:= $(addprefix $(obj)/,$(subdir-y))
+
+objds-y		:= $(patsubst %,%.d,$(objs-y))
+objds-y		+= $(patsubst %,%.t,$(objs-y))
+objds-y		:= $(addprefix $(obj)/.,$(objds-y))
+objds-y		:= $(wildcard $(sort $(objds-y)))
+
+objs-y		:= $(addprefix $(obj)/,$(objs-y))
+objs-y		+= $(obj)/built-in.o
+objs-y		:= $(wildcard $(sort $(objs-y)))
+dummy_file	:= $(wildcard $(obj)/.built-in-dummy.c)
+
+define sep
+endef
+
+__clean: $(subdir-y)
+ifneq ($(strip $(objs-y)),)
+	rm -rf $(objs-y)
+endif
+ifneq ($(strip $(objds-y)),)
+	rm -rf $(objds-y)
+endif
+ifneq ($(dummy_file),)
+	rm -rf $(dummy_file)
+endif
+	@:
+
+# Descending
+$(subdir-y): FORCE
+	$(Q)$(MAKE) $(clean)=$@
+
+.PHONY: FORCE
+
+FORCE:
+

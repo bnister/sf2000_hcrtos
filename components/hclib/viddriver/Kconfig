@@ -1,0 +1,33 @@
+menuconfig BR2_PACKAGE_VIDDRIVER
+	bool "video driver"
+	default n
+	select CONFIG_I2C
+	select CONFIG_I2C_SLAVE
+
+if BR2_PACKAGE_VIDDRIVER
+
+config CONFIG_VIDDRIVER_OSAL_HSR_NWORKS
+	int "Maximum parallel osal HSR works"
+	default 48
+
+config CONFIG_VIDDRIVER_DEBUG
+	bool "Enable debug"
+	default n
+
+config CONFIG_VIDDRIVER_FULL
+	bool "full video driver support"
+	default y
+
+if !CONFIG_VIDDRIVER_FULL
+choice
+	prompt "decoder select"
+	default CONFIG_VIDDRIVER_DECODER_MPEG2
+
+config CONFIG_VIDDRIVER_DECODER_MPEG2
+	bool "Enable mpeg2 decoder support"
+
+config CONFIG_VIDDRIVER_DECODER_MJPEG
+	bool "Enable mjpeg decoder support"
+endchoice
+endif
+endif

@@ -1,0 +1,64 @@
+menuconfig BR2_PACKAGE_HCCAST
+	bool "hccast"
+	default n
+	help
+	  Hichip screen casting middleware and simple demo application
+
+if BR2_PACKAGE_HCCAST
+
+config BR2_PACKAGE_HCCAST_NET
+	bool "Wi-Fi MGR & DHCP"
+	default n
+	help
+	  Support Wi-Fi Manager and DHCP server/client API
+
+config BR2_PACKAGE_HCCAST_WIRELESS
+	bool "Wireless casting"
+	default n
+	select BR2_PACKAGE_HCCAST_NET
+	help
+	  Support Wireless casting API, DLNA/Miracast/Aircast
+	  
+if BR2_PACKAGE_HCCAST_WIRELESS
+
+config BR2_PACKAGE_HCCAST_AIRCAST
+	bool "Aircast"
+	default y
+	select CONFIG_SPI_SPIDEV
+	select CONFIG_DRV_SPI
+
+if BR2_PACKAGE_HCCAST_AIRCAST
+
+config BR2_PACKAGE_HCCAST_AIRCAST_MIRROR_ONLY
+	bool "Air-mirror only"
+	default n
+	help
+	  Support Aircast only support screen mirrorring mode
+
+endif
+
+config BR2_PACKAGE_HCCAST_MIRACAST
+	bool "Miracast"
+	default y
+
+config BR2_PACKAGE_HCCAST_DLNA
+	bool "DLNA"
+	default y
+
+endif
+
+config BR2_PACKAGE_HCCAST_USBMIRROR
+	bool "USB mirrorring"
+	default n
+	select CONFIG_DRV_SPI
+	select CONFIG_SPI_SPIDEV
+	help
+	  Support IUM & AUM
+
+config BR2_PACKAGE_HCCAST_IPTV
+	bool "IPTV porting layer"
+	default n
+	help
+	  Support IPTV API
+
+endif

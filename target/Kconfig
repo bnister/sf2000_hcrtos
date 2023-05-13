@@ -1,0 +1,9 @@
+menu "Target"
+
+config BR2_ARCH
+        string
+	default "mips"
+
+source "chip/Kconfig"
+
+endmenu

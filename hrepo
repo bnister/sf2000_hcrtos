@@ -1,0 +1,490 @@
+#!/bin/bash
+
+hrepo()
+{
+	local command;
+	local subcommand;
+	local commit;
+	local branch;
+	local diff;
+	local submodule;
+	local verbose;
+	local extmsg;
+
+	if [ $# -eq 0 ]; then
+		cat <<-EOF
+		  usage: hrepo COMMAND [ARGS]
+
+		Show help of specific COMMAND
+		  usage: hrepo COMMAND -h
+		  usage: hrepo COMMAND --help
+
+		The most commonly used repo commands are:
+		  branch         View current topic branches
+		  checkout       Checkout a branch for development
+		  diff           Show changes between commit and working tree
+		  show           Show various types of objects
+		  sync           Update working tree to the latest revision or specific revision
+		  list           List projects and their associated directories
+		  status         Show the working tree status
+		  pull           Pull the latest revision
+		  forall         Run commands for all submodules
+		  commit         Commit changes to the repository, automatically add commit information of subprojects
+		EOF
+		return;
+	fi
+
+	command=$1
+	shift;
+
+	if [ "$command" == "list" ]; then
+		if [ $# != 0 ]; then
+			if [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
+				cat <<-EOF
+				List projects and their associated directories
+				  usage: hrepo list
+
+				EOF
+				return;
+			fi
+		fi
+		git submodule foreach -q --recursive '
+		branch=$(git branch | grep "*")
+		log="  $(git log -1 --oneline)"
+		echo "Submodule: $path ($branch)"
+		echo "$log"
+		'
+		return;
+	fi
+
+	if [ "$command" == "diff" ]; then
+		if [ $# != 0 ]; then
+			if [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
+				cat <<-EOF
+				Show changes between commit and working tree
+				  usage: hrepo diff
+
+				Show changes of <subproject>
+				  usage: hrepo diff <subproject> [-v]
+
+				EOF
+				return;
+			fi
+		fi
+
+		verbose="false"
+		submodule=""
+		if [ $# != 0 ]; then
+			if [ "$(echo $* | grep '\-v')" != "" ]; then
+				verbose="true"
+			fi
+
+			if [ "$(echo $* | sed 's/-v//g')" != "" ]; then
+				submodule=$(echo $* | sed 's/-v//g' | sed 's/[[:space:]]//g')
+			fi
+		fi
+
+		if [ "$submodule" != "" ]; then
+			echo ""
+			git status | grep " $submodule "
+			echo ""
+
+			branch=$(git -C $submodule branch | grep "*")
+			echo "Submodule: $submodule ($branch)"
+			git -C $submodule diff
+
+			rm -f .tmpmessage
+			touch .tmpmessage
+
+			if [ "$verbose" == "true" ]; then
+				git diff $submodule | \
+				  awk '/^diff --git/{module=$3} /^-Subproject/{oldcommit=$3} /^\+Subproject/{print module" "oldcommit" "$3}' | \
+				  sed 's#^a/##' | \
+				  while read line; do \
+					  submodule=$(echo $line | awk '{print $1}')
+					  oldcommit=$(echo $line | awk '{print $2}')
+					  newcommit=$(echo $line | awk '{print $3}' | sed 's/-dirty//')
+					  echo "$submodule changes:" >> .tmpmessage
+					  git -C $submodule log ${oldcommit}..${newcommit} --pretty="%h [%an]%n%B" | \
+					    sed 's/^/\t/' | \
+					    sed 's/"/\\"/g' >> .tmpmessage
+					  git -C $submodule diff ${oldcommit}..${newcommit} >> .tmpmessage
+				  done
+			else
+				git diff $submodule | \
+				  awk '/^diff --git/{module=$3} /^-Subproject/{oldcommit=$3} /^\+Subproject/{print module" "oldcommit" "$3}' | \
+				  sed 's#^a/##' | \
+				  while read line; do \
+					  submodule=$(echo $line | awk '{print $1}')
+					  oldcommit=$(echo $line | awk '{print $2}')
+					  newcommit=$(echo $line | awk '{print $3}' | sed 's/-dirty//')
+					  echo "$submodule changes:" >> .tmpmessage
+					  git -C $submodule log ${oldcommit}..${newcommit} --pretty="%h [%an]%n%B" | \
+					    sed 's/^/\t/' | \
+					    sed 's/"/\\"/g' >> .tmpmessage
+				  done
+			fi
+			cat .tmpmessage
+			rm -f .tmpmessage
+			return
+		fi
+
+		git submodule foreach -q --recursive '
+		branch=$(git branch | grep "*")
+		echo "Submodule: $path ($branch)"
+		git diff
+		'
+
+		rm -f .tmpmessage
+		touch .tmpmessage
+		git diff | \
+		  awk '/^diff --git/{module=$3} /^-Subproject/{oldcommit=$3} /^\+Subproject/{print module" "oldcommit" "$3}' | \
+		  sed 's#^a/##' | \
+		  while read line; do \
+			  submodule=$(echo $line | awk '{print $1}')
+			  oldcommit=$(echo $line | awk '{print $2}')
+			  newcommit=$(echo $line | awk '{print $3}' | sed 's/-dirty//')
+			  echo "$submodule changes:" >> .tmpmessage
+			  git -C $submodule log ${oldcommit}..${newcommit} --pretty="%h [%an]%n%B" | \
+			    sed 's/^/\t/' | \
+			    sed 's/"/\\"/g' >> .tmpmessage
+		  done
+
+		cat .tmpmessage
+		rm -f .tmpmessage
+		git diff
+		return;
+	fi
+
+	if [ "$command" == "sync" ]; then
+		if [ $# != 0 ]; then
+			if [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
+				cat <<-EOF
+				Sync to the revision of specific <commit> or <tag>
+				  usage: hrepo sync [<commit> | <tag>]
+
+				Sync to the latest revision on current branch
+				  usage: hrepo sync
+
+				NOTE: Sync command will pull from remote, then sync to specific revision
+
+				EOF
+				return;
+			fi
+		fi
+
+		git pull
+		git submodule sync
+		git submodule update --init --recursive
+		if [ $# != 0 ]; then
+			commit=$1
+			shift
+			git checkout $commit
+		fi
+		git submodule foreach -q --recursive '
+		branch=$(git branch | grep "*")
+		echo "Submodule: $path ($branch)"
+		git checkout $sha1
+		'
+		return;
+	fi
+
+	if [ "$command" == "status" ]; then
+		if [ $# != 0 ]; then
+			if [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
+				cat <<-EOF
+				Show the working tree status
+				  usage: hrepo status
+
+				Show the working tree status of <subproject>
+				  usage: hrepo status <subproject>
+
+				EOF
+				return;
+			fi
+		fi
+
+		if [ $# != 0 ]; then
+			submodule=$1
+			shift
+			echo ""
+			git status | grep " $submodule "
+			echo ""
+			branch=$(git -C $submodule branch | grep "*")
+			echo "Submodule: $submodule ($branch)"
+			git -C $submodule status
+			return
+		fi
+		git submodule foreach -q --recursive '
+		branch=$(git branch | grep "*")
+		echo "Submodule: $path ($branch)"
+		git status
+		'
+		git status
+		return;
+	fi
+
+	if [ "$command" == "branch" ]; then
+		if [ $# != 0 ]; then
+			if [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
+				cat <<-EOF
+				View current topic branches
+				  usage: hrepo branch
+
+				View both remote-tracking branches and local branches
+				  usage: hrepo branch -a
+
+				Create a new branch based on current revision
+				  usage: hrepo branch <newbranch>
+
+				Create a new branch from specific revision
+				  usage: hrepo branch <newbranch> [<commit> | <tag>]
+
+				EOF
+				return;
+			fi
+		fi
+
+		if [ $# != 0 ]; then
+			if [ "$1" == "-a" ]; then
+				git branch -a
+				return;
+			fi
+		fi
+
+		if [ $# != 0 ]; then
+			branch=$1
+			shift
+
+			if [ $# != 0 ]; then
+				commit=$1
+				shift
+				git branch $branch $commit
+				git submodule foreach -q --recursive "
+				echo \"Submodule: \$path\"
+				echo \"  Create branch $branch\"
+				git branch $branch"
+			else
+				git branch $branch
+				git submodule foreach -q --recursive "
+				echo \"Submodule: \$path\"
+				echo \"  Create branch $branch\"
+				git branch $branch"
+			fi
+			return
+		fi
+		git branch
+		return;
+	fi
+
+	if [ "$command" == "checkout" ]; then
+		if [ $# != 0 ]; then
+			if [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
+				cat <<-EOF
+				Checkout a branch for development
+				  usage: hrepo checkout <branch>
+
+				Checkout a specific revision for development
+				  usage: hrepo checkout [<commit> | <tag>]
+
+				NOTE: Checkout command will *NOT* pull from remote
+
+				EOF
+				return;
+			fi
+		fi
+
+		if [ $# != 0 ]; then
+			branch=$1
+			shift
+			if [ "$(git branch -a | grep -x "  remotes/origin/$branch")" = "" ] &&
+			   [ "$(git branch -a | grep -x "* $branch")" = "" ] &&
+			   [ "$(git branch -a | grep -x "  $branch")" = "" ]; then
+				git checkout $branch
+				git submodule foreach -q --recursive '
+				echo "Submodule: $path"
+				git checkout $sha1
+				'
+			else
+				git checkout $branch
+				git submodule foreach -q --recursive "
+				echo \"Submodule: \$path\"
+				git checkout $branch
+				"
+			fi
+		fi
+		return;
+	fi
+
+	if [ "$command" == "pull" ]; then
+		if [ $# != 0 ]; then
+			if [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
+				cat <<-EOF
+				Pull the latest revision of current working branch
+				  usage: hrepo pull
+
+				EOF
+				return;
+			fi
+		fi
+
+		if [ $# != 0 ]; then
+			submodule=$1
+			shift
+			git submodule update $submodule
+			git -C $submodule pull
+			return
+		fi
+		git pull
+		git submodule sync
+		git submodule foreach -q --recursive '
+		branch=$(git branch | grep "*")
+		echo "Submodule: $path ($branch)"
+		git pull
+		'
+		return
+	fi
+
+	if [ "$command" == "forall" ]; then
+		if [ $# != 0 ]; then
+			if [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
+				cat <<-EOF
+				Run commands for all submodules
+				  usage: hrepo forall '<commands>'
+
+				EOF
+				return;
+			fi
+		fi
+
+		if [ $# != 0 ]; then
+			subcommand=$1
+			shift
+			git submodule foreach -q --recursive "
+			echo \"Submodule: \$path\"
+			$subcommand
+			echo
+			"
+			$subcommand
+		fi
+		return
+	fi
+
+	if [ "$command" == "commit" ]; then
+		if [ $# != 0 ]; then
+			if [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
+				cat <<-EOF
+				Commit changes to the repository, automatically add commit information of subprojects
+				This command is the same as "git commit" but automatically add commit information of subprojects
+				  usage:
+				  hrepo commit [-a | --interactive | --patch] [-s] [-v] [-u<mode>] [--amend]
+				  [--dry-run] [(-c | -C | --fixup | --squash) <commit>]
+				  [-F <file> | -m <msg>] [--reset-author] [--allow-empty]
+				  [--allow-empty-message] [--no-verify] [-e] [--author=<author>]
+				  [--date=<date>] [--cleanup=<mode>] [--[no-]status]
+				  [-i | -o] [-S[<keyid>]] [--] [<file>...]
+
+				EOF
+				return
+			fi
+		fi
+
+		rm -f .tmpmessage
+		touch .tmpmessage
+		git diff --cached | \
+		  awk '/^diff --git/{module=$3} /^-Subproject/{oldcommit=$3} /^\+Subproject/{print module" "oldcommit" "$3}' | \
+		  sed 's#^a/##' | \
+		  while read line; do \
+			  submodule=$(echo $line | awk '{print $1}')
+			  oldcommit=$(echo $line | awk '{print $2}')
+			  newcommit=$(echo $line | awk '{print $3}' | sed 's/-dirty//')
+			  echo "$submodule changes:" >> .tmpmessage
+			  git -C $submodule log ${oldcommit}..${newcommit} --pretty="%h [%an]%n%B" | \
+			    sed 's/^/\t/' | \
+			    sed '/Signed-off-by/d' | \
+			    sed 's/"/\\"/g' >> .tmpmessage
+		  done
+
+		git commit "${@}"
+		if [ $? -eq 0 ]; then
+			git log -n 1 --pretty="%B" | \
+			  sed '/Signed-off-by/d' | \
+			  sed 's/"/\\"/g' >> .tmpmessage2
+			cat .tmpmessage2 .tmpmessage > .tmpmessage3
+			extmsg=$(cat .tmpmessage3)
+			git commit --amend -s -F .tmpmessage3
+		fi
+		rm -f .tmpmessage*
+	fi
+
+	if [ "$command" == "show" ]; then
+		if [ $# != 0 ]; then
+			if [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
+				cat <<-EOF
+				Show various types of objects
+				This command is the same as "git show" but automatically add changes inside subproject
+				  usage: hrepo show [options] [<object>...]
+
+				EOF
+				return
+			fi
+		fi
+
+		rm -f .tmpmessage
+		touch .tmpmessage
+		git show "${@}" | \
+		  awk '/^diff --git/{module=$3} /^-Subproject/{oldcommit=$3} /^\+Subproject/{print module" "oldcommit" "$3}' | \
+		  sed 's#^a/##' | \
+		  while read line; do \
+			  submodule=$(echo $line | awk '{print $1}')
+			  oldcommit=$(echo $line | awk '{print $2}')
+			  newcommit=$(echo $line | awk '{print $3}' | sed 's/-dirty//')
+			  echo "$submodule changes:" >> .tmpmessage
+			  git -C $submodule log ${oldcommit}..${newcommit} --pretty="%h [%an]%n%B" | \
+			    sed 's/^/\t/' | \
+			    sed 's/"/\\"/g' >> .tmpmessage
+			  git -C $submodule diff ${oldcommit}..${newcommit} >> .tmpmessage
+		  done
+
+		cat .tmpmessage
+		rm -f .tmpmessage
+		git show "${@}"
+	fi
+}
+
+_hrepo_cmds()
+{
+	local cur=${COMP_WORDS[COMP_CWORD]}
+	local cmd=${COMP_WORDS[COMP_CWORD - 1]}
+	local branches
+	local subproject
+
+	case $cmd in
+	'hrepo')
+		COMPREPLY=($(compgen -W "branch checkout diff sync list status pull forall commit show" -- $cur))
+		;;
+
+	'branch')
+		COMPREPLY=($(compgen -W "-a" -- $cur))
+		;;
+
+	'checkout')
+		branches=$(git branch -a | grep remotes | grep -v ">" | sed 's#remotes/origin/##g')
+		COMPREPLY=($(compgen -W "$branches" -- $cur))
+		;;
+
+	'status')
+		subprojects=$(git submodule | awk '{print $2}')
+		COMPREPLY=($(compgen -W "$subprojects" -- $cur))
+		;;
+
+	'diff')
+		subprojects=$(git submodule | awk '{print $2}')
+		COMPREPLY=($(compgen -W "$subprojects" -- $cur))
+		;;
+	esac
+
+	return 0
+}
+
+complete -F _hrepo_cmds hrepo

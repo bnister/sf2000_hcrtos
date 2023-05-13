@@ -1,0 +1,146 @@
+diff --git a/expr.h b/expr.h
+index 94a383b..c598a29 100644
+--- a/expr.h
++++ b/expr.h
+@@ -21,6 +21,8 @@ struct file {
+ 	struct file *next;
+ 	struct file *parent;
+ 	const char *name;
++	const char *fname;
++	const char *path;
+ 	int lineno;
+ };
+ 
+diff --git a/zconf.l b/zconf.l
+index 045093d..2cd2132 100644
+--- a/zconf.l
++++ b/zconf.l
+@@ -183,8 +183,8 @@ n	[A-Za-z0-9_-]
+ 	}
+ 	\n	{
+ 		fprintf(stderr,
+-			"%s:%d:warning: multi-line strings not supported\n",
+-			zconf_curname(), zconf_lineno());
++			"%s/%s:%d:warning: multi-line strings not supported\n",
++			current_file->path, current_file->fname, zconf_lineno());
+ 		BEGIN(INITIAL);
+ 		return T_EOL;
+ 	}
+@@ -307,19 +307,46 @@ void zconf_nextfile(const char *name)
+ 	struct file *iter;
+ 	struct file *file = file_lookup(name);
+ 	struct buffer *buf = xmalloc(sizeof(*buf));
++	char path[PATH_MAX+1];
++	char *env;
+ 	memset(buf, 0, sizeof(*buf));
+ 
++	memset(path, 0, sizeof(path));
++	sprintf(path, "%s/%s", current_file->path, file->name);
++
+ 	current_buf->state = YY_CURRENT_BUFFER;
+-	yyin = zconf_fopen(file->name);
++	yyin = zconf_fopen(path);
+ 	if (!yyin) {
+-		fprintf(stderr, "%s:%d: can't open file \"%s\"\n",
+-			zconf_curname(), zconf_lineno(), file->name);
++		env = getenv("KCONFIG_DUMMY");
++		if (!env) {
++			fprintf(stderr, "%s:%d: can't open file \"%s\"\n",
++			       zconf_curname(), zconf_lineno(), file->name);
++			exit(1);
++		} else {
++			fprintf(stderr, "Warning!!! %s/%s:%d: can't open file \"%s\"\n",
++			    current_file->path, current_file->fname, zconf_lineno(), file->name);
++			yyin = zconf_fopen(env);
++			if (!yyin) {
++				fprintf(stderr, "%s:%d: can't open file \"%s\"\n",
++				       zconf_curname(), zconf_lineno(),
++				       file->name);
++				exit(1);
++			}
++		}
++
++		fprintf(stderr, "%s/%s:%d: can't open file \"%s\"\n",
++			current_file->path, current_file->fname, zconf_lineno(), file->name);
+ 		exit(1);
+ 	}
+ 	yy_switch_to_buffer(yy_create_buffer(yyin, YY_BUF_SIZE));
+ 	buf->parent = current_buf;
+ 	current_buf = buf;
+ 
++	file->fname = strdup(basename(file->name));
++	memset(path, 0, sizeof(path));
++	sprintf(path, "%s/%s", current_file->path, dirname((char *)file->name));
++	file->path = strdup(path);
++
+ 	current_file->lineno = yylineno;
+ 	file->parent = current_file;
+ 
+diff --git a/zconf.lex.c_shipped b/zconf.lex.c_shipped
+index 33913d4..7a9d9dd 100644
+--- a/zconf.lex.c_shipped
++++ b/zconf.lex.c_shipped
+@@ -18,6 +18,7 @@
+ #include <string.h>
+ #include <errno.h>
+ #include <stdlib.h>
++#include <libgen.h>
+ 
+ /* end standard C headers. */
+ 
+@@ -2434,19 +2435,52 @@ void zconf_nextfile(const char *name)
+ 	struct file *iter;
+ 	struct file *file = file_lookup(name);
+ 	struct buffer *buf = xmalloc(sizeof(*buf));
++	char path[PATH_MAX+1];
++	char *env;
+ 	memset(buf, 0, sizeof(*buf));
++	memset(path, 0, sizeof(path));
++
++	if (current_file->path != NULL)
++		sprintf(path, "%s/%s", current_file->path, file->name);
++	else
++		sprintf(path, "%s", file->name);
+ 
+ 	current_buf->state = YY_CURRENT_BUFFER;
+-	yyin = zconf_fopen(file->name);
++	yyin = zconf_fopen(path);
+ 	if (!yyin) {
+-		fprintf(stderr, "%s:%d: can't open file \"%s\"\n",
+-			zconf_curname(), zconf_lineno(), file->name);
++		env = getenv("KCONFIG_DUMMY");
++		if (!env) {
++			fprintf(stderr, "%s:%d: can't open file \"%s\"\n",
++			       zconf_curname(), zconf_lineno(), file->name);
++			exit(1);
++		} else {
++			fprintf(stderr, "Warning!!! %s/%s:%d: can't open file \"%s\"\n",
++			    current_file->path, current_file->fname, zconf_lineno(), file->name);
++			yyin = zconf_fopen(env);
++			if (!yyin) {
++				fprintf(stderr, "%s:%d: can't open file \"%s\"\n",
++				       zconf_curname(), zconf_lineno(),
++				       file->name);
++				exit(1);
++			}
++		}
++
++		fprintf(stderr, "%s/%s:%d: can't open file \"%s\"\n",
++			current_file->path, current_file->fname, zconf_lineno(), file->name);
+ 		exit(1);
+ 	}
+ 	yy_switch_to_buffer(yy_create_buffer(yyin, YY_BUF_SIZE));
+ 	buf->parent = current_buf;
+ 	current_buf = buf;
+ 
++	file->fname = strdup(basename(file->name));
++	memset(path, 0, sizeof(path));
++	if (current_file->path != NULL)
++		sprintf(path, "%s/%s", current_file->path, dirname((char *)file->name));
++	else
++		sprintf(path, "%s", dirname((char *)file->name));
++	file->path = strdup(path);
++
+ 	current_file->lineno = yylineno;
+ 	file->parent = current_file;
+ 

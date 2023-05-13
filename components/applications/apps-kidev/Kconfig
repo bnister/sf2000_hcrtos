@@ -1,0 +1,75 @@
+menuconfig BR2_PACKAGE_APPS_KIDEV
+	bool "kidev"
+	select BR2_PACKAGE_PREBUILTS_LIBGE
+	select BR2_PACKAGE_LIBLVGL
+	select BR2_PACKAGE_PREBUILTS_LIBLRBALANCE
+	select BR2_PACKAGE_PREBUILTS_LIBTWOTONE
+	select BR2_PACKAGE_PREBUILTS_SPECTRUM
+
+if BR2_PACKAGE_APPS_KIDEV
+
+config CONFIG_APPS_PROJECTOR_HDMIIN
+	bool "Enable HDMI IN"
+	default n
+	select BR2_PACKAGE_PREBUILTS_HDMIRX	
+
+config CONFIG_APPS_PROJECTOR_CVBSIN
+	bool "Enable CVBS IN"
+	default n
+	select CONFIG_VIDEO_TVDECODER_SUPPORT
+	
+config CONFIG_APPS_PROJECTOR_USBMIRROR
+	bool "Enable USBMirror"
+	default n
+	select CONFIG_NET
+	select BR2_PACKAGE_LIBOPENSSL
+	select BR2_PACKAGE_LIBUSB
+	select BR2_PACKAGE_HCCAST
+	select BR2_PACKAGE_HCCAST_USBMIRROR
+
+config CONFIG_APPS_PROJECTOR_WIRELESSCAST
+	bool "Enable WirelessCast(miracast/dlna/airmirror)"
+	default n
+	select BR2_PACKAGE_HCCAST		
+	select CONFIG_NET
+	select BR2_PACKAGE_LIBOPENSSL
+	select BR2_PACKAGE_CJSON
+	select BR2_PACKAGE_PREBUILTS_LIBDSC
+	select BR2_PACKAGE_PREBUILTS_RTL8188FU
+	select BR2_PACKAGE_PREBUILTS_WPA_SUPPLICANT
+	select BR2_PACKAGE_PREBUILTS_WIFI_WIRELESS_TOOLS
+	select BR2_PACKAGE_LIBUSB 
+	select BR2_PACKAGE_PREBUILTS_AACELDEC 
+	select BR2_PACKAGE_HCCAST_WIRELESS 
+	
+config CONFIG_APPS_PROJECTOR_BLUETOOTH
+	bool "Enable Bluetooth"
+	default n
+	depends on BR2_PACKAGE_BLUETOOTH
+	help
+		open BT according to your board used.
+config CONFIG_APPS_PROJECTOR_VMOTOR_DRIVE
+	bool "Support projector vmotor drive"
+	default n
+	help
+		open step motor drive.
+
+config CONFIG_APPS_PROJECTOR_SPDIF_OUT
+	bool "Support projector spdif out"
+	default y
+	help
+		open spdif out.
+
+config CONFIG_APPS_PROJECTOR_MAIN_PAGE
+	bool "Support Main(home) page"
+	default n
+	help
+		open main page.
+
+config CONFIG_APPS_PROJECTOR_CVBS_AUDIO_I2SI_I2SO
+	bool "Support projector cvbs audio i2si i2so"
+	default n
+	help
+		set cvbs audio i2si i2so out.
+
+endif

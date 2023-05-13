@@ -1,0 +1,4 @@
+config BR2_PACKAGE_LIBVORBIS
+	bool "vorbis library"
+	select BR2_PACKAGE_LIBOGG
+

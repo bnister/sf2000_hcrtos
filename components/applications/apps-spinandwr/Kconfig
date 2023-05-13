@@ -1,0 +1,6 @@
+menuconfig BR2_PACKAGE_APPS_SPINANDWR
+	bool "spinand writer"
+
+if BR2_PACKAGE_APPS_SPINANDWR
+source "source/Kconfig"
+endif

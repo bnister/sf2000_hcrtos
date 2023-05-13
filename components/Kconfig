@@ -1,0 +1,40 @@
+menu "Components"
+
+config CONFIG_PREBUILT_SUBDIR
+	string "Prebuilt subdir"
+source "prebuilts/Kconfig"
+
+source "applications/Kconfig"
+source "newlib/Kconfig"
+source "kernel/Kconfig"
+source "cmds/Kconfig"
+source "pthread/Kconfig"
+source "ffmpeg/Kconfig"
+source "hc-examples/Kconfig"
+source "opencore-amr/Kconfig"
+source "libusb/Kconfig"
+source "hcfota/Kconfig"
+source "liblvgl/Kconfig"
+source "bluetooth/Kconfig"
+source "quicklz/Kconfig"
+source "liblzo/Kconfig"
+source "zlib/Kconfig"
+source "libopenssl/Kconfig"
+source "mbedtls/Kconfig"
+source "cjson/Kconfig"
+source "hccast/Kconfig"
+source "libcurl/Kconfig"
+source "unity/Kconfig"
+source "memtester/Kconfig"
+source "freetype/Kconfig"
+source "pcre/Kconfig"
+
+menu "Host utilities"
+source "dtc/Config.in.host"
+source "uboot-tools/Config.in.host"
+source "lzo1x/Config.in.host"
+endmenu
+
+source "hclib/Kconfig"
+
+endmenu

@@ -1,0 +1,456 @@
+/dts-v1/;
+
+#include <dt-bindings/gpio/gpio.h>
+#include <uapi/hcuapi/pinpad.h>
+
+#define CONFIG_MEMORY_SIZE 0x08000000
+
+#if (CONFIG_MEMORY_SIZE == 0x04000000)
+#define CONFIG_MEDIAPLAYER_ROTATE_HIGH_QUALITY 0 
+#else
+//0:MAX SCALE FACTOR:1/2
+//1:MAX SCALE FACTOR:1:1(NEED MORE MEMORY)
+#define CONFIG_MEDIAPLAYER_ROTATE_HIGH_QUALITY 1
+#endif
+
+#define CONFIG_VIDEO_IN_SHARE_WITH_VDEC 1
+#define CONFIG_HDMI_RX_SUPPORT 0
+#define CONFIG_VIN_DVP_SUPPORT 0
+#define CONFIG_VIN_TVDEC_SUPPORT 0 
+#define CONFIG_VIDEO_IN_SUPPORT (CONFIG_HDMI_RX_SUPPORT | CONFIG_VIN_DVP_SUPPORT | CONFIG_VIN_TVDEC_SUPPORT)
+#define CONFIG_DE4K_OUTPUT_SUPPORT 0
+#define CONFIG_DUAL_OUTPUT_SUPPORT 0
+#define CONFIG_VGA_OUTPUT_SUPPORT 0
+#define CONFIG_CVBS_OUTPUT_SUPPORT 0
+
+#define CONFIG_MM_FB_SIZE (0x10cf200)
+#define CONFIG_MM_VBV_SIZE (0x12c000)
+#define CONFIG_MM_MF_SIZE (0x198c00)
+#define CONFIG_MM_VIN_FB_SIZE (1920*1088*2*3)
+#define CONFIG_MM_VC_FB_SIZE (736*576*2*2)
+
+#define MAX_EXTRA_FB_NUM (3)
+#define MAX_REF_FB_NUM (7)		//if usb wired cast:MIN NUM:5
+#define MAX_TOTAL_FB_NUM (MAX_REF_FB_NUM + MAX_EXTRA_FB_NUM)
+#define MAX_WIDTH (2160)
+#define MAX_HEIGHT (1088)
+#define MAX_MB_WIDTH (MAX_WIDTH / 16)
+#define MAX_MB_HEIGHT (MAX_HEIGHT / 16)
+#define ONE_MV_SIZE (32 * MAX_MB_WIDTH * MAX_MB_HEIGHT)
+#define AVC_MV_SIZE (ONE_MV_SIZE * MAX_TOTAL_FB_NUM)
+#define AVC_MB_COL_SIZE (0x3000 * MAX_TOTAL_FB_NUM)
+#if (CONFIG_MEDIAPLAYER_ROTATE_HIGH_QUALITY == 1)
+#define MAX_SCALE_BUF_NUM (13 - MAX_TOTAL_FB_NUM)
+#else
+#define MAX_SCALE_BUF_NUM (0)
+#endif
+#define AVC_TOTAL_FB_SIZE (MAX_WIDTH*MAX_HEIGHT*3/2*(MAX_TOTAL_FB_NUM+MAX_SCALE_BUF_NUM))
+#define AVC_MEM_SIZE ((AVC_TOTAL_FB_SIZE + AVC_MB_COL_SIZE + AVC_MV_SIZE+ 1023)&0xFFFFFFC00 )
+
+#define CONFIG_AVC_MB_NEI_SIZE (0xf000)
+#define CONFIG_AVC_CMD_QUEUE_SIZE (0x10000)
+#define CONFIG_AVC_VBV_SIZE (0x80000)
+#define CONFIG_AVC_MEM_SIZE AVC_MEM_SIZE
+#define CONFIG_AVC_TOTAL_SIZE                                                  \
+	(CONFIG_AVC_MB_NEI_SIZE + CONFIG_AVC_CMD_QUEUE_SIZE +                  \
+	 CONFIG_AVC_VBV_SIZE + CONFIG_AVC_MEM_SIZE)
+
+#define __HCRTOS_MMZ0_SIZE                                                     \
+	(CONFIG_AVC_TOTAL_SIZE +                                               \
+	 (CONFIG_DUAL_OUTPUT_SUPPORT * CONFIG_MM_VC_FB_SIZE) +               \
+	 ((CONFIG_VIDEO_IN_SUPPORT && (!CONFIG_VIDEO_IN_SHARE_WITH_VDEC)) * CONFIG_MM_VIN_FB_SIZE))
+
+#define HCRTOS_MMZ_BLOCKLOG (12)
+#define HCRTOS_MMZ0_SIZE                                                       \
+	(__HCRTOS_MMZ0_SIZE +                                                  \
+	 (16 * (__HCRTOS_MMZ0_SIZE >> HCRTOS_MMZ_BLOCKLOG)) +                  \
+	 (16 << HCRTOS_MMZ_BLOCKLOG))
+#define HCRTOS_MMZ0_OFFSET (CONFIG_MEMORY_SIZE - HCRTOS_MMZ0_SIZE)
+
+#define HCRTOS_SYSMEM_SIZE (CONFIG_MEMORY_SIZE - HCRTOS_MMZ0_SIZE)
+#define HCRTOS_SYSMEM_OFFSET (0)
+
+#define HCRTOS_BOOTMEM_SIZE (0x1000000)
+#define HCRTOS_BOOTMEM_OFFSET (((HCRTOS_SYSMEM_SIZE < 0xc000000 ? HCRTOS_SYSMEM_SIZE : 0xc000000) - 0x1000000) & 0xffff0000)
+
+/{
+hcrtos {
+	#address-cells = <1>;
+	#size-cells = <1>;
+	memory-mapping {
+		#address-cells = <1>;
+		#size-cells = <1>;
+		bootmem {
+			reg = <HCRTOS_BOOTMEM_OFFSET HCRTOS_BOOTMEM_SIZE>;
+		};
+
+		sysmem {
+			reg = <HCRTOS_SYSMEM_OFFSET HCRTOS_SYSMEM_SIZE>;
+		};
+
+		mmz0 {
+			id = <0>;
+			reg = <HCRTOS_MMZ0_OFFSET HCRTOS_MMZ0_SIZE>;
+			blocklog = <HCRTOS_MMZ_BLOCKLOG>;
+		};
+	};
+
+	board {
+		label = "hc1512a@dbA210";
+	};
+
+	scpu {
+		/*
+		 * 0 : 594M
+		 * 1 : 396M
+		 * 2 : 297M
+		 * 3 : 198M
+		 * 4 : 198M
+		 * 5 : 198M
+		 * 6 : 198M
+		 * 7 : SCPU dig pll clk
+		 */
+		clock = <7>;
+		scpu-dig-pll-clk = <810>;
+	};
+
+	standby {
+		ir = <28>;  	// key val
+//		ddr-gpio = <111 0>; // pinpad plarity
+	};
+
+
+	hdmi {
+		/*
+		 * 0: fxde
+		 * 1: de4k
+		 * 2: hdmi rx
+		 * 3: pq rgb
+		 */
+		tx_source = <CONFIG_DE4K_OUTPUT_SUPPORT>;
+		i2c-devpath = "/dev/i2c0";
+		pinmux-hotplug = <PINPAD_L27 5>;
+		status = "okay";
+	};
+
+	video-engine {
+		/*
+		 * 0 : 170M
+		 * 1 : 148M
+		 * 2 : 238M
+		 * 3 : 266M
+		 * 4 : 297M
+		 * 5 : 198M
+		 * 6 : SCPU dig pll clk/2
+		 */
+		clock = <4>;
+		dynamic-resolution-support = <0>;
+		video-in-support = <CONFIG_VIDEO_IN_SUPPORT>;
+
+		mm-fb-size = <CONFIG_MM_FB_SIZE>;
+		mm-vbv-size = <CONFIG_MM_VBV_SIZE>;
+		mm-mf-size = <CONFIG_MM_MF_SIZE>;
+		mm-vin-fb-size = <CONFIG_MM_VIN_FB_SIZE>;
+
+		avc-extra-fb-num = <MAX_EXTRA_FB_NUM>;
+		avc-mb-nei-size = <CONFIG_AVC_MB_NEI_SIZE>;
+		avc-cmd-queue-size = <CONFIG_AVC_CMD_QUEUE_SIZE>;
+		avc-vbv-size = <CONFIG_AVC_VBV_SIZE>;
+		avc-mem-size = <CONFIG_AVC_MEM_SIZE>;
+		status = "okay";
+	};
+
+	de-engine {
+		/*
+		 * 0 : 170M
+		 * 1 : 148M
+		 * 2 : 198M
+		 * 3 : 225M
+		 * 4 : 297M
+		 * 5 : 300M
+		 * 6 : DE dig pll clk
+		 */
+		de4k-clock = <0>;
+
+		dual-output = <CONFIG_DUAL_OUTPUT_SUPPORT>;
+		mm-vc-fb-size = <CONFIG_MM_VC_FB_SIZE>;
+
+		de4k-output = <CONFIG_DE4K_OUTPUT_SUPPORT>;
+		/*
+		 * copy it from avp-custom/components/kernel/source/include/uapi/hcuapi/tvtype.h
+		 * TV_PAL = 0,			// (Fh=15.625,fv=50)       PAL4.43 (==PAL_BDGHI)
+		 * TV_NTSC = 1,			// (Fh=15.734,Fv=59.94)    NTSC3.58
+		 * TV_PAL_M = 2,			// (Fh=15.734,Fv=59.94)    PAL3.58
+		 * TV_PAL_N = 3,			// (Fh=15.625,fv=50)       PAL4.43 (changed PAL mode) 
+		 * TV_PAL_60 = 4,			// (Fh=15.734,Fv=59.94)
+		 * TV_NTSC_443 = 5,		// (Fh=15.734,Fv=59.94)
+		 * TV_LINE_720_25 = 6,
+		 * TV_LINE_720_30 = 7,
+		 * TV_LINE_1080_25 = 8,
+		 * TV_LINE_1080_30 = 9,
+		 * TV_LINE_1080_50 = 10,
+		 * TV_LINE_1080_60 = 11,
+		 * TV_LINE_1080_24 = 12,
+		 * TV_PAL_NC = 13,			// (Fh=15.625,fv=50)       PAL3.58 (changed PAL mode)
+		 * TV_LINE_640X480_50 = 14,
+		 * TV_LINE_800X480_60 = 15,
+		 * TV_LINE_1024X768_60 = 16,
+		 * TV_LINE_1360X768_60 = 17,
+		 * TV_LINE_1280X960_60 = 18,
+		 * TV_LINE_1280X1024_60 = 19,
+		 * TV_LINE_1024X768_50 = 20,
+		 * TV_LINE_1080_55 = 21,
+		 * TV_LINE_768X1024_60 = 22,
+		 * TV_LINE_4096X2160_30 = 23,
+		 * TV_LINE_3840X2160_30 = 24,
+		 */
+
+		tvtype = <11>;
+		cvbs-output = <CONFIG_CVBS_OUTPUT_SUPPORT>;
+		vga-output = <CONFIG_VGA_OUTPUT_SUPPORT>;
+		status = "okay";
+	};
+
+	uart@0 {
+		devpath = "/dev/uart0";
+		status = "disabled";
+	};
+
+	uart@1 {
+		pinmux-active = <PINPAD_R05 2 PINPAD_R08 2>;
+		devpath = "/dev/uart1";
+		status = "okay";
+	};
+
+	i2c@0{
+		pinmux-active = <PINPAD_L28 3 PINPAD_L29 3>;
+		device_type = "hichip,hcrtos-setup-setbit";
+		reg_bit = <0xb8800094 18 1>;
+		devpath = "/dev/i2c0";
+		baudrate = <100000>;
+		mode = "master";
+		status = "okay";
+	};
+
+	uart_dummy {
+		devpath = "/dev/uart_dummy";
+		status = "okay";
+	};
+
+	virtuart {
+		devpath = "/dev/virtuart";
+		status = "okay";
+	};
+
+	stdio {
+		serial0 = "/hcrtos/uart_dummy";
+	};
+
+	boot-stdio {
+		serial0 = "/hcrtos/uart_dummy";
+	};
+
+	bluetooth {
+		devpath = "/dev/uart1";
+		status = "disabled";
+	};
+
+	i2s {
+		status = "okay";
+	};
+
+	i2so {
+		volume = <255>;
+		status = "okay";
+	};
+
+	i2si {
+		volume = <255>;
+		status = "disabled";
+	};
+
+	spdif-out {
+		status = "disabled";
+	};
+
+	irc {
+		pinmux-active = <PINPAD_L23 4>;
+		linux,rc-map-name = "rc-hcdemo";
+		status = "okay";
+	};
+
+	persistentmem {
+		mtdname = "persistentmem";
+		size = <4096>;
+		status = "okay";
+	};
+
+	sfspi {
+		pinmux-active = <PINPAD_L11 1 PINPAD_L12 1 PINPAD_L13 1 PINPAD_L14 1>;
+		sclk = <50000000>;
+		dma-mode = <1>;
+		status = "okay";
+
+		spi_nor_flash {
+			spi-tx-bus-width = <1>;
+			spi-rx-bus-width = <1>;
+			reg = <0>;
+			status = "okay";
+			partitions {
+				part-num = <4>;
+
+				/* part0 is for entire norflash by default */
+
+				part1-label = "boot";
+				part1-reg = <0x0 0x19000>;
+				part1-filename = "bootloader.bin";
+
+				part2-label = "eromfs";
+				part2-reg = <0x19000 0x1d000>;
+				part2-filename = "romfs.img";
+
+				part3-label = "firmware";
+				part3-reg = <0x36000 0x3aa000>;
+				part3-filename = "hcscreen.uImage";
+
+				part4-label = "persistentmem";
+				part4-reg = <0x3e0000 0x20000>;
+				part4-filename = "persistentmem.bin";
+			};
+		};
+
+		spidev@0 {
+			devpath = "/dev/spidev0";
+			reg = <0>;
+			spi-max-frequency = <50000000>;
+			status = "okay";
+		};
+	};
+
+#if (CONFIG_DE4K_OUTPUT_SUPPORT == 1)
+#define CONFIG_FB0_REG 0xb883a000
+#define CONFIG_FB1_REG 0xb883a080
+#else
+#define CONFIG_FB0_REG 0xb8808000
+#define CONFIG_FB1_REG 0xb8808080
+#endif
+
+	fb0 {
+		bits_per_pixel = <32>;
+		xres = <1280>;
+		yres = <720>;
+		xres_virtual = <1280>;
+		yres_virtual = <720>;
+		xoffset = <0>;
+		yoffset = <0>;
+
+		scale = <1280 720 1920 1080>;
+
+		reg = <CONFIG_FB0_REG 0x1000>;
+		/*
+		 * frame buffer memory from:
+		 * system : malloc buffer from system heap
+		 * mmz0   : malloc buffer from mmz0
+		 * none   : set buffer by user
+		 * default is system if the property is missing
+		 */
+		buffer-source = "system";
+		extra-buffer-size = <0x9CA000>;
+		status = "okay";
+	};
+
+	fb1 {
+		reg = <CONFIG_FB1_REG 0x1000>;
+		status = "disabled";
+	};
+
+	rotate {
+		/*
+		 * anticlockwise,
+		 * support 0/90/180/270 degree.
+		 */
+		rotate = <0>;
+
+		/*
+		* value is 0 or 1, support fliping may use more fb memory
+		* flip_support = 1, support fb fliped
+		*/
+		flip_support = <0>;
+
+		/*
+		 * value is 0 or 1
+		 * h_flip = 1 is horizontally fliped
+		 * v_flip = 1 is vertically fliped
+		 */
+		h_flip = <0>;
+		v_flip = <0>;
+
+		status = "disabled";
+	};
+
+	reset_gpio {
+		/*
+		* the gpio for reset function
+		* gpio_num: the gpio number for reset
+		* gpio_active: the valid active level(1 or 0 valid) of gpio.
+		*/
+		gpio_num = <PINPAD_L25>;
+		gpio_active = <0>;
+		status = "okay";
+
+	};
+	
+	wifi_pw_enable {
+		/*
+		* the gpio for reset function
+		* gpio_num: the gpio number for reset
+		* gpio_active: the valid active level(1 or 0 valid) of gpio.
+		*/
+		gpio_num = <PINPAD_T13>;
+		gpio_active = <1>;
+		status = "okay";
+
+	};
+
+	usb0 {  // usb_host0 / usb_peripheral0
+		reg = <0x18844000 0x1000>;
+		interrupts = <53>,<52>;
+		interrupt-names = "mc","dma";
+		dr_mode = "host";  // host/peripheral
+		index_num = <0>;
+		ctrl_base = <0x18800000>;
+		status = "okay";
+	};
+
+	usb1 {  // usb_host1/ usb_peripheral1
+		reg = <0x18850000 0x1000>;
+		interrupts = <51>, <50>;
+		interrupt-names = "mc", "dma";
+		dr_mode = "host";
+		index_num = <1>;
+		ctrl_base = <0x18800000>;
+		status = "okay";
+	};
+	
+	ge: ge@18806000 {
+	    reg = <0xb8806000 0x2000>, <0xb8800000 0x1000>;
+	    interrupts = <4>; 
+	    cmdq_buf_size = <0x3c000>;
+	    status = "okay";
+    	}; 
+	dsc: dsc@0x18870000 {
+	     compatible = "hichip,dsc";
+	     reg = <0xb8834000 0x1000>;
+	     interrupts = <44>;
+	     status = "okay";
+     	}; 
+
+	viddec {
+		kshm_size = <0x1000000>;
+	};
+
+	auddec {
+		kshm_size = <0x200000>;
+	};
+};
+};

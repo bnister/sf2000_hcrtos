@@ -1,0 +1,6 @@
+menuconfig BR2_PACKAGE_APPS_HDMISWITCH
+	bool "hdmi switch"
+
+if BR2_PACKAGE_APPS_HDMISWITCH
+source "source/Kconfig"
+endif

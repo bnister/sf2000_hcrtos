@@ -1,0 +1,6 @@
+menuconfig BR2_PACKAGE_APPS_BOOTLOADER
+	bool "bootloader"
+
+if BR2_PACKAGE_APPS_BOOTLOADER
+source "source/Kconfig"
+endif

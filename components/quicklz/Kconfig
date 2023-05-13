@@ -1,0 +1,5 @@
+config BR2_PACKAGE_QUICKLZ
+	bool "quicklz"
+	default n
+	help
+	  Quicklz decompress algo

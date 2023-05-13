@@ -1,0 +1,6 @@
+menuconfig BR2_PACKAGE_CMDS
+	bool "Cmds"
+
+if BR2_PACKAGE_CMDS
+source "source/Kconfig"
+endif

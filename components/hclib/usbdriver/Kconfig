@@ -1,0 +1,2 @@
+menuconfig BR2_PACKAGE_USBDRIVER
+	bool "usb driver"

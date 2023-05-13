@@ -1,0 +1,11 @@
+menuconfig BR2_PACKAGE_LIBACODEC
+	bool "lib audio codec"
+	default n
+
+if BR2_PACKAGE_LIBACODEC
+
+config CONFIG_LIBACODEC_DEBUG
+	bool "Enable debug"
+	default n
+
+endif

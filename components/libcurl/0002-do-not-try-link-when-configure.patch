@@ -1,0 +1,12 @@
+diff --git a/configure b/configure
+index 5370270..4c95b46 100755
+--- a/configure
++++ b/configure
+@@ -2337,6 +2337,7 @@ fi
+   # left behind by Apple's compiler.  We do this before executing the actions.
+   rm -rf conftest.dSYM conftest_ipa8_conftest.oo
+   eval $as_lineno_stack; ${as_lineno_stack:+:} unset as_lineno
++  ac_retval=0
+   as_fn_set_status $ac_retval
+ 
+ } # ac_fn_c_try_link

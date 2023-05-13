@@ -1,0 +1,112 @@
+&mipi{
+	reg = <0xb884A000 0x300>, <0xb8800444 0x8>,<0xb8800080 0x8>;
+
+	/*
+		* MIPI_COLOR_RGB565_0	=	0
+		* MIPI_COLOR_RGB565_1	=	1
+		* MIPI_COLOR_RGB565_2	=	2
+		* MIPI_COLOR_RGB666_0	=	3
+		* MIPI_COLOR_RGB666_1	=	4
+		* MIPI_COLOR_RGB888	=	5
+	*/
+	dsi,format =<5>;
+
+	dsi,lanes = <4>;
+
+	/*
+		* bit 6:5 MIPI_Virtual_Channel_Generic_ID
+		* bit 4 :MIPI_CRC
+		* bit 3 :MIPI_ECC
+		* bit 2 :MIPI_Bus_Turn_request.
+		* bit 1 :MIPI_EOTp
+		* bit 0 :MIPI_EOTp
+		*/
+	dsi,cfg = <0x1C>;
+
+	/*
+		* 0: E_SRC_SEL_FXDE = 0
+		* 1: E_SRC_SEL_4KDE
+		* 2: E_SRC_SEL_HDMI_RX
+		*/
+	src-sel = <CONFIG_DE4K_OUTPUT_SUPPORT>;
+	clock-frequency = <0>;
+	// status = "okay";
+};
+
+&DE {
+	VPInitInfo {
+		rgb-cfg{
+			b-rgb-enable = <1>;
+			/*
+			 * 0: MODE_PRGB
+			 * 1: MODE_SRGB
+			 */
+			rgb-mode = <0>;
+			/*
+			 * 0: MODE_PRGB_888_10bit 
+			 * 1: MODE_PRGB_666
+			 */
+			prgb-mode = <0>; 
+			lcd-width = <1080>;
+			screen_timing: timing-para {
+				/* bool type, 0 or 1*/
+				b-enable = <1>;
+				/*
+				 * VPO_RGB_CLOCK_27M = 1,
+				 * VPO_RGB_CLOCK_33M = 2,
+				 * VPO_RGB_CLOCK_49M = 3,
+				 * VPO_RGB_CLOCK_66M = 4,
+				 * VPO_RGB_CLOCK_74M = 5,
+				 * VPO_RGB_CLOCK_85M = 6,
+				 * VPO_RGB_CLOCK_108M = 7,
+				 * VPO_RGB_CLOCK_6_6M = 8,
+				 * VPO_RGB_CLOCK_9M = 9,
+				 * VPO_RGB_CLOCK_39_6M = 10,
+				 * VPO_RGB_CLOCK_74_25M = 11,//H1600
+				 * VPO_RGB_CLOCK_148_5M = 12,//H1600
+				 * VPO_RGB_CLOCK_54M = 13,//H1600
+				 * VPO_RGB_CLOCK_132M = 14,//H1600
+				*/
+				output-clock = <14>;
+
+				h-total-len = <1228>;
+				v-total-len = <2015>;
+
+				h-active-len = <1080>;
+				v-active-len = <1920>;
+
+				h-front-len = <116>;
+				h-sync-len = <16>;
+				h-back-len = <16>;
+
+				v-front-len = <59>;
+				v-sync-len = <4>;
+				v-back-len = <32>;
+				/* bool type, 0 or 1*/
+				h-sync-level = <1>;
+				/* bool type, 0 or 1*/
+				v-sync-level = <1>;
+				frame-rate = <60000>;
+			};
+		};
+	};
+};
+&mipi{
+panel-init-sequence = [
+	39 00 04 B9 FF 83 99
+	39 00 0D B1 00 64 30 30 44 09 22 22 71 F1 54 5E
+	39 00 0B B2 00 80 00 7F 0A 0E 30 4D 01 01
+	39 00 29 B4 00 FF 02 40 02 40 00 00 06 00 01 02 00 0F 01 02 05 20 00 04 44 02 40 02 40 00 00 06 00 01 02 00 0F 01 02 05 00 00 04 44
+	39 05 20 D3 00 00 00 00 00 18 18 32 10 09 00 09 00 00 00 00 00 00 00 00 00 00 11 02 02 03 00 00 00 0A 08
+	39 05 21 D5 18 18 18 18 21 20 18 18 19 19 19 19 18 18 18 18 03 02 01 00 30 30 31 31 32 32 18 18 18 18 18 18
+	39 05 21 D6 18 18 18 18 20 21 19 19 18 18 19 19 18 18 18 18 00 01 02 03 30 30 31 31 32 32 18 18 18 18 18 18
+	39 00 31 D8 0A BE FA A0 0A BE FA A0 0A BE FA A0 0A BE FA A0 0F FF FF E0 0F FF FF E0 0F FF FF E0 0F FF FF E0 0F FF FF E0 0F FF FF E0 0F FF FF E0 0F FF FF E0
+	39 00 2B E0 00 01 05 2B 2A 3F 11 34 06 0B 0E 10 12 11 12 10 15 08 16 04 0F 00 01 05 2B 2A 3F 11 34 06 0B 0E 10 12 11 12 10 15 08 16 04 0F
+	39 00 03 B6 2E 2E
+	15 00 02 CC 08
+	39 00 03 C0 01 91
+	39 00 03 E4 01 03
+	05 78 01 11
+	05 14 01 29
+	];
+};

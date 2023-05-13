@@ -1,0 +1,3 @@
+config BR2_PACKAGE_DISP_MIRACAST
+	bool "miracast"
+	default n

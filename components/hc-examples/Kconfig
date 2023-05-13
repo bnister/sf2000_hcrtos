@@ -1,0 +1,27 @@
+config BR2_PACKAGE_HC_EXAMPLES
+	bool "hc-examples"
+	default n
+
+if BR2_PACKAGE_HC_EXAMPLES
+config BR2_PACKAGE_HDMI_WIREELSS_EXAMPLE
+	bool "hdmi wireless example"
+	default n
+	select CONFIG_NET
+
+if BR2_PACKAGE_HDMI_WIREELSS_EXAMPLE
+choice
+	bool "hdmi wireless sample sending data way"
+	default BR2_PACKAGE_HDMI_WIRELSS_DISPLAY_RAW
+
+config BR2_PACKAGE_HDMI_WIRELSS_DISPLAY_RAW
+	bool "Calling netowork driver api directly"
+
+config BR2_PACKAGE_HDMI_WIRELSS_DISPLAY_TCP
+	bool "Using tcp"
+
+config BR2_PACKAGE_HDMI_WIRELSS_DISPLAY_UDP
+	bool "Using udp"
+
+endchoice
+endif
+endif

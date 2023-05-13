@@ -1,0 +1,6 @@
+config BR2_PACKAGE_RTL8733BU
+	bool "rtl8733bu wifi"
+	depends on CONFIG_NET
+	select CONFIG_DRV_LNXDRIVER
+	select CONFIG_DRV_SOFTIRQ
+	default n
