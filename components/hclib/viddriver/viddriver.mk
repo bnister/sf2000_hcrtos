@@ -3,7 +3,7 @@
 # video driver
 #
 ################################################################################
-VIDDRIVER_VERSION = 751b6f3412ca4ab9d199ab18000fd8cceb5d5b71
+VIDDRIVER_VERSION = c0611331e3a4028a17411f50c1e2dfe1cb31b997
 VIDDRIVER_SITE_METHOD = git
 VIDDRIVER_SITE = ssh://git@hichiptech.gitlab.com:33888/hclib/libvid.git
 VIDDRIVER_DEPENDENCIES = kernel

@@ -3,7 +3,7 @@
 # mipi driver
 #
 ################################################################################
-MIPIDRIVER_VERSION = e2d9f2aaec8d53a2a3a4eefafcd6f9172250774c
+MIPIDRIVER_VERSION = 5a08b64bf11d974528761caf1ac6b3cf54912a0e
 MIPIDRIVER_SITE_METHOD = git
 MIPIDRIVER_SITE = ssh://git@hichiptech.gitlab.com:33888/hcrtos_sdk/mipidriver.git
 MIPIDRIVER_DEPENDENCIES = kernel
