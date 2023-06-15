@@ -1,0 +1,5 @@
+{
+    "_servicePort"                   : "8000",
+    "_mainService"                  : "http://119.3.89.190:8080/upgrade/",
+    "enableLatestVersionUpgrade"    : false
+}

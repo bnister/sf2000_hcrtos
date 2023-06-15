@@ -1,0 +1,92 @@
+;
+; HiChip16xxUSB.inf
+;
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=USB
+ClassGuid={36FC9E60-C465-11CF-8056-444553540000}
+Provider=%ManufacturerName%
+CatalogFile=HiChip16xxUSB.cat
+DriverVer = 05/09/2022,17.4.20.647
+PnpLockDown=1
+
+[DestinationDirs]
+DefaultDestDir = 12
+HiChip16xxUSB_Device_CoInstaller_CopyFiles = 11
+
+[SourceDisksNames]
+1 = %DiskName%,,,""
+
+[SourceDisksFiles]
+HiChip16xxUSB.sys  = 1,,
+;
+
+
+;*****************************************
+; Install Section
+;*****************************************
+
+[Manufacturer]
+%ManufacturerName%=Standard,NTamd64
+
+[Standard.NTamd64]
+%HiChip16xxUSB.DeviceDesc%=HiChip16xxUSB_Device, USB\VID_1CBE&PID_0005
+
+
+[HiChip16xxUSB_Device.NT]
+CopyFiles=Drivers_Dir
+
+[Drivers_Dir]
+HiChip16xxUSB.sys
+
+[HiChip16xxUSB_Device.NT.HW]
+AddReg=HiChip16xxUSB_AddReg
+
+[HiChip16xxUSB_AddReg]
+; By default, USBDevice class uses iProduct descriptor to name the device in
+; Device Manager on Windows 8 and higher.
+; Uncomment for this device to use %DeviceName% on Windows 8 and higher:
+;HKR,,FriendlyName,,%HiChip16xxUSB.DeviceDesc%
+
+;-------------- Service installation
+[HiChip16xxUSB_Device.NT.Services]
+AddService = HiChip16xxUSB,%SPSVCINST_ASSOCSERVICE%, HiChip16xxUSB_Service_Inst
+
+; -------------- HiChip16xxUSB driver install sections
+[HiChip16xxUSB_Service_Inst]
+DisplayName    = %HiChip16xxUSB.SVCDESC%
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 3               ; SERVICE_DEMAND_START
+ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\HiChip16xxUSB.sys
+
+;
+;--- HiChip16xxUSB_Device Coinstaller installation ------
+;
+
+[HiChip16xxUSB_Device.NT.CoInstallers]
+AddReg=HiChip16xxUSB_Device_CoInstaller_AddReg
+CopyFiles=HiChip16xxUSB_Device_CoInstaller_CopyFiles
+
+[HiChip16xxUSB_Device_CoInstaller_AddReg]
+;
+
+
+[HiChip16xxUSB_Device_CoInstaller_CopyFiles]
+;
+
+
+[HiChip16xxUSB_Device.NT.Wdf]
+KmdfService =  HiChip16xxUSB, HiChip16xxUSB_wdfsect
+[HiChip16xxUSB_wdfsect]
+KmdfLibraryVersion = 1.15
+
+[Strings]
+SPSVCINST_ASSOCSERVICE= 0x00000002
+ManufacturerName="<HiChip Inc>" ;TODO: Replace with your manufacturer name
+ClassName="Universal Serial Bus devices"
+DiskName = "HiChip16xxUSB Installation Disk"
+HiChip16xxUSB.DeviceDesc = "HiChip16xxUSB Device"
+HiChip16xxUSB.SVCDESC = "HiChip16xxUSB Service"
+REG_MULTI_SZ = 0x00010000
