@@ -5,7 +5,7 @@ This is the repository for the Custom Firmware for the SF2000 from DataFrog.
 <h2>Project Members:</h2>
 
 <b>Ignatz:</b> Maintainer of this repository, main dev on the SF2000 Custom Firmeware
-<br><b>Osaka:</b> 
+<br><b>Osaka:</b> A researcher of the original firmware, author of the bootloader fix and the sample custom code (BMP viewer) 
 
 <h2>Links:</h2><br>
 Original SDK Dump and firmware files:<br>
