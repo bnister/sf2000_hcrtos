@@ -1,0 +1,24 @@
+config CONFIG_RC_KEYMAP_HCDEMO
+        bool "HC demo remote control receiver"
+	depends on CONFIG_RC_CORE
+	default y
+
+config CONFIG_RC_KEYMAP_PROJECTOR_C1
+	bool "Projector C1 remote control receiver"
+	depends on CONFIG_RC_CORE
+	default n
+
+config CONFIG_RC_KEYMAP_PROJECTOR_C1_WJV6
+	bool "Projector C1 WJV6 remote control receiver"
+	depends on CONFIG_RC_CORE
+	default n
+
+config CONFIG_RC_KEYMAP_PROJECTOR_C1_AK02
+	bool "Projector C1 AK02 remote control receiver"
+	depends on CONFIG_RC_CORE
+	default n
+
+config CONFIG_RC_KEYMAP_PROJECTOR_C2_D3000
+	bool "Projector C2 D3000 remote control receiver"
+	depends on CONFIG_RC_CORE
+	default n

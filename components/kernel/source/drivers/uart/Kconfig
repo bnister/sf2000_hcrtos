@@ -1,0 +1,3 @@
+config CONFIG_UART_RX_BUF_SIZE
+	int "Rx buffer size"
+	default 1024

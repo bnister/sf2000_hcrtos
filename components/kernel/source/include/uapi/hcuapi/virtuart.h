@@ -1,0 +1,9 @@
+#ifndef _HCUAPI_VIRTUART_H_
+#define _HCUAPI_VIRTUART_H_
+
+#include <hcuapi/iocbase.h>
+
+#define VIRTUART_NOTIFY_POLLIN		_IO (VIRTUART_IOCBASE, 0)
+#define VIRTUART_NOTIFY_EXIT		_IO (VIRTUART_IOCBASE, 1)
+
+#endif	/* _HCUAPI_VIRTUART_H_ */

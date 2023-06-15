@@ -1,0 +1,338 @@
+menu "Drivers"
+
+menuconfig CONFIG_DRV_UART
+        bool "Uart driver"
+        default y
+
+if CONFIG_DRV_UART
+source "uart/Kconfig"
+endif
+
+menuconfig CONFIG_DRV_VIRTUART
+        bool "Virtual uart driver"
+        default y
+
+if CONFIG_DRV_VIRTUART
+source "virtuart/Kconfig"
+endif
+
+menuconfig CONFIG_DRV_FILEUART
+        bool "File uart driver"
+        default n
+
+if CONFIG_DRV_FILEUART
+source "fileuart/Kconfig"
+endif
+
+config CONFIG_DRV_DUMMYUART
+        bool "Dummy uart driver"
+        default y
+
+config CONFIG_DRV_DEVNULL
+        bool "Enable /dev/null"
+        default y
+
+config CONFIG_DRV_DEVZERO
+        bool "Enable /dev/zero"
+        default n
+
+config CONFIG_DRV_SOFTIRQ
+        bool "Softirq support"
+        default n
+
+menuconfig CONFIG_DRV_LNXDRIVER
+        bool "Lnx support"
+        default n
+
+if CONFIG_DRV_LNXDRIVER
+config CONFIG_SCHED_LNXWORKSTACKSIZE
+	hex "Default lnx work stack size in uint32_t"
+	default 0x1000
+
+config CONFIG_SCHED_SOFTIRQD_HI_PRIORITY
+	int "Default lnx softirqd hi task priority"
+	default CONFIG_TASK_CRITICAL_PRIORITY
+
+menuconfig CONFIG_SCHED_SOFTIRQD_HI_RESCHED
+	bool "Enable softirqd hi task resched"
+	default y
+
+if CONFIG_SCHED_SOFTIRQD_HI_RESCHED
+config CONFIG_SCHED_SOFTIRQD_HI_RESCHED_PRIORITY
+	int "Default lnx softirqd hi task resched priority"
+	default CONFIG_TASK_CRITICAL_PRIORITY
+endif
+
+config CONFIG_SCHED_SOFTIRQD_PRIORITY
+	int "Default lnx softirqd task priority"
+	default CONFIG_TASK_CRITICAL_PRIORITY
+
+menuconfig CONFIG_SCHED_SOFTIRQD_RESCHED
+	bool "Enable softirqd task resched"
+	default y
+
+if CONFIG_SCHED_SOFTIRQD_RESCHED
+config CONFIG_SCHED_SOFTIRQD_RESCHED_PRIORITY
+	int "Default lnx softirqd task resched priority"
+	default CONFIG_TASK_CRITICAL_PRIORITY
+endif
+
+config CONFIG_NET_RX_SOFTIRQ_IN_TASK_ONLY
+	bool "net rx softirq process in task only"
+	default n
+
+config CONFIG_NET_TX_SOFTIRQ_IN_TASK_ONLY
+	bool "net tx softirq process in task only"
+	default n
+
+config CONFIG_TASKLET_SOFTIRQ2_IN_TASK_ONLY
+	bool "tasklet softirq process in task only"
+	default n
+endif
+
+menuconfig CONFIG_DRV_WQUEUE
+        bool "Workqueue support"
+        default y
+
+if CONFIG_DRV_WQUEUE
+source "wqueue/Kconfig"
+endif
+
+menuconfig CONFIG_DRV_AMPRPC
+        bool "AMP RPC support"
+	select CONFIG_SCHED_RPCWORK
+	select CONFIG_SCHED_HPWORK
+	select CONFIG_WQUEUE_NOTIFIER
+	depends on CONFIG_SOC_HC16XX
+        default n
+
+if CONFIG_DRV_AMPRPC
+source "amprpc/Kconfig"
+endif
+
+config CONFIG_DRVR_RAMDISK
+	bool "Ramdisk"
+	default n
+
+config CONFIG_DRVR_MKRD
+	bool "RAM disk wrapper (mkrd)"
+	default n
+	---help---
+		Build the mkrd() function which serves as a wrapper to simplify
+		creation of RAM disks.  If the boardctrl() interface is enabled,
+		the selecting this option will also enable the BOARDIOC_MKRD
+		command that will support creation of RAM disks from applications.
+
+source "bch/Kconfig"
+
+source "mtd/Kconfig"
+
+source "pipes/Kconfig"
+
+menu "Buffering"
+
+config CONFIG_DRVR_WRITEBUFFER
+	bool "Enable write buffer support"
+	default n
+	---help---
+		Enable generic write buffering support that can be used by a variety
+		of drivers.
+
+if CONFIG_DRVR_WRITEBUFFER
+
+config CONFIG_DRVR_WRDELAY
+	int "Write flush delay"
+	default 350
+	---help---
+		If there is no write activity for this configured amount of time,
+		then the contents will be automatically flushed to the media.  This
+		reduces the likelihood that data will be stuck in the write buffer
+		at the time of power down.
+
+endif # CONFIG_DRVR_WRITEBUFFER
+
+config CONFIG_DRVR_READAHEAD
+	bool "Enable read-ahead buffer support"
+	default n
+	---help---
+		Enable generic read-ahead buffering support that can be used by a
+		variety of drivers.
+
+if CONFIG_DRVR_WRITEBUFFER || CONFIG_DRVR_READAHEAD
+
+config CONFIG_DRVR_READBYTES
+	bool "Support byte read method"
+	default y if CONFIG_MTD_BYTE_WRITE
+	default n if !CONFIG_MTD_BYTE_WRITE
+
+config CONFIG_DRVR_REMOVABLE
+	bool "Support removable media"
+	default n
+
+config CONFIG_DRVR_INVALIDATE
+	bool "Support cache invalidation"
+	default n
+
+endif # CONFIG_DRVR_WRITEBUFFER || CONFIG_DRVR_READAHEAD
+
+endmenu # Buffering
+
+config CONFIG_DEV_MMZ
+	bool "mmz dev"
+	default y
+
+menuconfig CONFIG_DRV_VIDEO
+	bool "video"
+	default n
+
+if CONFIG_DRV_VIDEO
+source "video/Kconfig"
+endif
+
+
+config CONFIG_DRV_PINMUX
+	bool "pinmux"
+	default y
+
+config CONFIG_DRV_GPIO
+	bool "gpio"
+	default y
+
+config CONFIG_DRV_ADC
+	bool "ADC Support"
+	default n
+	
+source "av/Kconfig"
+
+config CONFIG_DRV_POK
+	bool "pok Support"
+	default n
+
+menuconfig CONFIG_DRV_INPUT
+	bool "input event"
+	default y
+
+if CONFIG_DRV_INPUT
+source "input/Kconfig"
+endif
+
+menuconfig CONFIG_DRV_SPI
+	bool "spi support"
+	default y
+
+if CONFIG_DRV_SPI
+source "spi/Kconfig"
+endif
+
+config CONFIG_DRV_LVDS
+	bool "lvds"
+	depends on CONFIG_SOC_HC16XX
+	default n
+
+config CONFIG_DRV_RGB
+	bool "rgb"
+	depends on CONFIG_SOC_HC15XX
+	default n
+
+config CONFIG_DRV_MIPI
+	bool "mipi"
+	depends on CONFIG_SOC_HC16XX
+	default y
+
+source "i2c/Kconfig"
+
+source "pwm/Kconfig"
+
+config CONFIG_DRV_NBDBG
+	bool "NB debug"
+	default y
+
+menuconfig CONFIG_DRV_APLATFORM
+	bool "audio platform support"
+	default y
+
+if CONFIG_DRV_APLATFORM
+source "aplatform/Kconfig"
+endif
+
+menuconfig CONFIG_DRV_WDT
+	bool "watchdog"
+	default n
+
+if CONFIG_DRV_WDT
+	source "watchdog/Kconfig"
+endif
+
+config CONFIG_DRV_PERSISTENTMEM
+	bool "persistent memory"
+	select CONFIG_LIB_CRC
+	select CONFIG_MTD_BYTE_WRITE
+	default y
+
+config CONFIG_DRV_HWSPINLOCK
+        bool "hwspinlock"
+        default n
+
+menuconfig CONFIG_DRV_KSHM
+	bool "kshm driver"
+	select CONFIG_DRV_HWSPINLOCK
+	default y
+
+if CONFIG_DRV_KSHM
+config CONFIG_DRV_KSHM_FOR_DUALCORE
+	bool "kshm for dualcore"
+	default n
+endif
+
+config CONFIG_DRV_HCGE
+	bool "hcge driver"
+	default n
+
+menuconfig CONFIG_DRV_STANDBY
+        bool "standby driver"
+        default n
+
+if CONFIG_DRV_STANDBY
+config CONFIG_OUT_HC_SCANCODE
+        bool "output hichip scancode"
+        default n
+#config CONFIG_STANDBY_REAL_MODE
+#       bool "standby fast mode"
+#       default n
+endif
+	
+menuconfig CONFIG_DRV_DVP
+	bool "dvp driver"
+	default n
+
+if CONFIG_DRV_DVP
+source "dvp/Kconfig"
+endif
+
+source "crypto/Kconfig"
+
+menuconfig CONFIG_USB_GADGET_VENDOR
+	bool "USB gadget vendor support"
+	default n
+
+if CONFIG_USB_GADGET_VENDOR
+	config CONFIG_USB_ZERO
+		bool "usb gadget demo: zero"
+		default n
+endif
+
+if CONFIG_USB_GADGET_VENDOR
+	config CONFIG_USB_GADGET_HID_VENDOR
+		bool "usb gadget demo: hid mouse/keyboard report parameters"
+		default n
+endif
+ 
+menuconfig CONFIG_DRV_LCD
+	bool "lcd driver"
+	default n
+
+if CONFIG_DRV_LCD
+source lcd/Kconfig"
+endif
+
+endmenu

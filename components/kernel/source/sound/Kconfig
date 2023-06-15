@@ -1,0 +1,19 @@
+menuconfig CONFIG_SOUND
+	bool "Sound core"
+	default y
+
+if CONFIG_SOUND
+
+choice
+	prompt "audsink force bitdepth out"
+	default CONFIG_AUDSINK_16BIT_OUT
+
+config CONFIG_AUDSINK_16BIT_OUT
+	bool "16bit out"
+
+config CONFIG_AUDSINK_24BIT_OUT
+	bool "24bit out"
+
+endchoice
+
+endif

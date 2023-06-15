@@ -1,0 +1,13 @@
+config CONFIG_FS_ELMFAT
+	bool "FF FAT file system"
+	default n
+	depends on !CONFIG_DISABLE_MOUNTPOINT
+	---help---
+		Enable FAT filesystem support
+
+config CONFIG_FSUTILS_FF_MKFATFS
+	bool "mkfatfs utility"
+	default y
+	depends on CONFIG_FS_ELMFAT && !CONFIG_DISABLE_PSEUDOFS_OPERATIONS
+	---help---
+		Enables support for the mkfatfs utility

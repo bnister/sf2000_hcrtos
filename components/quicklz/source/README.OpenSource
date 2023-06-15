@@ -1,0 +1,10 @@
+[
+    {
+        "Name"                  : "quicklz",
+        "License"               : "GPL License",
+        "License File"          : "LICENSE.md",
+        "Version Number"        : "1.5.0",
+        "Upstream URL"          : "https://github.com/RT-Thread-packages/quicklz.git",
+        "Description"           : "QuickLZ is known as the fastest compression library in the world, with a speed of 308 Mbyte/s per core, simple to use and easy to integrate. This quicklz library is RT-thread for the official qiuicklz C library Porting. For more information about quicklz, please refer to http://www.quicklz.com"
+    }
+]

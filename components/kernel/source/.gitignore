@@ -1,0 +1,15 @@
+*.o
+*.d
+*.map
+.config*
+cscope*
+tags*
+obj/*
+.stamp_*
+.menuconfig.log
+.*.swp
+.rbuilt-in-dummy.c
+.built-in-dummy.c
+*.code-*
+.vscode
+.applied_patches_list

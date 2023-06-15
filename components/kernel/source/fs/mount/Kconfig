@@ -1,0 +1,9 @@
+config CONFIG_FS_AUTOMOUNTER
+	bool "Auto-mounter"
+	default n
+	select CONFIG_SCHED_LPWORK
+	---help---
+	  The automounter provides an OS-internal mechanism for automatically
+	  mounting and unmounting removable media as the media is inserted and
+	  removed.
+

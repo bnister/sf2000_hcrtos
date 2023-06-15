@@ -1,0 +1,45 @@
+#
+# For a description of the syntax of this configuration file,
+# see the file kconfig-language.txt in the NuttX tools repository.
+#
+
+menuconfig CONFIG_PIPES
+	bool "FIFO and named pipe drivers"
+	default n
+	---help---
+		FIFO and named pipe drivers.  Standard interfaces are declared
+		in include/unistd.h
+
+if CONFIG_PIPES
+
+config CONFIG_DEV_PIPE_MAXSIZE
+	int "Maximum pipe/FIFO size"
+	default 65535
+	---help---
+		Maximum configurable size of a pipe or FIFO at runtime.
+
+config CONFIG_DEV_PIPE_SIZE
+	int "Default pipe size"
+	default 256
+	---help---
+		Sets the default size of the pipe ringbuffer in bytes.  A value of
+		zero disables pipe support.
+
+config CONFIG_DEV_FIFO_SIZE
+	int "Default FIFO size"
+	default 256
+	---help---
+		Sets the default size of the FIFO ringbuffer in bytes.  A value of
+		zero disables FIFO support.
+
+config CONFIG_DEV_PIPE_VFS_PATH
+	string "Path to the pipe device"
+	default "/dev/pipe"
+	---help---
+		The path to where pipe device will exist in the VFS namespace.
+
+config CONFIG_DEV_PIPEDUMP
+	bool "Enable dump pipe data"
+	default n
+
+endif # PIPES

@@ -1,0 +1,10 @@
+[
+    {
+        "Name"                  : "lwip-contrib",
+        "License"               : "BSD 3-Clause License",
+        "License File"          : "COPYING",
+        "Version Number"        : "STABLE-2_1_0_RELEASE",
+        "Upstream URL"          : "https://git.savannah.nongnu.org/git/lwip/lwip-contrib.git",
+        "Description"           : "lwIP Contrib - Contributed code for Lightweight TCP/IP stack"
+    }
+]

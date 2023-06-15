@@ -1,0 +1,20 @@
+choice
+	prompt "watchdog timer running mode"
+	default CONFIG_WDT_MODE_WATCHDOG
+
+	config CONFIG_WDT_MODE_WATCHDOG
+		bool "watchdog mode"
+
+	config CONFIG_WDT_MODE_TIMER
+		bool "timer mode"
+endchoice
+
+config CONFIG_WDT_AUTO_FEED
+	bool "auto feed watchdog timer in idle task"
+	depends on CONFIG_WDT_MODE_WATCHDOG
+	default n
+
+config CONFIG_WDT_TIMEOUT 
+	int "default timeout (in millisecond) of watchdog timer"
+	range 1 120000
+	default 20000

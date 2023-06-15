@@ -1,0 +1,32 @@
+# For a description of the syntax of this configuration file,
+# see the file kconfig-language.txt in the NuttX tools repository.
+#
+menuconfig CONFIG_DEV_URANDOM
+	bool "Enable /dev/urandom"
+	default n
+	---help---
+		Enable support for /dev/urandom provided by either a hardware TRNG or
+		by a software PRNG implementation.
+
+		NOTE:  This option may not be cryptographially secure and should not
+		be enabled if you are concerned about cyptographically secure
+		pseudo-random numbers (CPRNG) and do not know the characteristics
+		of the software PRNG implementation!
+
+if CONFIG_DEV_URANDOM
+
+choice
+	prompt "/dev/urandom algorithm"
+	default CONFIG_DEV_URANDOM_CONGRUENTIAL
+
+config CONFIG_DEV_URANDOM_CONGRUENTIAL
+	bool "Congruential"
+	---help---
+		Use the same congruential general used with srand().  This algorithm
+		is computationally more intense and uses double precision floating
+		point.  NOTE: Good randomness from the congruential generator also
+		requires that you also select CONFIG_LIBC_RAND_ORDER > 2
+
+		NOTE: Not cyptographically secure
+endchoice # /dev/urandom algorithm
+endif # DEV_URANDOM

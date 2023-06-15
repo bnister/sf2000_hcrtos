@@ -1,0 +1,111 @@
+if BR2_PACKAGE_APPS_PROJECTOR
+
+config CONFIG_APPS_PROJECTOR_HDMIIN
+	bool "Enable HDMI IN"
+	default y
+	select BR2_PACKAGE_PREBUILTS_HDMIRX	
+
+config CONFIG_APPS_PROJECTOR_CVBSIN
+	bool "Enable CVBS IN"
+	default y
+	select CONFIG_VIDEO_TVDECODER_SUPPORT
+	
+config CONFIG_APPS_PROJECTOR_USBMIRROR
+	bool "Enable USBMirror"
+	default n
+	select CONFIG_NET
+	select BR2_PACKAGE_LIBOPENSSL
+	select BR2_PACKAGE_LIBUSB
+	select BR2_PACKAGE_HCCAST
+	select BR2_PACKAGE_HCCAST_USBMIRROR
+
+config CONFIG_APPS_PROJECTOR_WIRELESSCAST
+	bool "Enable WirelessCast(miracast/dlna/airmirror)"
+	default n
+	select BR2_PACKAGE_HCCAST		
+	select CONFIG_NET
+	select BR2_PACKAGE_LIBOPENSSL
+	select BR2_PACKAGE_CJSON
+	select BR2_PACKAGE_PREBUILTS_LIBDSC
+	#select BR2_PACKAGE_PREBUILTS_RTL8188FU
+	select BR2_PACKAGE_PREBUILTS_WPA_SUPPLICANT
+	select BR2_PACKAGE_PREBUILTS_WIFI_WIRELESS_TOOLS
+	select BR2_PACKAGE_LIBUSB 
+	select BR2_PACKAGE_PREBUILTS_AACELDEC 
+	select BR2_PACKAGE_HCCAST_WIRELESS 
+	
+config CONFIG_APPS_PROJECTOR_BLUETOOTH
+	bool "Enable Bluetooth"
+	default n
+	depends on BR2_PACKAGE_BLUETOOTH
+	help
+		open BT according to your board used.
+config CONFIG_APPS_PROJECTOR_VMOTOR_DRIVE
+	bool "Support projector vmotor drive"
+	default n
+	help
+		open step motor drive.
+
+config CONFIG_APPS_PROJECTOR_SPDIF_OUT
+	bool "Support projector spdif out"
+	default n
+	help
+		open spdif out.
+
+config CONFIG_APPS_PROJECTOR_SYS_ZOOM
+	bool "Enable system zoom"
+	default n 
+	help
+		open sys zoom
+
+config CONFIG_APPS_PROJECTOR_USB_AUTO_UPGRADE
+	bool "Enable usb auto upgrade"
+	default n 
+	help
+		open open usb auto upgrade
+
+config CONFIG_APPS_PROJECTOR_MAIN_PAGE
+	bool "Support Main(home) page"
+	default y
+	help
+		open main page.
+
+config CONFIG_APPS_PROJECTOR_CVBS_AUDIO_I2SI_I2SO
+	bool "Support projector cvbs audio i2si i2so"
+	default y
+	help
+		set cvbs audio i2si i2so out.
+		
+config CONFIG_APPS_PROJECTOR_CAST_720P
+	bool "Support 720p cast"
+	default n
+	help
+		720p cast in 64M solution.
+
+config CONFIG_APPS_PROJECTOR_BACKLIGHT_MONITOR
+	bool "support backlight monitor"
+	default n
+	help
+		support backlight monitor.
+
+config CONFIG_APPS_PROJECTOR_KEYSTONE
+	bool "support keystone"
+	default n
+	depends on CONFIG_SOC_HC16XX
+	help
+		support projector keystone function.
+
+config CONFIG_APPS_PROJECTOR_LVGL_RESOLUTION_240P
+    	bool "Support LVGL(osd) resolution for 240P"
+    	default n
+     	help
+        reset LVGL resolution for 320 *240.
+
+config CONFIG_APPS_PROJECTOR_LVGL_MBOX_STANDBY
+	bool "Press POWER 2 times enter standby?"
+	default n
+	help
+		Support confirm when you go in standby
+
+endif
+

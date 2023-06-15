@@ -1,0 +1,10 @@
+[
+    {
+        "Name"                  : "POSIX threading wrapper for FreeRTOS",
+        "License"               : "MIT License",
+        "License File"          : "LICENSE",
+        "Version Number"        : "85ce51dad6aef44446c9f289e65f35c318afe015",
+        "Upstream URL"          : "https://github.com/FreeRTOS/Lab-Project-FreeRTOS-POSIX.git",
+        "Description"           : "The Portable Operating System Interface (POSIX) is a family of standards specified by the IEEE Computer Society for maintaining compatibility between operating systems. FreeRTOS+POSIX implements *a small subset* of the [POSIX threading](https://pubs.opengroup.org/onlinepubs/7908799/xsh/threads.html) API. This subset allows application developers familiar with POSIX API to develop a FreeRTOS application using POSIX like threading primitives. FreeRTOS+POSIX does not implement more than 80% of the POSIX API. Therefore, an existing POSIX compliant application or a POSIX compliant library cannot be ported to run on FreeRTOS Kernel using only this wrapper."
+    }
+]

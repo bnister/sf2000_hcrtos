@@ -1,0 +1,19 @@
+# For a description of the syntax of this configuration file,
+# see the file kconfig-language.txt in the NuttX tools repository.
+#
+
+menu "Partition Table"
+
+config CONFIG_PTABLE_PARTITION
+	bool "PTABLE support"
+	default n
+
+config CONFIG_MBR_PARTITION
+	bool "MBR support"
+	default n
+
+config CONFIG_GPT_PARTITION
+	bool "GPT support"
+	default n
+
+endmenu

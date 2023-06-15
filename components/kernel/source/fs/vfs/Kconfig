@@ -1,0 +1,65 @@
+config CONFIG_PATH_MAX
+	int "Maximum size of path name"
+	default 512
+	---help---
+		The maximum size of path name.
+
+config CONFIG_NAME_MAX
+	int "Maximum size of a file name"
+	default 64
+	---help---
+		The maximum size of a file name.
+config CONFIG_FILE_MODE
+	bool "Enable file mode"
+	default n
+
+config CONFIG_DISABLE_MOUNTPOINT
+	bool "Disable support for mount points"
+	default n
+
+config CONFIG_DISABLE_PSEUDOFS_OPERATIONS
+	bool "Disable pseudo-filesystem operations"
+	default n
+	---help---
+		Disable certain operations on pseudo-file systems include mkdir,
+		rmdir, unlink, and rename.  These are necessary for the logical
+		completeness of the illusion created by the pseudo-filesystem.
+		However, in practical embedded system, they are seldom needed and
+		you can save a little FLASH space by disabling the capability.
+
+config CONFIG_NFILE_DESCRIPTORS_PER_BLOCK
+	int "The number of file descriptors per block"
+	default 8
+	range 3 99999
+	---help---
+		The number of file descriptors per block(one for each open)
+
+config CONFIG_INLINE_POLL_NFILE_DESCRIPTORS
+	int "Inline poll file descriptors"
+	default 5
+	---help---
+		The inline poll file descriptors in one call
+		to avoid frequently malloc/free. If polling more file
+		descriptors in one call, dynamic malloc/free is used.
+
+config CONFIG_NAME_MAX
+	int "Maximum size of a file name"
+	default 32
+	---help---
+		The maximum size of a file name.
+
+config CONFIG_PATH_MAX
+	int "Maximum size of path name"
+	default 256
+	---help---
+		The maximum size of path name.
+
+config CONFIG_LIB_SENDFILE_BUFSIZE
+	int "sendfile() buffer size"
+	default 512
+	---help---
+		Size of the I/O buffer to allocate in sendfile().  Default: 512b
+
+config CONFIG_DISABLE_MQUEUE
+	bool "Disable POSIX message queue support"
+	default y

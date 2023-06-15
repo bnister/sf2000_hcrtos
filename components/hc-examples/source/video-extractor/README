@@ -1,0 +1,9 @@
+extractor是一个抽取视频数据的工具，抽取的数据会在每一帧开头增加4字节的数据，
+表示下一帧数据的大小，4字节大小以小端格式存储，工具运行命令：
+	extractor <输入视频文件路径> <输出视频数据>
+该工具在Ubuntu 18.04上测试.
+如果无法使用，可以自行编译，修改CMakeList中ffmpeg的路径之后,运行下面命令编译：
+	mkdir build
+	cd build
+	cmake ../
+	make all

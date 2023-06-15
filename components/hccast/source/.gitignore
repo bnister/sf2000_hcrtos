@@ -1,0 +1,4 @@
+*.o
+*.swp
+build
+.applied_patches_list

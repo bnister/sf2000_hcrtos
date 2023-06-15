@@ -1,0 +1,44 @@
+# For a description of the syntax of this configuration file,
+# see the file kconfig-language.txt in the NuttX tools repository.
+#
+
+config CONFIG_ARCH_HAVE_I2CRESET
+	bool
+	default n
+
+menuconfig CONFIG_I2C
+	bool "I2C Driver Support"
+	default n
+	---help---
+		This selection enables building of the "upper-half" I2C driver.
+		See include/nuttx/i2c/i2c_master.h for further I2C driver information.
+
+if CONFIG_I2C
+
+config CONFIG_I2C_SCB_MASTER
+	bool "I2C SCB Master"
+        default y
+
+config CONFIG_I2C_GPIO_MASTER
+	bool "I2C GPIO Master"
+	default n
+
+menuconfig CONFIG_I2C_SLAVE
+	bool "I2C Slave"
+	default n
+
+if CONFIG_I2C_SLAVE
+config CONFIG_I2C_SLAVE_HDMI
+	bool "hdmi I2C Slave"
+	default n
+endif
+
+config CONFIG_I2C_DRIVER
+	bool "I2C character driver"
+	default n
+	---help---
+		Build in support for a character driver at /dev/i2c[N] that may be
+		used to perform I2C bus transfers from applications.  The intent of
+		this driver is to support I2C testing.  It is not suitable for use
+		in any real driver application.
+endif

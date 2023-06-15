@@ -1,0 +1,13 @@
+choice
+	prompt "Select b2bupdater mode"
+	default CONFIG_B2BUPGRADER_UART
+
+	config CONFIG_B2BUPGRADER_UART
+		bool "uart"
+
+if  CONFIG_SOC_HC16XX
+	config CONFIG_B2BUPGRADER_USB
+		bool "usb"
+endif
+
+endchoice

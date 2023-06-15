@@ -1,0 +1,22 @@
+ROOT = $(shell pwd)/../
+CROSS_TOOLCHAIN = $(ROOT)/output/host/usr/bin/mips-mti-linux-gnu-
+CC = $(CROSS_TOOLCHAIN)gcc
+
+LIBS= -pthread
+INC = -L/media/ps/data/home/weiwen.liu/linux/hclinux-b300-0217-squashfs/hclinux-0218/buildroot/output/host/mipsel-buildroot-linux-gnu/sysroot/usr/include
+CFLAGS = -O0 -g
+
+all: display_sink display_source
+	@echo "build success"
+	cp $^ ~/../media/weiwen.liu/
+
+display_sink : display_sink.c decoder.c
+	$(CC) -o $@ $(LIBS) $(CFLAGS) $^	
+	cp $@ ~/../media/weiwen.liu/
+
+display_source: display_source.c queue.c
+	$(CC) -o $@  $(INC) $(LIBS) $(CFLAGS) $^
+	cp $@ ~/../media/weiwen.liu/
+clean:
+	rm -rf *.o
+	rm -rf display_sink display_source

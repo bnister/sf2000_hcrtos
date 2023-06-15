@@ -1,0 +1,7 @@
+config CONFIG_CMDS_OS_TOP
+	bool "top"
+	default n
+
+config CONFIG_CMDS_OS_PS
+	bool "ps"
+	default n

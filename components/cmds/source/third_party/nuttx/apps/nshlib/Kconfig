@@ -1,0 +1,154 @@
+#
+# For a description of the syntax of this configuration file,
+# see the file kconfig-language.txt in the NuttX tools repository.
+#
+menu "Disable Individual commands"
+
+config CONFIG_NSH_CMD_MODE_ALL
+	bool "Command mode All"
+	default n
+
+config CONFIG_NSH_DISABLE_CAT
+	bool "Disable cat"
+	default n
+
+config CONFIG_NSH_DISABLE_CD
+	bool "Disable cd"
+	default n
+
+config CONFIG_NSH_DISABLE_CP
+	bool "Disable cp"
+	default n
+
+config CONFIG_NSH_DISABLE_CMP
+	bool "Disable cmp"
+	default n
+
+config CONFIG_NSH_DISABLE_DATE
+	bool "Disable date"
+	default n
+
+config CONFIG_NSH_DISABLE_DD
+	bool "Disable dd"
+	default n
+
+config CONFIG_NSH_DISABLE_DF
+	bool "Disable df"
+	default n
+
+config CONFIG_NSH_DISABLE_DIRNAME
+	bool "Disable dirname"
+	default n
+
+config CONFIG_NSH_DISABLE_ECHO
+	bool "Disable echo"
+	default n
+
+config CONFIG_NSH_DISABLE_HEXDUMP
+	bool "Disable hexdump"
+	default n
+
+config CONFIG_NSH_DISABLE_LS
+	bool "Disable ls"
+	default n
+
+config CONFIG_NSH_DISABLE_MB
+	bool "Disable mb"
+	default n
+
+config CONFIG_NSH_DISABLE_MKDIR
+	bool "Disable mkdir"
+	default n
+
+config CONFIG_NSH_DISABLE_MKFATFS
+	bool "Disable mkfatfs"
+	depends on CONFIG_FSUTILS_MKFATFS
+
+menuconfig CONFIG_NSH_DISABLE_ROMFSTEST
+	bool "Disable romfstest"
+	default y
+
+if !CONFIG_NSH_DISABLE_ROMFSTEST
+	config CONFIG_NSH_ROMFS_IMAGEFILE
+	string "Romfs imagefile"
+
+	config CONFIG_NSH_ROMFS_DEV_MINOR
+	int "Romfs dev minor"
+	default 1
+
+	config CONFIG_NSH_ROMFS_MOUNTPOINT
+	string "Romfs mountpoing"
+	default "/romfs"
+endif
+
+config CONFIG_NSH_DISABLE_MKRD
+        bool "Disable mkrd"
+	default n
+
+config CONFIG_NSH_DISABLE_MH
+	bool "Disable mh"
+	default n
+
+config CONFIG_NSH_DISABLE_MOUNT
+	bool "Disable mount"
+	default n
+
+config CONFIG_NSH_DISABLE_MV
+	bool "Disable mv"
+	default n
+
+config CONFIG_NSH_DISABLE_MW
+	bool "Disable mw"
+	default n
+
+config CONFIG_NSH_DISABLE_PWD
+	bool "Disable pwd"
+	default n
+
+config CONFIG_NSH_DISABLE_RM
+	bool "Disable rm"
+	default n
+
+config CONFIG_NSH_DISABLE_RMDIR
+	bool "Disable rmdir"
+	default n
+
+config CONFIG_NSH_DISABLE_TIME
+	bool "Disable time"
+	default n
+
+config CONFIG_NSH_DISABLE_TRUNCATE
+	bool "Disable truncate"
+	default y
+
+config CONFIG_NSH_DISABLE_UMOUNT
+	bool "Disable umount"
+	default n
+
+config CONFIG_NSH_DISABLE_XD
+	bool "Disable xd"
+	default y if DEFAULT_SMALL
+	default n if !DEFAULT_SMALL
+
+endmenu
+
+menu "Configure Command Options"
+
+config CONFIG_NSH_CMDOPT_DD_STATS
+	bool "dd: Support transfer statistics"
+	default n
+	depends on !CONFIG_NSH_DISABLE_DD
+
+config CONFIG_NSH_CMDOPT_HEXDUMP
+	bool "hexdump: Enable 'skip' and 'count' parameters"
+	default y
+	depends on !CONFIG_NSH_DISABLE_HEXDUMP
+
+endmenu
+
+config CONFIG_NSH_FILEIOSIZE
+	int "NSH I/O buffer size"
+	default 1024
+	---help---
+		Size of a static I/O buffer used for file access (ignored if
+		there is no filesystem). Default is 512/1024.

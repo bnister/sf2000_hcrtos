@@ -1,0 +1,33 @@
+menu "Memory Management"
+
+config CONFIG_MEM_NR_MMZ
+	int "Multi media memory zone number"
+	default 1
+
+config CONFIG_MEM_DEBUG_STORE
+	bool "Memory store check"
+	default n
+	help
+	  Check memory overflow in memset/memcpy/memmove/strcat/strcpy/strncat/strncpy
+
+menuconfig CONFIG_MEM_DEBUG_MONITOR
+	bool "Memory monitor (integrity/leak/caller/task)"
+	default n
+
+if CONFIG_MEM_DEBUG_MONITOR
+
+config CONFIG_MEM_DEBUG_LR_CNT
+	int "Max link register to record"
+	default 5
+
+config CONFIG_MEM_DEBUG_LR_OMIT_CNT
+	int "The omit layers of function call"
+	default 2
+
+config CONFIG_MEM_DEBUG_RECORD_TASKID
+	bool "Record taskid"
+	default 5
+
+endif
+
+endmenu

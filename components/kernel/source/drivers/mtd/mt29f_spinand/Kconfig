@@ -1,0 +1,25 @@
+ config CONFIG_MTD_SPINAND_MT29F
+	bool "SPINAND Device Support for Micron"
+	depends on CONFIG_MTD_NAND && CONFIG_DRV_SPI
+	help
+	  This enables support for accessing Micron SPI NAND flash
+	  devices.
+	  If you have Micron SPI NAND chip say yes.
+
+	  If unsure, say no here.
+
+ config CONFIG_MTD_SPINAND_ONDIEECC
+	bool "Use SPINAND internal ECC"
+	depends on CONFIG_MTD_SPINAND_MT29F
+	default n
+	help
+	  Internal ECC.
+	  Enables Hardware ECC support for Micro SPI NAND.
+
+config CONFIG_MTD_SPINAND_TIMEOUT
+	int "wait time out(s)"
+	range 1 50
+	default 40
+	depends on CONFIG_MTD_SPINAND_MT29F
+	help
+	  Set time-out period (s)

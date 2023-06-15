@@ -1,0 +1,19 @@
+
+config CONFIG_RPCMSG_NUM
+	int "RPC message number"
+        default 8
+	---help---
+		The message number of RPC. Each RPC call
+		requires one message to store the RPC parameters.
+
+config CONFIG_RPCMSG_SIZE
+	int "RPC message buffer size"
+	default 4096
+	---help---
+		The message buffer size.
+
+config CONFIG_RPCWORK_NUM
+	int "RPC works number"
+	default 64
+	---help---
+		The RPC works number.

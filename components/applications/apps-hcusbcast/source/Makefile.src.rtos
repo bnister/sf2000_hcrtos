@@ -1,0 +1,18 @@
+PROJECTOR_DIR ?= $(srctree)/src
+INC = -I$(PROJECTOR_DIR)/hcusbcast \
+      -I$(STAGING_DIR)/usr/include/lvgl/ \
+      -I$(STAGING_DIR)/usr/include/lvgl/lvgl
+
+cflags-y += -Wno-strict-prototypes -Wno-sign-compare -Wno-discarded-qualifiers -Wno-error=format=
+cflags-y += $(INC)
+
+include $(PROJECTOR_DIR)/hcusbcast_app/hcusbcast.rtos.mk
+
+COBJS = $(CSRCS:.c=.o)
+
+OBJS = $(patsubst $(PROJECTOR_DIR)/%,%,$(COBJS))
+
+hcusbcast-y = $(OBJS)
+obj-y += hcusbcast.o
+debug_p: FORCE
+	echo $(OBJS)

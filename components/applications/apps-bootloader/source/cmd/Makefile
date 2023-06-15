@@ -1,0 +1,11 @@
+cmd-y := bootm.o mtdload.o
+cmd-$(CONFIG_BOOT_SHOWLOGO) += showlogo.o
+cmd-$(CONFIG_BOOT_SHOWMEMINFO) += meminfo.o
+cmd-$(CONFIG_BOOT_UPGRADE) += upgrade.o
+cmd-$(CONFIG_BOOT_USBD_UPGRADE) += usbd_upgrade.o
+cmd-$(CONFIG_BOOT_UPGRADE) += standby.o
+cmd-$(CONFIG_BOOT_BACKLIGHT) += backlight.o
+cmd-$(CONFIG_BOOT_PQ_START) += pq_start.o
+cmd-$(CONFIG_BOOT_SHOW_UPGRADE_WAY) += show_upgrade_way.o
+cmd-$(CONFIG_BOOT_LCD) += boot_lcd.o
+obj-y += cmd.o

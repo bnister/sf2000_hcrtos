@@ -1,0 +1,18 @@
+menuconfig CONFIG_SPINANDWR_SELFCOMPRESSED
+	bool "Support spinandwr self compressed"
+	default n
+
+if CONFIG_SPINANDWR_SELFCOMPRESSED
+
+choice
+	prompt "Spinandwr self compress algo"
+	default CONFIG_SPINANDWR_SELFCOMPRESSED_LZMA
+
+	config CONFIG_SPINANDWR_SELFCOMPRESSED_LZMA
+		bool "Spinandwr lzma self-compressed"
+
+	config CONFIG_SPINANDWR_SELFCOMPRESSED_LZO1X
+		bool "Spinandwr lzo1x self-compressed"
+endchoice
+
+endif

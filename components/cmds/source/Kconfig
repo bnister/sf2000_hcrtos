@@ -1,0 +1,232 @@
+menuconfig CONFIG_CMDS_OS
+	bool "OS operations"
+	default n
+
+if CONFIG_CMDS_OS
+source "os/Kconfig"
+endif
+
+config CONFIG_CMDS_PTHREAD
+	bool "pthread operations"
+	depends on BR2_PACKAGE_PTHREAD
+	default n
+
+menuconfig CONFIG_CMDS_NSH
+	bool "Nsh operations"
+	default n
+
+if CONFIG_CMDS_NSH
+source "third_party/nuttx/apps/nshlib/Kconfig"
+endif
+
+menuconfig CONFIG_CMDS_SOUND_TEST
+	bool "sound test operations"
+	default n
+
+if CONFIG_CMDS_SOUND_TEST
+source "sound_test/Kconfig"
+endif
+
+config CONFIG_CMDS_LSMOD
+	bool "lsmod operations"
+	default y
+
+menuconfig CONFIG_CMDS_ADC_TEST
+	bool "adc test operations"
+	default n
+
+if CONFIG_CMDS_ADC_TEST
+source "saradc/Kconfig"
+endif
+
+config CONFIG_CMDS_FB_TEST
+	bool "fb test operations"
+	default n
+
+config CONFIG_CMDS_INPUT
+	bool "input event operations"
+	depends on CONFIG_DRV_INPUT
+	default n
+
+config CONFIG_CMDS_MTD
+	bool "mtd operations"
+	depends on CONFIG_MTD
+	default n
+
+config CONFIG_CMDS_SPI
+	bool "spi operations"
+	depends on CONFIG_HC_SPI_SF || CONFIG_HC_SPI_MASTER
+	default n
+
+if CONFIG_CMDS_SPI
+	choice
+        prompt "Test spi controller"
+	default TEST_SPI_SF
+
+        config TEST_SPI_SF
+                bool "test spi-sf"
+        config TEST_SPI_MASTER
+                bool "test spi-master"
+	config TEST_SPI_GPIO
+		bool "test spi-gpio"
+
+	endchoice
+endif
+
+config CONFIG_CMDS_PERSISTENTMEM
+	bool "persistent memory operations"
+	depends on CONFIG_DRV_PERSISTENTMEM
+	default n
+
+config CONFIG_CMDS_POK_TEST
+	bool "pok test operations"
+	default n  
+
+config CONFIG_CMD_UART
+	bool "uart test operations"
+	default n
+
+config CONFIG_CMDS_WATCHDOG_TEST
+	bool "watchdog test operations"
+	default n  
+
+config CONFIG_CMDS_EFUSE_DUMP
+	bool "Efuse bits dump operations"
+	default n
+	
+menuconfig CONFIG_CMDS_HDMI_RX
+	bool "hdmi rx test operations"
+	default n
+
+if CONFIG_CMDS_HDMI_RX
+config CONFIG_CMDS_HDMI_RX_SORTING
+	bool "enable hdmrx sorting test"
+	default n
+endif
+
+	
+config CONFIG_CMDS_TV_DECODER
+	bool "tv decoder(cvbs in) test operations"
+	default n
+
+config CONFIG_CMDS_PQ
+	bool "PQ test operations"
+	default n
+
+config CONFIG_CMDS_HCFOTA
+	bool "HCFOTA test operations"
+	select BR2_PACKAGE_HCFOTA
+	default n
+
+config CONFIG_CMDS_STANDBY
+	bool "standby test operations"
+	default n
+
+config CONFIG_CMDS_BLUETOOTH_TEST
+	bool "config bluetooth test"
+	default n
+
+config CONFIG_CMDS_WS2811
+	bool "ws2811 test operations"
+	select BR2_PACKAGE_PREBUILTS_LIBWS2811
+	default n
+
+config CONFIG_CMDS_SORTING
+       bool "sorting test operations"
+       select BR2_PACKAGE_PREBUILTS_LIBSORTING
+       default n
+
+menuconfig CONFIG_CMDS_USB
+	bool "USB setting operations"
+	default n
+
+if CONFIG_CMDS_USB
+config CONFIG_CMDS_USB_GADGET_MSC
+	bool "USB gadget: mass-storage device commonds"
+	depends on BR2_PACKAGE_PREBUILTS_USBGADGETDRIVER
+	depends on BR2_PACKAGE_PREBUILTS_USBGADGETDRIVER_MSC
+	depends on CONFIG_CMDS_USB
+	default n
+
+config CONFIG_CMDS_USB_GADGET_NCM
+	bool "USB gadget: NCM device commonds"
+	depends on BR2_PACKAGE_PREBUILTS_USBGADGETDRIVER
+	depends on BR2_PACKAGE_PREBUILTS_USBGADGETDRIVER_NCM
+	depends on CONFIG_CMDS_USB
+	default n
+
+config CONFIG_CMDS_USB_GADGET_SERIAL
+	bool "USB gadget: Serial device commonds"
+	depends on BR2_PACKAGE_PREBUILTS_USBGADGETDRIVER
+	depends on BR2_PACKAGE_PREBUILTS_USBGADGETDRIVER_SERIAL
+	depends on CONFIG_CMDS_USB
+	default n
+
+config CONFIG_CMDS_USB_GADGET_ZERO
+	bool "USB gadget: Zero demo"
+	depends on BR2_PACKAGE_PREBUILTS_USBGADGETDRIVER
+	depends on CONFIG_USB_ZERO
+	depends on CONFIG_CMDS_USB
+	default n
+
+config CONFIG_CMDS_USB_GADGET_HID
+	bool "USB gadget: HID device commonds"
+	depends on BR2_PACKAGE_PREBUILTS_USBGADGETDRIVER
+	depends on BR2_PACKAGE_PREBUILTS_USBGADGETDRIVER_HID
+	depends on CONFIG_CMDS_USB
+	default n
+endif
+
+
+config CONFIG_CMDS_LIBUSB_EXAMPLES
+	bool "USB: libusb examples"	
+	depends on CONFIG_CMDS_USB
+	depends on BR2_PACKAGE_LIBUSB
+	default n
+
+config CONFIG_CMDS_USB_EYE_PATTERN
+	bool "USB: Oscilloscope test eye pattern"	
+	depends on CONFIG_CMDS_USB
+	default n
+
+config CONFIG_CMDS_USB_HID
+	bool "USB: HID class test demos"	
+	depends on BR2_PACKAGE_PREBUILTS_USBDRIVER_HID
+	depends on CONFIG_CMDS_USB
+	default n
+	
+config CONFIG_CMDS_VIN_DVP
+bool "vin dvp test operations"
+default n
+
+config CONFIG_CMDS_PWM
+bool "pwm test"
+default n
+
+config CONFIG_CMDS_WIFI
+	bool "wifi test"
+	select BR2_PACKAGE_PREBUILTS_WPA_SUPPLICANT
+	select BR2_PACKAGE_PREBUILTS_WIFI_WIRELESS_TOOLS
+	default n
+
+config CONFIG_CMD_NETWORK
+	bool "Network test commands"
+	default n
+	depends on BR2_PACKAGE_LIBCURL
+
+config CONFIG_CMD_MIPI_TEST
+	bool "MIPI test commands"
+	default n
+	depends on CONFIG_DRV_MIPI
+
+menuconfig CONFIG_CMD_UNITY
+        bool "Unity test entry"
+	depends on BR2_PACKAGE_UNITY
+	default n
+
+if CONFIG_CMD_UNITY
+config CONFIG_CMD_UNITY_DUMMY_CASES
+        bool "Dummy unity test cases"
+	default n
+endif
+

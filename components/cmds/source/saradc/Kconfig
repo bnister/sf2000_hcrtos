@@ -1,0 +1,11 @@
+config CONFIG_CMDS_TOUCH_ADC_TEST
+	bool "touch adc test cmds"
+	default n
+
+config CONFIG_CMDS_KEY_ADC_TEST
+	bool "key adc test cmds"
+	default n
+
+config CONFIG_CMDS_QUERY_ADC_TEST
+	bool "query adc test cmds"
+	default n

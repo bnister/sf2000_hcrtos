@@ -1,0 +1,10 @@
+{
+  "wlan"          : true,
+  "setting"       : true,
+  "filemanager"   : false,
+  "language"      : true,
+  "upgrade"       : true,
+  "upgrade_local" : true,
+  "restart"       : true,
+  "reset"         : true
+}

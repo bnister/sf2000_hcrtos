@@ -1,0 +1,9 @@
+[
+    {
+        "Name"                  : "yaffs2",
+        "License"               : "GPL",
+        "Version Number"        : "613a901a229e8a701c18f003dd0aee18453e0670",
+        "Upstream URL"          : "git://www.aleph1.co.uk/yaffs2",
+        "Description"           : "It is now YAFFS2 - original YAFFS (YAFFS1) only supports 512-byte page NAND and is now deprecated. YAFFS2 supports 512b page in 'YAFFS1 compatibility' mode (CONFIG_YAFFS_YAFFS1) and 2K or larger page NAND in YAFFS2 mode (CONFIG_YAFFS_YAFFS2)."
+    }
+]

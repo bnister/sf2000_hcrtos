@@ -1,0 +1,245 @@
+name	english	chinese	french
+id	0	1	2
+STR_QR_CONNECT_AP	First scan QR code\nSet AP network	1.请扫码连接本\n设备	Veuillez balayer le code \n pour connecter cet appareil
+STR_QR_SCAN_WIFI	Second scan QR code\nSet WiFi network	2.请扫码联网	Veuillez balayer \n le code réseau
+STR_QR_CONFIG	Scan QR code\nSet device parameters	请扫码配置参数	s'il vous plaît balayez les \n paramètres de configuration du code
+STR_WIFI_SCANNING	WiFi is scanning ...	WiFi正在扫描 ...	Le WiFi est scanné...
+STR_WIFI_CONNECTING	WiFi is connecting ...	WiFi连接中 ...	Connexion WiFi en cours...
+STR_MIRA_CONNECTING	Miracast is connecting ...	安卓同屏连接中 ...	Connexion android dans le même écran...
+STR_MIRA_CONNECT_OK	Miracast connect OK.	安卓同屏连接成功	Connexion android même écran avec succès
+STR_AIR_PLAY_MUSIC	Aircast is playing music	苹果同屏播放音乐	Musique sur le même écran d’apple
+STR_INSERT_ANDROID_OR_APPLE	Please plug in android or apple device!	请插入苹果或者安卓设备!	Veuillez insérer un appareil apple ou android!
+STR_REINSERT_ANDROID_OR_APPLE	Please pull out and plug in android or apple device!	请拔出，再插入苹果或者安卓设备!	Veuillez débrancher et rebrancher votre appareil apple ou android!
+STR_PICTURE_MODE	Image mode	图像模式	Mode Image
+STR_CONSTRAST	Contrast	对比度	contraste
+STR_HUE	Hue	色调	ton
+STR_BRIGHTNESS	Brightness	亮度	luminosité
+STR_COLOR	Color	颜色	couleur
+STR_SHARPNESS	Sharpness	清晰度	clarté
+STR_COLOR_TEMP	Color temperature	色温	Temp de couleur
+STR_SOUND_MODE	Sound mode	声音模式	Sound Mode
+STR_TREBLE	Treble	高音	Tweeter
+STR_BASS	Bass	低音	Bass
+STR_BALANCE	Balance	平衡	Balance
+STR_BT_SETTING	BT model	蓝牙模式	Bluetooth mode
+STR_SEARCH_BT	Search bluetooth	搜索蓝牙	Rechercher bluetooth
+STR_BT_DEVICE	BT device	蓝牙设备	Appareil bluetooth
+STR_BT_MY_DEV	My device	我的设备	Mon appareil
+STR_BT_OTHER_DEV	Other device	其它设备	Autre équipement
+STR_NO_BT	No device	无设备	No Device
+STR_BT_CONN	Connected	已连接	Connecté
+STR_BT_DISCONN	Disconnected	未连接	Non connecté
+STR_BT_SAVED	Saved	已保存	Enregistré
+STR_BT_MAKE_DISCONN	Disconnect	断开	Disconnect
+STR_BT_MAKE_CONN	Connect	连接	Connect
+STR_WIFI_CONNING	Connecting	连接中	connecté
+STR_WIFI_SEARCHING	Searching	搜索中	Rechercher
+STR_WIFI_NO_DEVICE	No wifi device	无网络设备	pas de \n périphérique réseau
+STR_WIFI_PWD_NULL	Password cannot be null	密码不能为空	mot de passe ne peut pas être vide
+STR_WIFI_CONN_SUCCESS	Connection success!	连接成功！	Connexion réussie!
+STR_WIFI_CONN_FAILED	Connection failed!	连接失败！	échec de la connexion!
+STR_WIFI_RE_ENTER_PWD	Re-enter the password?	重输入密码？	Retaper le mot de passe?
+STR_PROMPT_YES	Yes	是	Yes
+STR_PROMPT_NO	No	否	NO
+STR_ENTER_WORD	Enter the password for 8 to 32 bits	请输入8到32位密码	Entrez le mot de passe de 8 à 32 chiffres
+STR_WIFI_SSID_NULL	SSID cannot be null	SSID 不能为空	SSID ne peut pas être vide
+STR_WIFI_SSID_TOO_LONG	SSID should be less than 64 bits	SSID应该小于64位	le SSID doit être inférieur à 64 bits
+STR_WIFI_CANCEL	Cancel	取消	Annuler
+STR_BT_DELETE	Delete	忽略	Ignorer
+STR_OSD_LANG_TITLE	OSD lang	OSD语言	OSD langue
+STR_OSD_LANG	OSD lang	语言设置	OSD langue
+STR_FLIP	Flip	投屏模式	Feuilleter
+STR_ASPECT_RATIO	Aspect ratio	画面比例	Ratio d'image
+STR_RESTORE_FACTORY_DEFAULT	Factory reset	恢复出厂设置	Retour à l'usine
+STR_UPGRADE	Software upgrade	软件升级	Escaladent
+STR_UPGRADE_NOT_POWER_OFF	Upgrading please do not\npower Off	正在升级，请勿断电	Mise à niveau, ne \npas éteindre
+STR_UPGRADE_DOWNLOADING	Download...	下载中...	Téléchargement en cours...
+STR_UPGRADEING	Upgrate...	升级中...	En cours de mise à niveau
+STR_AUTO_SLEEP	Auto sleep	自动休眠	Auto sommeil
+STR_OSD_TIMER	OSD timer	菜单显示时间	OSD temps
+STR_UPGRADE_NO_DEV	Please insert USB!	请插入USB！	s'il vous plaît insérer USB!
+STR_UPGRADE_NO_SOFTWATE	Please provide the \n upgrade file!	请提供升级文件！	s'il vous plaît fournir \n les fichiers de mise à jour!
+STR_UPGRADE_LOAD_ERR	Load file err!	载入文件错误！	Erreur de chargement du fichier!
+STR_UPGRADE_CRC_ERR	Crc err!	校验错误！	Erreur de vérification!
+STR_UPGRADE_VERSION_ERR	Version err!	版本错误！	Erreur de version
+STR_UPGRADE_DECO_ERR	Decompress err!	解压缩错误！	Erreur de décompression!
+STR_UPGRADE_ERR	Upgrade err	升级错误！	Erreur de mise à jour!
+STR_UPGRADE_SUCCESS_MSG1	Upgrade success, reboot	升级成功，	Mise à niveau réussie, redémarrage 
+STR_UPGRADE_SUCCESS_MSG2	s later	s后重启	s plus tard
+STR_KEYSTONE	Keystone	梯形校正	Correction trapézoïdale
+STR_VERSION_INFO	Version info	版本信息	Version Info
+STR_PICTURE_MODE_TITLE	Picture	图像	Picture
+STR_SOUND_MODE_TITLE	Sound	声音	Sound
+STR_OPTION_MODE_TITLE	Option	选项	Option
+STR_ADJUST_MODE_TITLE	Adjust	调节	Adjust
+STR_FOOT_SURE	Enter	确定	Enter
+STR_FOOT_MENU	Menu	菜单	Menu
+STR_FOOT_MOVE	Move	移动	Move
+STR_FOOT_OFF	Off	离开	off
+STR_MOVIE	Movie	电影	Movie
+STR_MUSIC	Music	音乐	Music
+STR_PHOTO	Photo	照片	Photo
+STR_TEXT	Book	电子书	Book
+STR_BACK	Back	返回	Back
+STR_PLAY	Play	播放	Jouer
+STR_PAUSE	Pause	暂停	Pause
+STR_STOP	Stop	停止	Stop
+STR_FF	FF	快进	FF
+STR_FB	FB	快退	FB
+STR_NEXT	Next	下一曲	Next
+STR_PREV	Prev	上一曲	Préc
+STR_ROUND	Round	列表循环	Round
+STR_LISTROUND	Round	列表循环	Round
+STR_SINGLEROUND	Single	单曲循环	Single
+STR_ZOOMIN	Zoom+	放大	Zoom+
+STR_ZOOMOUT	Zoom-	缩小	Zoom-
+STR_ROTATE_LEFT	Left	逆时针	Gauche
+STR_ROTATE_RIGHT_K	Right	顺时针	Droit
+STR_NO_EFFECT	Effect	无特效	Effect
+STR_NOR_EFFECT	Normal	普通	Normal
+STR_SHUTTER_EFFECT	Shutter	百叶窗	Shutter
+STR_BRUSH_EFFECT	Brush	飞入	Brush
+STR_SLIDE_EFFECT	Slide	滑动	Slide
+STR_RAND_EFFECT	Random	随机	Aléatoire
+STR_FADE_EFFECT	Fade	消失	Disparaît
+STR_FILE_FAIL	Open file fail	打开文件失败	échec de l'ouverture du fichier
+STR_AUDIO_USPT	Audio track unsupport	音频轨道不支持	piste Audio non supportée
+STR_VIDEO_USPT	Video track unsupport	视频轨道不支持	piste vidéo non prise en charge
+STR_USPT_VIDEO_TYPE	Unsupport video type	视频类型不支持	Video Type not supported
+STR_USPT_AUDIO_TYPE	Unsupport audio type	音频类型不支持	Type Audio non supporté
+STR_AUDIO_ERROR	Audio decode error	音频解码失败	échec du décodage Audio
+STR_VIDEO_ERROR	Video decode error	视频解码失败	échec de décodage Vidéo
+STR_PIC_ERROR	Picture decode error	图片解码失败	échec de décodage d'image
+STR_HDMI_TITLE1	HDMI1	高清1	HDMI1
+STR_HDMI_TITLE2	HDMI2	高清2	HDMI2
+STR_HDMI_TITLE	HDMI	高清	HDMI
+STR_MEDIA_TITLE	Media	多媒体	Média
+STR_AV_TITLE	AV	视频	AV
+STR_HOME_TITLE	Home	主页	Home
+STR_SETTING_TITLE	Setting	设置	Setting
+STR_HELP_TITLE	Help	帮助	Help
+STR_CHANNEL_TITLE	Source	信号源	Source
+STR_WIFI_TITLE	Wifi	网络	Réseau
+STR_WIRED_TITLE	Wired \nscreen	有线同屏	Wired \nscreen
+STR_WIRELESS_TITLE	Wireless \nscreen	无线同屏	Wireless \nscreen
+STR_OFF	Off	关	Off
+STR_ON	On	开	On
+STR_STANDARD	Standard	标准	Std.
+STR_DYNAMIC	Dynamic	动态	Dyn.
+STR_MILD	Mild	温和	Mild
+STR_USER	User	用户	User
+STR_COLD	Cold	冷色温	Froide
+STR_WARM	Warm	暖色温	Chaude
+STR_SPORTS	Sports	运动	Sports
+STR_ENGLISH	English	英语	Français
+STR_CHINESE	Chinese	中文	Chinois
+STR_FRONT_TABLE	Front table	桌上正投	Table
+STR_FRONT_CEILING	Front ceiling	吊装正投	Levage
+STR_BACK_TABLE	Back table	桌上背投	Back Table
+STR_BACK_CEILING	Back ceiling	吊装背投	Le levage
+STR_RESTORE_OK_1	Ok	确定	Ok
+STR_RESTORE_OK_2	Ok?	确定?	Ok?
+STR_RESTORE_CLOSE	Close	关闭	Close
+STR_OSD_TIME_5S	5s	5秒	5s
+STR_OSD_TIEM_10S	10s	10秒	10s
+STR_OSD_TIME_15S	15s	15秒	15s
+STR_OSD_TIME_20S	20s	20秒	20s
+STR_OSD_TIME_25S	25s	25秒	25s
+STR_OSD_TIME_30S	30s	30秒	30s
+STR_AUTO_SLEEP_1H	60m	60分钟	60s
+STR_AUTO_SLEEP_2H	120m	120分钟	120m
+STR_AUTO_SLEEP_3H	180m	180分钟	180m
+STR_INPUT_SOURCE	Source	信号源	Source
+STR_VOLUME	Volume	声音	Son
+STR_LIST	List	播放列表	List
+STR_INFO	INFO	信息	INFO
+STR_SF	SF	慢放	SF
+STR_STEP	STEP	步进	STEP
+STR_INFO_RES	Resolution:	分辨率:	Résolution :
+STR_INFO_FRAME	Frame:	帧数:	Cadres:
+STR_INFO_AUDIO	Audio:	音轨:	Pistes :
+STR_INFO_SUBTITLE	Subtitle:	字幕:	Sous-titres
+STR_INFO_SIZE	Size:	大小:	Size:
+STR_INFO_ALBUM	Album:	专辑:	Album:
+STR_INFO_ARTIST	Artist:	艺术家:	Artist:
+STR_INFO_BIT	Bitrate:	码率:	Débit:
+STR_INFO_EXIT	Exit	退出	Sortie
+STR_PANEL_CLOSE	Close	关闭屏幕	Close
+STR_MUTE	Mute	静音	Mute
+STR_MUSIC_OFF	OFF	关闭音乐	OFF
+STR_MUSIC_ON	ON	打开音乐	ON
+STR_MUSIC_SRC	Source	音乐资源	Source
+STR_FILE_DATE	Date:	日期:	Date:
+STR_FILE_TIME	Time:	时间:	Time:
+STR_SETUP	Ratio	画面比例	Ratio
+STR_ASPECT_AUTO	Auto	自动	Auto
+STR_ASPECT_4_3	4:3	4:3	4:3
+STR_ASPECT_16_9	16:9	16:9	16:9
+STR_USB_MOUNT_FAIL_MSG	Mount failed	挂载失败	Mount failed
+STR_NETWORK_ERR	Network error!	网络错误！	Erreur Réseau!
+STR_CONNECT_WIFI_FAIL	Connect WiFi fail!	连接WiFi出错！	Erreur de connexion WiFi!
+STR_CONNECT_WIFI_FIRST	Please connect WiFi first!	请先连接WiFi！	Veuillez d'abord vous connecter au WiFi!
+STR_VIDEO_DATA_ERR	Video data decoding error!	视频数据解码错！	Les données vidéo sont mal décodées!
+STR_AUDIO_DATA_ERR	Audio data decoding error!	音频数据解码错！	Les données audio sont mal décodées!
+STR_VIDEO_FORMAT_NOT_SUPPORT	Video format not support!	视频格式不支持！	Le format vidéo n'est pas pris en charge!
+STR_AUDIO_FORMAT_NOT_SUPPORT	Audio format not support!	音频格式不支持！	Le format audio n'est pas pris en charge!
+STR_WIFI_DISCONNECT	WiFi disconnect!	WiFi断开连接！	WiFi déconnecté!
+STR_MEDIA_CONTAINER_NOT_SUPPORT	Media(container) not support!	媒体容器不支持！	Le conteneur média n'est pas pris en charge!
+STR_WIFI_SAVED	Saved WiFi	已保存WI-FI	WI-FI enregistré
+STR_WIFI_NEARBY	Nearby WiFi	附近的WI-FI	Wi-Fi proche
+STR_WIFI_SEARCH	Search	搜索	Search
+STR_WIFI_ADD	Add net	添加网络	Ajouter
+STR_WIFI_RET	Home	主页	Home
+STR_WIFI_STRENGTH	Signal strength	信号强度	Signal Force
+STR_WIFI_SECURITY	Security	安全	Sécurité
+STR_WIFI_PWD	Password	密码	Password
+STR_WIFI_SHOW_PWD	Show password	显示密码	Show password
+STR_WIFI_NET_MODE	Net mode	网络模式	Mode réseau
+STR_WIFI_IP_ADDR	IP address	IP地址	IP Address
+STR_WIFI_NET_MASK	Net mask	掩码	Masque
+STR_WIFI_GATE_WAY	Gate way	网关	Gate Way
+STR_WIFI_DNS	DNS	DNS	DNS
+STR_WIFI_MAC	MAC	MAC	MAC
+STR_WIFI_STATIC_IP	Static IP	静态IP	IP statique
+STR_WIFI_CONNECT_ERR	Connect timeout or\npassword error	连接超时或密码错误	délai de connexion expiré \nou mot de passe incorrect
+STR_WIFI_NOT_CONNECT	WiFi not turned on!	WiFi未打开!	le WiFi n'est pas activé!
+STR_RESET	Reset	重置	Reset
+STR_FOCUS_FORWAD	Forward	前移	Avant
+STR_FOCUS_BACK	Backward	后移	En arrière
+STR_FOCUS	Focus	对焦	Focus
+STR_EBOOK_UP	Up	上一页	Up
+STR_EBOOK_DOWN	Down	下一页	Down
+STR_EBOOK_PREV	Prev	上一部	Prev
+STR_EBOOK_NEXT	Next	下一部	Next
+STR_SUBTITLE_MSG	Unsupport subtitle type	字幕类型不支持	Type de sous-titre non supporté
+STR_ZOOMMOVE	Move	移动	Move
+STR_MP_NO_DEV	No device	无设备	No Device
+STR_MIRROR_ROTATE_ON	Mirror rotate on	镜像旋转开	Miroir tournant ouvert
+STR_MIRROR_ROTATE_OFF	Mirror rotate off	镜像旋转关	Mirror rotation off
+STR_FRENCH	French	法语	Français
+STR_LANG	English	中文	Français
+STR_ENTER_STANDBY	Enter standby?	是否进入待机?	Entrer en veille ou pas?
+STR_WINDOW_SCALE	Window zoom	视窗缩放	Zoom de la fenêtre
+STR_WIFI_READY	WI-FI initializing…,please wait	WI-FI初始化中…,请稍后	Initialisation WI-FI ..., veuillez patienter
+STR_ANDROID_SCAN_QR	Please scan the code of Android device to install software	安卓设备请扫码安装软件	Appareils Android Veuillez balayer le Code pour installer le logiciel
+STR_USB_UPG_READ	USB upgrade, reading ...	USB升级，读取中	Mise à niveau USB, lecture ...
+STR_NET_UPG_DOWNLOAD	Network upgrade, downloading ...	网络升级，下载中	Mise à niveau du réseau, téléchargement ...
+STR_USB_UPG_OPEN_FILE_FAIL	Open USB upgraded file fail!	打开升级文件失败	Échec du fichier de mise à niveau USB ouvert!
+STR_USB_UPG_FILE_LARGE	Upgraded file too large!	升级文件太大	Fichier mis à niveau trop volumineux!
+STR_USB_UPG_READ_FAIL	Read USB upgraded file error!	读取升级文件错	Lire l’erreur de fichier mis à niveau USB!
+STR_NET_UPG_HTTP_BAD	HTTP server bad!	HTTP服务器有错	Serveur HTTP mauvais!
+STR_UPG_USER_CANCEL	User download interrupt!	取消升级	Interruption du téléchargement de l’utilisateur!
+STR_UPG_PRODUCT_ID_MISMATCH	Board product ID mismatch!	升级产品型号不匹配	Incompatibilité de l’ID de produit de la carte !
+STR_UPG_SW_VER_NOT_UPG	Software version is new, do not need upgrade!	已经是最新软件，无需升级	La version du logiciel est nouvelle, n’a pas besoin de mise à niveau!
+STR_UPG_SW_ILLGAL	Upgraded firmware is corrupted or illgal!	升级固件被破坏	Le firmware mis à jour est corrompu ou illgal!
+STR_UPG_UNZIP_FAIL	Decompress upgraded firmware fail!	解压升级固件失败	Décompresser le firmware mis à niveau échoue !
+STR_UPG_BURNING	Burning flash, DO NOT power off!	Flash烧写中，不要断电	Flash brûlant, NE PAS éteindre!
+STR_USB_UPG_OK	Upgrade successful, Plugout U-disk, then reboot ...	升级成功，请拔出U盘，重启	Mise à niveau réussie, Plugout U-disk, puis redémarrage ...
+STR_NET_UPG_OK	Upgrade successful, reboot now ...	升级成功，正在重启	Mise à niveau réussie, redémarrez maintenant ...
+STR_UPG_BURN_FAIL	Flash burn fail, reboot now ...	Flash烧写失败，正在重启	La gravure flash échoue, redémarrez maintenant ...
+STR_BT_DISCONNECTED	BT disconnected	蓝牙已断开	BT déconnecté
+STR_BT_CONNECTED	BT connected	蓝牙已连接	BT connecté
+STR_BT_CONN_FAILED	BT connect failed	蓝牙连接失败	Échec de BT Connect
+STR_HDMI_FORMAT_USPT	Not Support Format	不支持格式	Format non pris en charge
+STR_NO_SIGNAL	NO SIGNAL	无信号	PAS DE SIGNAL
+

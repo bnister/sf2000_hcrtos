@@ -1,0 +1,85 @@
+config CONFIG_SCHED_WORKQUEUE
+	bool
+
+config CONFIG_BUILD_FLAT
+	bool
+
+config CONFIG_WQUEUE_NOTIFIER
+	bool "Generic work notifier"
+	default y
+	select CONFIG_SCHED_WORKQUEUE
+	---help---
+		Enable building of work queue notifier logic that will execute a
+		worker function an event occurs.  This is is a general purpose
+		notifier, but was developed specifically to support poll() logic
+		where the poll must wait for an resources to become available.
+
+menuconfig CONFIG_SCHED_RPCWORK
+	bool "Enable RPCWORK"
+	default y
+	select CONFIG_BUILD_FLAT
+	select CONFIG_SCHED_WORKQUEUE
+	---help---
+		rpc workqueue
+
+if CONFIG_SCHED_RPCWORK
+
+config CONFIG_SCHED_RPCNTHREADS
+	int "Number of threads for RPCWORK"
+	default 8
+
+config CONFIG_SCHED_RPCWORKPRIORITY
+	int "Priority for RPCWORK threads"
+	default CONFIG_TASK_HIGH_PRIORITY
+
+config CONFIG_SCHED_RPCWORKSTACKSIZE
+	hex "Stack size in uint32_t for RPCWORK threads"
+	default 0x2000
+
+endif
+
+menuconfig CONFIG_SCHED_HPWORK
+	bool "Enable HPWORK"
+	default y
+	select CONFIG_BUILD_FLAT
+	select CONFIG_SCHED_WORKQUEUE
+	---help---
+		high-priority workqueue
+
+if CONFIG_SCHED_HPWORK
+
+config CONFIG_SCHED_HPNTHREADS
+	int "Number of threads for HPWORK"
+	default 1
+
+config CONFIG_SCHED_HPWORKPRIORITY
+	int "Priority for HPWORK threads"
+	default CONFIG_TASK_HIGH_PRIORITY
+
+config CONFIG_SCHED_HPWORKSTACKSIZE
+	hex "Stack size in uint32_t for HPWORK threads"
+	default 0x2000
+
+endif
+
+menuconfig CONFIG_SCHED_LPWORK
+	bool "Enable LPWORK"
+	default y
+	---help---
+		low-priority workqueue
+
+if CONFIG_SCHED_LPWORK
+
+config CONFIG_SCHED_LPNTHREADS
+	int "Number of threads for LPWORK"
+	default 1
+
+config CONFIG_SCHED_LPWORKPRIORITY
+	int "Priority for LPWORK threads"
+	default CONFIG_TASK_NORMAL_PRIORITY
+
+config CONFIG_SCHED_LPWORKSTACKSIZE
+	hex "Stack size in uint32_t for LPWORK threads"
+	default 0x1000
+
+endif

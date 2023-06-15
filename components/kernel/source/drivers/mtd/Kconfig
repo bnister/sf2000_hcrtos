@@ -1,0 +1,136 @@
+#
+# For a description of the syntax of this configuration file,
+# see the file kconfig-language.txt in the NuttX tools repository.
+#
+
+menuconfig CONFIG_MTD
+	bool "Memory Technology Device (MTD) Support"
+	default n
+	---help---
+		Memory Technology Device (MTD) drivers.  Some simple drivers for
+		memory technologies like FLASH, EEPROM, NVRAM, etc.  See
+		include/nuttx/mtd/mtd.h
+
+		(Note: This is a simple memory interface and should not be
+		confused with the "real" MTD developed at infradead.org.  This
+		logic is unrelated; I just used the name MTD because I am not
+		aware of any other common way to refer to this class of devices).
+
+if CONFIG_MTD
+
+config CONFIG_MTD_PARTITION
+	bool "Support MTD partitions"
+	default n
+	---help---
+		MTD partitions are build as MTD drivers that manage a sub-region
+		of the FLASH memory.  The contain the original FLASH MTD driver and
+		simply manage all accesses to assure that (1) FLASH accesses are
+		always offset to the beginning of the partition, and (2) that FLASH
+		accesses do not extend outside of the partition.
+
+		A FLASH device may be broken up into several partitions managed,
+		each managed by a separate MTD driver.  The MTD partition interface
+		is described in:
+
+			include/nuttx/mtd/mtd.h
+			FAR struct mtd_dev_s *mtd_partition(FAR struct mtd_dev_s *mtd, off_t offset, off_t nblocks);
+
+		Each call to mtd_partition() will create a new MTD driver instance
+		managing the sub-region of flash beginning at 'offset' (in blocks)
+		and of size 'nblocks' on the device specified by 'mtd'.
+
+config CONFIG_FTL_WRITEBUFFER
+	bool "Enable write buffering in the FTL layer"
+	default n
+	depends on DRVR_WRITEBUFFER
+
+config CONFIG_FTL_READAHEAD
+	bool "Enable read-ahead buffering in the FTL layer"
+	default n
+	depends on DRVR_READAHEAD
+
+config CONFIG_MTD_SECT512
+	bool "512B sector conversion"
+	default n
+	---help---
+		If enabled, a MTD driver will be created that will convert the
+		sector size of any other MTD driver to a 512 byte "apparent" sector
+		size.  The managed MTD driver in this case must have an erase block
+		size that is greater than 512B and an even multiple of 512B.
+
+if CONFIG_MTD_SECT512
+
+config CONFIG_MTD_SECT512_ERASED_STATE
+	hex "Erased state of the FLASH"
+	default 0xff
+
+config CONFIG_MTD_SECT512_READONLY
+	bool "512B read-only"
+	default n
+
+endif # CONFIG_MTD_SECT512
+
+config CONFIG_MTD_PARTITION_NAMES
+	bool "Support MTD partition naming"
+	depends on CONFIG_MTD_PARTITION
+	default n
+	---help---
+		MTD partitions can be assigned a name for reporting via the procfs
+		file system interface.  This adds an API which must be called to
+		specify the partition name.
+
+config CONFIG_MTD_BYTE_WRITE
+	bool "Byte write"
+	default n
+	---help---
+		Some devices (such as the EON EN25F80) support writing an arbitrary
+		number of bytes to FLASH. This setting enables MTD interfaces to
+		support such writes.  The SMART file system can take advantage of
+		this option if it is enabled.
+
+config CONFIG_MTD_WRBUFFER
+	bool "Enable MTD write buffering"
+	default n
+	depends on CONFIG_DRVR_WRITEBUFFER
+	select CONFIG_DRVR_INVALIDATE
+	select CONFIG_DRVR_READBYTES
+	---help---
+		Build the mtd_rwbuffer layer and enable support for write buffering.
+
+if CONFIG_MTD_WRBUFFER
+
+config CONFIG_MTD_NWRBLOCKS
+	int "MTD write buffer size"
+	default 4
+	---help---
+		The size of the MTD write buffer (in blocks)
+
+endif # CONFIG_MTD_WRBUFFER
+
+config CONFIG_MTD_READAHEAD
+	bool "Enable MTD read-ahead buffering"
+	default n
+	depends on CONFIG_DRVR_READAHEAD
+	select CONFIG_DRVR_INVALIDATE
+	select CONFIG_DRVR_READBYTES
+	---help---
+		Build the mtd_rwbuffer layer and enable support for read-ahead buffering.
+
+if CONFIG_MTD_READAHEAD
+
+config CONFIG_MTD_NRDBLOCKS
+	int "MTD read-head buffer size"
+	default 4
+	---help---
+		The size of the MTD read-ahead buffer (in blocks)
+
+endif # CONFIG_MTD_READAHEAD
+
+source "spi-nor/Kconfig"
+
+source "nand/Kconfig"
+if CONFIG_MTD_NAND
+source "mt29f_spinand/Kconfig"
+endif
+
+endif # CONFIG_MTD

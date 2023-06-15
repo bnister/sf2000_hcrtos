@@ -1,0 +1,3 @@
+ifconfig eth0 192.168.1.1 up
+
+display_source -v 3 -a 3  -s 192.168.1.100 &

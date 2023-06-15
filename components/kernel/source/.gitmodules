@@ -1,0 +1,3 @@
+[submodule "hcuapi"]
+	path = include/uapi/hcuapi
+	url = https://gitlab.hichiptech.com:62443/sw/hclinux_sdk/hcuapi.git

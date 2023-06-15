@@ -1,0 +1,3 @@
+menuconfig CONFIG_PWM_DRIVER
+	bool "PWM Driver Support"
+	default n

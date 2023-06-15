@@ -1,0 +1,17 @@
+config CONFIG_SYS_ARCH
+	string
+	help
+	  This option should contain the architecture name to build the
+	  appropriate arch/<CONFIG_SYS_ARCH> directory.
+	  All the architectures should specify this option correctly.
+
+config CONFIG_SYS_CPU
+	string
+	help
+	  This option should contain the CPU name to build the correct
+	  arch/<CONFIG_SYS_ARCH>/<CONFIG_SYS_CPU> directory.
+
+	  This is optional.  For those targets without the CPU directory,
+	  leave this option empty.
+
+source "mips/Kconfig"

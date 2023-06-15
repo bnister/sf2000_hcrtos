@@ -1,0 +1,29 @@
+choice 
+	prompt "Work mode"
+	default CONFIG_EASYLOGGER_NORMAL
+
+	config CONFIG_EASYLOGGER_NORMAL
+		bool "Normal"
+	config CONFIG_EASYLOGGER_PRINTF
+		bool "Printf"
+	config CONFIG_EASYLOGGER_DISABLE
+		bool "Disable"
+endchoice
+choice
+	prompt "Line end"
+	default CONFIG_EASYLOGGER_LINE_END_LF
+
+	config CONFIG_EASYLOGGER_LINE_END_LF
+		bool "Unix: LF"
+	config CONFIG_EASYLOGGER_LINE_END_CRLF
+		bool "Dos: CRLF"
+	config CONFIG_EASYLOGGER_LINE_END_NONE
+		bool "None"
+endchoice
+config CONFIG_EASYLOGGER_COLOR_ENABLE
+	bool "Color enable"
+	default y
+
+config CONFIG_EASYLOGGER_LINE_BUF_SIZE
+	int "Buffer size for every line's log"
+	default 1024

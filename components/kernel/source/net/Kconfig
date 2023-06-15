@@ -1,0 +1,74 @@
+menu "Net"
+menuconfig CONFIG_NET
+	bool "Enable network"
+	default n
+
+if CONFIG_NET
+config CONFIG_NET_LWIP_SACK
+	bool "Enable Lwipsack"
+	default y
+
+	help
+	  Answer Y to enable LiteOS support lwip.
+
+choice
+	depends on CONFIG_NET_LWIP_SACK
+	prompt "Lwipsack"
+	default CONFIG_NET_LWIP_SACK_2_1_2
+	help
+	  Enable Lwipsack for 2.x
+
+config CONFIG_NET_LWIP_SACK_2_1_2
+	bool "Enable Lwipsack (2.1.2)"
+	depends on CONFIG_NET_LWIP_SACK
+
+config CONFIG_NET_LWIP_SACK_2_1_3
+	bool "Enable Lwipsack (2.1.3)"
+	depends on CONFIG_NET_LWIP_SACK
+
+endchoice
+
+config CONFIG_NET_LWIP_PPP
+	bool "ppp support"
+	default n
+
+config CONFIG_NET_LWIP_IPV6
+	bool "ipv6 support"
+	default n
+
+config CONFIG_NET_LWIP_BRIDGE
+	bool "bridge support"
+	default n
+
+config CONFIG_NET_LWIP_SLIP
+	bool "SLIP protocol support"
+	default n
+
+config CONFIG_NET_LWIP_6LOWPAN
+	bool "6LoWPAN support"
+	default n
+
+config CONFIG_NET_LWIP_DIS_UDP_CHECKSUM_CHECK
+	bool "Disable udp checksum check"
+	default n
+
+config CONFIG_NET_LWIP_DIS_TCP_CHECKSUM_CHECK
+	bool "Disable tcp checksum check"
+	default n
+
+config CONFIG_NET_LWIP_DIS_IP_CHECKSUM_GEN
+	bool "Disable ip checksum check"
+	default n
+
+config CONFIG_NETDEV_BUDGET
+	int "Net device budget"
+	default 300
+	help
+		Net device buget is for net device receive softirq,
+		which every time irq receive max packats nums
+
+endif
+endmenu
+
+
+

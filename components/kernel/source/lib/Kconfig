@@ -1,0 +1,39 @@
+menu "Libraries"
+
+config CONFIG_LIB_FDT
+	bool "Enable the FDT library (RO)"
+	default y
+
+config CONFIG_LIB_CONSOLE
+	bool "Console commandline support"
+	default y
+
+menuconfig CONFIG_LIB_ELOG
+	bool "Easylogger support"
+	default y
+
+if CONFIG_LIB_ELOG
+source "easylogger/Kconfig"
+endif
+
+config CONFIG_LIB_CRC
+	bool "CRC support"
+	default n
+
+config CONFIG_LIB_LZMA
+	bool "LZMA decompress support"
+	default n
+
+config CONFIG_LIB_GZIP
+	bool "GZIP decompress support"
+	select BR2_PACKAGE_ZLIB
+	default n
+
+config CONFIG_LIB_RSA
+	bool "RSA support"
+	default n
+
+source "libc/Kconfig"
+
+endmenu
+

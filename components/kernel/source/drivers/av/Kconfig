@@ -1,0 +1,120 @@
+menuconfig CONFIG_AUDIO_SUPPORT
+	bool "Audio Support"
+	default y
+
+if CONFIG_AUDIO_SUPPORT
+config CONFIG_AUDIO_I2SO_SUPPORT
+	bool "i2so Support"
+	default y
+
+config CONFIG_AUDIO_I2SI_SUPPORT
+	bool "i2si Support"
+	default y
+
+config CONFIG_AUDIO_I2SI0_SUPPORT
+	bool "i2si0 Support"
+	default n
+
+config CONFIG_AUDIO_I2SI1_SUPPORT
+	bool "i2si1 Support"
+	default n
+
+config CONFIG_AUDIO_I2SI2_SUPPORT
+	bool "i2si2 Support"
+	default n
+
+config CONFIG_AUDIO_SPO_SUPPORT
+	bool "spo Support"
+	default y
+
+config CONFIG_AUDIO_SPIN_SUPPORT
+	bool "spin Support"
+	default y
+
+config CONFIG_AUDIO_PCMO_SUPPORT
+	bool "pcmo Support"
+	default n
+
+config CONFIG_AUDIO_PCMI_SUPPORT
+	bool "pcmi Support"
+	default n
+
+config CONFIG_AUDIO_PCMI0_SUPPORT
+	bool "pcmi0 Support"
+	default n
+
+config CONFIG_AUDIO_PCMI1_SUPPORT
+	bool "pcmi1 Support"
+	default n
+
+config CONFIG_AUDIO_PCMI2_SUPPORT
+	bool "pcmi2 Support"
+	default n
+
+config CONFIG_AUDIO_PDMI0_SUPPORT
+	bool "pdmi0 Support"
+	default n
+
+config CONFIG_AUDIO_TDMI_SUPPORT
+	bool "tdmi Support"
+	default n
+	depends on CONFIG_SOC_HC16XX
+
+config CONFIG_AUDIO_DECODER_PRIORITY
+	int "Default audio decoder task priority"
+	default CONFIG_TASK_HIGH_PRIORITY
+
+config CONFIG_AUDIO_DECODER_STACKSIZE
+	hex "Default audio decoder task stack size"
+	default 0x4000
+
+config CONFIG_AUDIO_SINK_PRIORITY
+	int "Default audio sink task priority"
+	default CONFIG_TASK_HIGH_PRIORITY
+
+config CONFIG_AUDIO_SINK_STACKSIZE
+	hex "Default audio sink task stack size"
+	default 0x400
+endif
+
+menuconfig CONFIG_VIDEO_SUPPORT
+	bool "Video Support"
+	default y
+
+if CONFIG_VIDEO_SUPPORT
+config CONFIG_VIDEO_HDMI_TX_SUPPORT
+	bool "hdmi tx Support"
+	default y
+
+config CONFIG_VIDEO_HDMI_RX_SUPPORT
+	bool "hdmi rx Support"
+	select CONFIG_I2C
+	select CONFIG_I2C_SLAVE
+	select CONFIG_I2C_SLAVE_HDMI
+	depends on CONFIG_SOC_HC16XX
+
+config CONFIG_VIDEO_VINDVP_SUPPORT
+	bool "vin dvp Support"
+	default y
+
+config CONFIG_VIDEO_TVDECODER_SUPPORT
+	bool "tv decoder Support"
+	default y
+
+config CONFIG_VIDEO_DECODER_SUPPORT
+	bool "video decoder Support"
+	default y
+config CONFIG_VIDEO_SINK_SUPPORT
+	bool "video sink Support"
+	default y
+	select BR2_PACKAGE_PREBUILTS_IMAGEDEC
+
+config CONFIG_PQ_SUPPORT
+	bool "PQ Support"
+	default y if CONFIG_SOC_HC16XX
+	default n if CONFIG_SOC_HC15XX
+endif
+
+config CONFIG_AVSYNC_SUPPORT
+	bool "avsync dev Support"
+	default y

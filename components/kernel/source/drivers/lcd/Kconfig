@@ -1,0 +1,35 @@
+config CONFIG_DRV_LCD_DEV
+	bool "lcd dev"
+	default n
+
+config CONFIG_DRV_LCD_NT35510
+	bool "lcd nt35510 support"
+	default n
+
+config CONFIG_DRV_LCD_GC9505
+	bool "lcd gc9505 support"
+	default n
+
+config CONFIG_DRV_LCD_JDI026
+	bool "lcd jdi026 support"
+	default n
+
+config CONFIG_DRV_LCD_SC5014A
+	bool "lcd sc5014 support"
+	default n
+
+config CONFIG_DRV_LCD_JD9168
+	bool "lcd jd9168 support"
+	default n
+
+config CONFIG_DRV_LCD_ST7789V2
+	bool "lcd st7789v2 support"
+	default n
+
+config CONFIG_DRV_LCD_N116BGE
+	bool "lcd n116bge support"
+	default n
+
+config CONFIG_DRV_BACKLIGHT
+	bool "backlight support"
+	default n

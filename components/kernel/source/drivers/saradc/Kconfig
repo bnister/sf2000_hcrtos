@@ -1,0 +1,11 @@
+config CONFIG_KEY_ADC
+	bool "key adc driver"
+	default n
+
+config CONFIG_POLL_ADC
+	bool "poll adc driver"
+	default n
+
+config CONFIG_TOUCH_ADC
+	bool "touch adc driver 16xx"
+	default n

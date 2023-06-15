@@ -1,0 +1,226 @@
+{
+  "device_name" : {
+    "_name"       : "设备名",
+    "use"         : true,
+    "name"        : "device_name",
+    "key"         : "device_name",
+    "component"   : "input_text",
+    "tips"        : "tips_restart_effect",
+    "max_length"  : 20,
+    "min_length"  : 6,
+    "input_limit" : "base",
+    "default"     : "UNKNOWN"
+  },
+  "device_password" : {
+    "_name"       : "设备密码",
+    "use"         : true,
+    "name"        : "device_password",
+    "key"         : "device_password",
+    "component"   : "input_password",
+    "tips"        : "tips_restart_effect",
+    "max_length"  : 8,
+    "min_length"  : 8,
+    "input_limit" : "base",
+    "default"     : ""
+  },
+  "wifi_mode" : {
+    "_name"       : "WiFi模式",
+    "use"         : true,
+    "name"        : "wifi_mode",
+    "key"         : "wifi_mode",
+    "enabled_key" : "wifi_mode_enabled",
+    "enabled_val" : true,
+    "component"   : "input_select",
+    "default"     : "1",
+    "confirm"     : true,
+    "confirm_tips": "tips_setting_restart",
+    "items"       : [
+      {"key": 1, "name": "2.4G"},
+      {"key": 2, "name": "5G"}
+    ]
+  },
+  "wifi_channel" : {
+    "_name"       : "WiFi信道",
+    "use"         : true,
+    "name"        : "wifi_channel",
+    "key"         : "wifi_channel",
+    "enabled_key" : "wifi_channel_enabled",
+    "enabled_val" : true,
+    "component"   : "input_select",
+    "default"     : "1",
+    "items"       : [
+      {"key": 0, "name": "auto", "use_key": "wifi_channel_auto_support", "use_val": true},
+
+      {"key": 1, "name": "1", "use_key": "wifi_channel_list", "use_val": "list1"},
+      {"key": 2, "name": "2", "use_key": "wifi_channel_list", "use_val": "list1"},
+      {"key": 3, "name": "3", "use_key": "wifi_channel_list", "use_val": "list1"},
+      {"key": 4, "name": "4", "use_key": "wifi_channel_list", "use_val": "list1"},
+      {"key": 5, "name": "5", "use_key": "wifi_channel_list", "use_val": "list1"},
+      {"key": 6, "name": "6", "use_key": "wifi_channel_list", "use_val": "list1"},
+      {"key": 7, "name": "7", "use_key": "wifi_channel_list", "use_val": "list1"},
+      {"key": 8, "name": "8", "use_key": "wifi_channel_list", "use_val": "list1"},
+      {"key": 9, "name": "9", "use_key": "wifi_channel_list", "use_val": "list1"},
+      {"key": 10, "name": "10", "use_key": "wifi_channel_list", "use_val": "list1"},
+      {"key": 11, "name": "11", "use_key": "wifi_channel_list", "use_val": "list1"},
+
+      {"key": 36, "name": "36", "use_key": "wifi_channel_list", "use_val": "list2"},
+      {"key": 40, "name": "40", "use_key": "wifi_channel_list", "use_val": "list2"},
+      {"key": 44, "name": "44", "use_key": "wifi_channel_list", "use_val": "list2"},
+      {"key": 48, "name": "48", "use_key": "wifi_channel_list", "use_val": "list2"},
+      {"key": 149, "name": "149", "use_key": "wifi_channel_list", "use_val": "list2"},
+      {"key": 153, "name": "153", "use_key": "wifi_channel_list", "use_val": "list2"},
+      {"key": 157, "name": "157", "use_key": "wifi_channel_list", "use_val": "list2"},
+      {"key": 161, "name": "161", "use_key": "wifi_channel_list", "use_val": "list2"},
+      {"key": 165, "name": "165", "use_key": "wifi_channel_list", "use_val": "list2"}
+    ]
+  },
+  "resolution" : {
+    "_name"       : "分辨率",
+    "use"         : true,
+    "name"        : "resolution",
+    "key"         : "resolution",
+    "component"   : "input_select",
+    "default"     : "1",
+    "items"       : [
+      {"key": 1, "name": "480P"},
+      {"key": 2, "name": "576P"},
+      {"key": 3, "name": "720P"},
+      {"key": 4, "name": "1080P"},
+      {"key": 5, "name": "4K", "use_key": "resolution_4k", "use_val": "enabled"},
+      {"key": 6, "name": "auto"}
+    ]
+  },
+  "tv_ratio" : {
+    "_name"       : "比例",
+    "use"         : false,
+    "name"        : "tv_ratio",
+    "key"         : "tv_ratio",
+    "component"   : "input_select",
+    "default"     : "1",
+    "items"       : [
+      {"key": 1, "name": "4:3"},
+      {"key": 2, "name": "16:9"}
+    ]
+  },
+  "android_mode" : {
+    "_name"       : "安卓模式",
+    "use"         : false,
+    "name"        : "android_mode",
+    "key"         : "android_mode",
+    "component"   : "input_select",
+    "default"     : "1",
+    "items"       : [
+      {"key": 1, "name": "16:9"},
+      {"key": 2, "name": "20:9"}
+    ]
+  },
+  "mirror_model" : {
+    "_name"       : "镜像模式",
+    "use"         : false,
+    "name"        : "mirror_model",
+    "key"         : "mirror_model",
+    "component"   : "input_select",
+    "default"     : "3",
+    "items"       : [
+      {"key": 1, "name": "mirror_model_standard"},
+      {"key": 2, "name": "mirror_model_smooth"},
+      {"key": 3, "name": "mirror_model_quick"}
+    ]
+  },
+  "aircast_mode" : {
+    "_name"       : "iOS同屏模式",
+    "use"         : true,
+    "name"        : "aircast_mode",
+    "key"         : "aircast_mode",
+    "component"   : "input_select",
+    "default"     : "2",
+    "items"       : [
+      {"key": 1, "name": "mirror_and_stream"},
+      {"key": 2, "name": "mirror_only"},
+      {"key": 3, "name": "auto"}
+    ]
+  },
+  "bright" : {
+    "_name"       : "亮度",
+    "use"         : false,
+    "name"        : "bright",
+    "key"         : "bright",
+    "component"   : "input_text",
+    "max_value"   : 100,
+    "min_value"   : 0,
+    "input_limit" : "number",
+    "default"     : "0"
+  },
+  "contrast" : {
+    "_name"       : "对比度",
+    "use"         : false,
+    "name"        : "contrast",
+    "key"         : "contrast",
+    "component"   : "input_text",
+    "max_value"   : 100,
+    "min_value"   : 0,
+    "input_limit" : "number",
+    "default"     : "0"
+  },
+  "saturation" : {
+    "_name"       : "饱和度",
+    "use"         : false,
+    "name"        : "saturation",
+    "key"         : "saturation",
+    "component"   : "input_text",
+    "max_value"   : 100,
+    "min_value"   : 0,
+    "input_limit" : "number",
+    "default"     : "0"
+  },
+  "hue" : {
+    "_name"       : "色调",
+    "use"         : false,
+    "name"        : "hue",
+    "key"         : "hue",
+    "component"   : "input_text",
+    "max_value"   : 100,
+    "min_value"   : 0,
+    "input_limit" : "number",
+    "default"     : "0"
+  },
+  "sharpness" : {
+    "_name"       : "锐度",
+    "use"         : false,
+    "name"        : "sharpness",
+    "key"         : "sharpness",
+    "component"   : "input_text",
+    "max_value"   : 100,
+    "min_value"   : 0,
+    "input_limit" : "number",
+    "default"     : "0"
+  },
+  "mirror_rotation" : {
+    "_name"       : "镜像旋转",
+    "use"         : true,
+    "name"        : "mirror_rotation",
+    "key"         : "mirror_rotation",
+    "component"   : "input_select",
+    "default"     : "0",
+    "items"       : [
+      {"key": 0, "name": "0"},
+	  {"key": 2, "name": "90"},
+	  {"key": 3, "name": "180"},
+	  {"key": 1, "name": "270"}
+    ]
+  },
+  "auto_rotation" : {
+    "_name"       : "自动旋转",
+    "use"         : true,
+    "name"        : "auto_rotation",
+    "key"         : "auto_rotation",
+    "use_key"     : "mirror_rotation",
+    "use_val"     : [1, 2, 3],
+    "component"   : "input_select",
+    "default"     : "0",
+    "items"       : [
+      {"key": 1, "name": "enabled"},
+      {"key": 0, "name": "disabled"}
+    ]
+  }
+}

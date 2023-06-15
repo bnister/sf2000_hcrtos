@@ -1,0 +1,13 @@
+#modprobe 8188fu && wpa_supplicant -D nl80211 -i wlan0 -c /etc/wpa_supplicant.conf -B && udhcpc -i wlan0
+
+#hdmi_rx_test -v 3 -a 3  -s 192.168.1.100 &
+
+#modprobe 8188fu && hostapd /etc/rtl_hostapd_2G.conf -B && ifconfig wlan0 192.168.1.1 up
+#modprobe 8188fu && hostapd /etc/hostapd.conf -B && ifconfig wlan0 192.168.1.1 up
+#modprobe 8188fu && hostapd /etc/hostapd-test.conf -B && ifconfig wlan0 192.168.1.1 up
+#modprobe 8188fu && wpa_supplicant -D nl80211 -i wlan0 -c /etc/wpa_supplicant-display.conf -B && ifconfig wlan0 192.168.1.1 up
+umount /media
+killall wpa_supplicant
+modprobe 8821cu && wpa_supplicant -D nl80211 -i wlan0 -c /etc/wpa_supplicant-display-5g.conf -B && ifconfig wlan0 192.168.1.1 up
+
+display_source -v 3 -a 3  -s 192.168.1.100 &

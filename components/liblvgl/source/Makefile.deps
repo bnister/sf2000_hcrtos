@@ -1,0 +1,79 @@
+ifeq ($(HAVE_LUA),)
+export HAVE_LUA = y
+endif
+
+ifeq ($(HAVE_LIBCONFIG),)
+export HAVE_LIBCONFIG = y
+endif
+
+ifeq ($(HAVE_LIBARCHIVE),)
+export HAVE_LIBARCHIVE = y
+endif
+
+ifeq ($(HAVE_LIBCURL),)
+export HAVE_LIBCURL = y
+endif
+
+ifeq ($(HAVE_LIBFDISK),)
+export HAVE_LIBFDISK = y
+endif
+
+ifeq ($(HAVE_LIBGPIOD),)
+export HAVE_LIBGPIOD = y
+endif
+
+ifeq ($(HAVE_LIBMTD),)
+ifeq ($(HAVE_LINUX),y)
+export HAVE_LIBMTD = y
+else
+export HAVE_LIBMTD = n
+endif
+endif
+
+ifeq ($(HAVE_LIBUBI),)
+export HAVE_LIBUBI = y
+endif
+
+ifeq ($(HAVE_LIBZEROMQ),)
+export HAVE_LIBZEROMQ = y
+endif
+
+ifeq ($(HAVE_ZLIB),)
+export HAVE_ZLIB = y
+endif
+
+ifeq ($(HAVE_ZSTD),)
+export HAVE_ZSTD = y
+endif
+
+ifeq ($(HAVE_LIBUBOOTENV),)
+export HAVE_LIBUBOOTENV = y
+endif
+
+ifeq ($(HAVE_LIBEBGENV),)
+export HAVE_LIBEBGENV = y
+endif
+
+ifeq ($(HAVE_LIBSSL),)
+export HAVE_LIBSSL = y
+endif
+
+ifeq ($(HAVE_LIBCRYPTO),)
+export HAVE_LIBCRYPTO = y
+endif
+
+ifeq ($(HAVE_MBEDTLS),)
+export HAVE_MBEDTLS = y
+endif
+
+ifeq ($(HAVE_JSON_C),)
+export HAVE_JSON_C = y
+endif
+
+ifeq ($(HAVE_LIBWEBSOCKETS),)
+export HAVE_LIBWEBSOCKETS = y
+endif
+
+ifeq ($(HAVE_URIPARSER),)
+export HAVE_URIPARSER = y
+endif

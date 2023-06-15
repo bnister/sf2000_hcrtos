@@ -1,0 +1,4 @@
+option('display_sink', type : 'boolean', value : false)
+option('display_source', type : 'boolean', value : false)
+option('dsc', type : 'boolean', value : false)
+option('wifi_test', type : 'boolean', value : false)

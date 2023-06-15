@@ -1,0 +1,7 @@
+config CONFIG_VIRTUART_RX_BUF_SIZE
+	int "Virtuart rx buffer size"
+	default 1024
+
+config CONFIG_VIRTUART_TX_BUF_SIZE
+	int "Virtuart tx buffer size"
+	default 1024

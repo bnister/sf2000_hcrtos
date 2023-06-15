@@ -1,0 +1,8 @@
+source "arch/Kconfig"
+source "freertos/Kconfig"
+source "fs/Kconfig"
+source "lib/Kconfig"
+source "drivers/Kconfig"
+source "sound/Kconfig"
+source "net/Kconfig"
+source "dts/Kconfig"

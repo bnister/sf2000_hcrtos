@@ -1,0 +1,4 @@
+config CONFIG_DRV_ADC
+	bool "init SAR ADC module"
+	depends on CONFIG_SOC_HC15XX
+	default y

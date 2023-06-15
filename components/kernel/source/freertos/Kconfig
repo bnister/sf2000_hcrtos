@@ -1,0 +1,66 @@
+menu "Task configurations"
+config CONFIG_TICK_RATE_HZ
+	int "Default OS tick rate in HZ"
+	default 1000
+
+config CONFIG_TASK_PERFORMANCE
+	bool "Enable Tasks performance staticstics"
+	default y
+
+config CONFIG_GENERATE_DETAIL_ISR_RUN_TIME_STATS
+	bool "Generate detail ISR run time stats"
+	depends on CONFIG_TASK_PERFORMANCE
+	default n
+
+config CONFIG_TASK_OPTIMISED_SCHEDULER
+	bool "Enable optimized task scheduler"
+	default n
+
+config CONFIG_MAX_TASK_NAME_LEN
+	int "Max task name length"
+	default 16
+
+config CONFIG_TASK_MAX_PRIORITIES
+	int "Max task priorities"
+	default 32
+
+config CONFIG_TASK_NORMAL_PRIORITY
+	int "Task normal priority"
+	default 11
+
+config CONFIG_TASK_HIGH_PRIORITY
+	int "Task high priority"
+	default 14
+
+config CONFIG_TASK_CRITICAL_PRIORITY
+	int "Task critical priority"
+	default 21
+
+config CONFIG_TIMER_TASK_PRIORITY
+	int "Timer task priority"
+	default 14
+
+config CONFIG_TIMER_STACK_SIZE
+	hex "Timer task stack size in uint32_t"
+	default 0x400
+
+config CONFIG_TIMER_QUEUE_LENGTH
+	int "Timer queue length in bytes"
+	default 1024
+
+config CONFIG_TASK_STACK_SIZE
+	hex "Default task stack size in uint32_t"
+	default 0x1000
+
+config CONFIG_MINIMAL_TASK_STACK_SIZE
+	hex "Default minimal task stack size in uint32_t"
+	default 0x100
+
+config CONFIG_ISR_STACK_SIZE
+	hex "ISR stack size in uint32_t"
+	default 0x400
+
+config CONFIG_TASK_NOTIFICATION_ARRAY_ENTRIES
+	int "Task notification array entries"
+	default 5
+endmenu

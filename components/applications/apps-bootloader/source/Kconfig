@@ -1,0 +1,240 @@
+menuconfig CONFIG_BOOT_SELFCOMPRESSED
+	bool "Support bootloader self compressed"
+	default n
+
+if CONFIG_BOOT_SELFCOMPRESSED
+
+choice
+	prompt "Bootloader self compress algo"
+	default CONFIG_BOOT_SELFCOMPRESSED_LZMA
+
+	config CONFIG_BOOT_SELFCOMPRESSED_LZMA
+		bool "Bootloader lzma self-compressed"
+
+	config CONFIG_BOOT_SELFCOMPRESSED_LZO1X
+		bool "Bootloader lzo1x self-compressed"
+endchoice
+
+endif
+
+config CONFIG_BOOT_SHOWLOGO
+	bool "Support boot show logo/av"
+	default y
+	help
+	  This feature depends on audio/video driver support in hcrtos kernel.
+	  If the is no audio/video driver enabled, the audio or video or both
+	  will be ignored.
+
+config CONFIG_BOOT_HDMI_TX_CHECK_EDID
+	bool "Support edid detection"
+	default n
+	help
+	  edid detection
+
+choice
+	prompt "Firmware Solution"
+	default CONFIG_BOOT_HCRTOS
+
+	config CONFIG_BOOT_HCRTOS
+		bool "Boot hcrtos firmware"
+
+	config CONFIG_BOOT_HCLINUX_DUALCORE
+		bool "Boot hclinux dual-core firmware"
+
+	config CONFIG_BOOT_HCLINUX_SINGLECORE
+		bool "Boot hclinux single-core firmware"
+
+	config CONFIG_BOOT_NONE
+		bool "No firmware to boot"
+endchoice
+
+config CONFIG_BOOT_SHOWMEMINFO
+	bool "Support show memory info"
+	default y
+	help
+	  Show memory info in console
+
+menuconfig CONFIG_BOOT_USBD_UPGRADE
+	bool "Support usbd upgrade "
+	select CONFIG_DRVR_RAMDISK
+	select BR2_PACKAGE_PREBUILTS_USBGADGETDRIVER
+	select CONFIG_BOOT_SHOW_UPGRADE_WAY
+	default n
+
+if CONFIG_BOOT_USBD_UPGRADE
+config CONFIG_BOOT_USBD_UPGRADE_REQUEST_TIME
+	int "usbd upgrade request time "
+	range 0 5
+	default 3
+
+config CONFIG_BOOT_USBD_UPGRADE_USBD_PORT_NUM
+	int "select which port to usbd upgrade"
+	range 0 1
+	default 0
+
+choice
+	prompt "Select enter usbd upgrade way"
+	default CONFIG_BOOT_USBD_UPGRADE_ENTER_BY_CHAR
+
+	config  CONFIG_BOOT_USBD_UPGRADE_ENTER_BY_CHAR
+		bool "press any char in keyboard"
+
+	config  CONFIG_BOOT_USBD_UPGRADE_ENTER_BY_KEY
+		bool "press physical key in board"
+endchoice
+endif
+
+
+menuconfig CONFIG_BOOT_UPGRADE
+	bool "Support upgrade"
+	select BR2_PACKAGE_HCFOTA
+	select CONFIG_BOOT_SHOW_UPGRADE_WAY
+	default y
+	help
+	  Support upgrade in bootloader
+
+if CONFIG_BOOT_UPGRADE
+config CONFIG_BOOT_UPGRADE_MODE
+	bool "Support upgrade mode"
+	default n
+	help
+	  Support upgrade mode in bootloader
+
+if CONFIG_BOOT_UPGRADE_MODE
+config CONFIG_BOOT_UPGRADE_SUPPORT_USBDEVICE
+	bool "Support usbdevice"
+	depends on CONFIG_BOOT_USBD_UPGRADE
+	default n
+
+config CONFIG_BOOT_UPGRADE_SUPPORT_USBHOST
+	bool "Support usbhost"
+	default n
+
+config CONFIG_BOOT_UPGRADE_SUPPORT_SD
+	bool "Support sd card"
+	default n
+
+config CONFIG_BOOT_UPGRADE_SUPPORT_NETWORK
+	bool "Support network"
+	default n
+
+config CONFIG_BOOT_HCFOTA_TIMEOUT
+	int "usbd upgrade request time "
+	range 0 60000
+	default 10000
+
+endif
+
+config CONFIG_BOOT_UPGRADE_EXTERNAL_FLASH
+	bool "external flash distribution"
+	default n
+	help
+	  Support upgrade mode in bootloader
+
+if CONFIG_BOOT_UPGRADE_EXTERNAL_FLASH
+choice
+	prompt "external flash type"
+	default CONFIG_BOOT_UPGRADE_EXTERNAL_FLASH_EMMC
+
+	config CONFIG_BOOT_UPGRADE_EXTERNAL_FLASH_EMMC
+		bool "emmc"
+
+	config CONFIG_BOOT_UPGRADE_EXTERNAL_FLASH_NAND
+		bool "nand flash"
+
+	config CONFIG_BOOT_UPGRADE_EXTERNAL_FLASH_SDCARD
+		bool "sd card"
+
+endchoice
+endif
+
+endif
+
+menuconfig CONFIG_BOOT_SHOW_UPGRADE_WAY
+	bool "progress bar menu"
+	default n
+
+if  CONFIG_BOOT_SHOW_UPGRADE_WAY
+
+choice
+	prompt "show progress bar way during upgrade firmware"
+	default CONFIG_BOOT_UPGRADE_SHOW_WITH_SERIAL
+
+	config CONFIG_BOOT_UPGRADE_SHOW_WITH_SCREEN
+		bool "The screen displays a progress bar"
+		select CONFIG_MMAP
+		select CONFIG_DRV_VIDEO
+		select CONFIG_DRV_HCFB
+
+	config CONFIG_BOOT_UPGRADE_SHOW_WITH_SERIAL
+		bool "Serial port printing progress bar"
+
+	config CONFIG_BOOT_UPGRADE_SHOW_WITH_LED
+		bool "Show progress bar with led"
+
+endchoice
+
+endif 
+
+choice
+       prompt "Select the location where the system start up"
+       default CONFIG_BOOT_STARTUP_FROM_FLASH
+
+       config  CONFIG_BOOT_STARTUP_FROM_FLASH
+               bool "flash"
+
+       config  CONFIG_BOOT_STARTUP_FROM_EMMC_SD
+               bool "emmc/sd"
+endchoice
+
+config CONFIG_BOOT_STANDBY
+	bool "Support boot standby"
+	default n
+	help
+	  This function depends on the standby function in the hcrtos kernel.
+	  If the standby function is not enabled, the function cannot take effect.
+
+menuconfig CONFIG_BOOT_BACKLIGHT
+	bool "Support boot open lcd backlight"
+	default y
+	help
+		open lcd backlight
+
+if CONFIG_BOOT_BACKLIGHT
+config CONFIG_BOOT_BACKLIGHT_DELAY_TIME
+    int "Time for boot to turn on backlight, in milliseconds"
+    range 0 10000
+    default 0
+
+config CONFIG_BOOT_PWM_BACKLIGHT_MONITOR
+    bool "Backlight monitor function"
+    default n
+	help
+		add backlight detection function
+
+config CONFIG_BOOT_BLUETOOTH_BACKLIGHT
+    bool "Bluetooth open gpio backlight"
+    default n
+	help
+		Set bluetooth open gpio backlight
+
+endif
+
+config CONFIG_BOOT_PQ_START
+	bool "Support boot open pq start"
+	default n
+	depends on CONFIG_SOC_HC16XX
+	help
+		open pq start
+
+config CONFIG_BOOT_UPGRADE_FAILED_FORCE_UPGRADE
+	bool "Support force upgrade after upgrade fails"
+	default n
+	help
+		When the bootm cannot find the image, force the upgrade
+
+config CONFIG_BOOT_LCD
+	bool "Support boot open lcd"
+	default y
+	help
+		Open lcddev for lcddev initialization

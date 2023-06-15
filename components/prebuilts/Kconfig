@@ -1,0 +1,324 @@
+menuconfig BR2_PACKAGE_PREBUILTS
+	bool "prebuilts"
+	default y
+
+if BR2_PACKAGE_PREBUILTS
+
+config BR2_PACKAGE_PREBUILTS_FFPLAYER
+	bool "ffplayer"
+	select BR2_PACKAGE_FFMPEG
+	select BR2_PACKAGE_PTHREAD
+	select BR2_PACKAGE_PREBUILTS_AUDDRIVER
+
+config BR2_PACKAGE_PREBUILTS_AUDDRIVER
+	bool "audio driver"
+	select CONFIG_SOUND
+	default y
+	
+config BR2_PACKAGE_PREBUILTS_VIDDRIVER
+	bool "video driver"
+	default y
+
+
+menuconfig BR2_PACKAGE_PREBUILTS_PLUGINS
+	bool "decoder & driver plugins"
+	default n
+
+if BR2_PACKAGE_PREBUILTS_PLUGINS
+
+config BR2_PACKAGE_PREBUILTS_MP3DEC
+	bool "mp3 dec"
+	depends on BR2_PACKAGE_PREBUILTS_AUDDRIVER
+	default y
+
+config BR2_PACKAGE_PREBUILTS_AACDEC
+	bool "aac dec"
+	depends on BR2_PACKAGE_PREBUILTS_AUDDRIVER
+	default y
+
+config BR2_PACKAGE_PREBUILTS_AACELDEC
+	bool "aacel dec"
+	depends on BR2_PACKAGE_PREBUILTS_AUDDRIVER
+	default n
+
+config BR2_PACKAGE_PREBUILTS_AC3DEC
+	bool "ac3 dec"
+	depends on BR2_PACKAGE_PREBUILTS_AUDDRIVER
+	default y
+
+config BR2_PACKAGE_PREBUILTS_EAC3DEC
+	bool "eac3 dec"
+	depends on BR2_PACKAGE_PREBUILTS_AUDDRIVER
+	default n
+
+config BR2_PACKAGE_PREBUILTS_PCMDEC
+	bool "pcm dec"
+	depends on BR2_PACKAGE_PREBUILTS_AUDDRIVER
+	default y
+
+config BR2_PACKAGE_PREBUILTS_FLACDEC
+	bool "flac dec"
+	depends on BR2_PACKAGE_PREBUILTS_AUDDRIVER
+	default y
+
+config BR2_PACKAGE_PREBUILTS_VORBISDEC
+	bool "vorbis dec"
+	depends on BR2_PACKAGE_PREBUILTS_AUDDRIVER
+	default y
+
+config BR2_PACKAGE_PREBUILTS_WMADEC
+	bool "wma dec"
+	depends on BR2_PACKAGE_PREBUILTS_AUDDRIVER
+	default y
+
+config BR2_PACKAGE_PREBUILTS_WMAPRODEC
+	bool "wmapro/xma1/xma2 dec"
+	depends on BR2_PACKAGE_PREBUILTS_AUDDRIVER
+	default y
+
+config BR2_PACKAGE_PREBUILTS_OPUSDEC
+	bool "opus dec"
+	depends on BR2_PACKAGE_PREBUILTS_AUDDRIVER
+	default y
+
+config BR2_PACKAGE_PREBUILTS_RADEC
+	bool "cook dec"
+	depends on BR2_PACKAGE_PREBUILTS_AUDDRIVER
+	default y
+
+config BR2_PACKAGE_PREBUILTS_APEDEC
+	bool "ape dec"
+	depends on BR2_PACKAGE_PREBUILTS_AUDDRIVER
+	default y
+
+config BR2_PACKAGE_PREBUILTS_AMRDEC
+	bool "amr dec"
+	depends on BR2_PACKAGE_PREBUILTS_AUDDRIVER
+	select BR2_PACKAGE_OPENCORE_AMR
+	default y
+
+config BR2_PACKAGE_PREBUILTS_PCMDVDDEC
+	bool "pcmdvd dec"
+	depends on BR2_PACKAGE_PREBUILTS_AUDDRIVER
+	default n
+
+config BR2_PACKAGE_PREBUILTS_ALACDEC
+	bool "alac dec"
+	depends on BR2_PACKAGE_PREBUILTS_AUDDRIVER
+	default n
+
+
+config BR2_PACKAGE_PREBUILTS_MPEG2DEC
+	bool "mpeg2 dec"
+ 	depends on BR2_PACKAGE_PREBUILTS_VIDDRIVER
+	default y if CONFIG_PREBUILT_SUBDIR != ""
+
+config BR2_PACKAGE_PREBUILTS_IMAGEDEC
+	bool "image dec"
+	depends on BR2_PACKAGE_PREBUILTS_VIDDRIVER
+	default y if CONFIG_PREBUILT_SUBDIR = ""
+	select BR2_PACKAGE_PREBUILTS_MPEG2DEC if CONFIG_PREBUILT_SUBDIR = ""	
+
+if CONFIG_PREBUILT_SUBDIR = ""
+config BR2_PACKAGE_PREBUILTS_H264DEC
+	bool "h264 dec"
+	depends on BR2_PACKAGE_PREBUILTS_VIDDRIVER
+	default y 
+
+config BR2_PACKAGE_PREBUILTS_RVDEC
+	bool "rv dec"
+	depends on BR2_PACKAGE_PREBUILTS_VIDDRIVER
+	default y
+	select BR2_PACKAGE_PREBUILTS_MPEG2DEC	
+
+config BR2_PACKAGE_PREBUILTS_VC1DEC
+	bool "vc1 dec"
+	depends on BR2_PACKAGE_PREBUILTS_VIDDRIVER
+	default y
+	select BR2_PACKAGE_PREBUILTS_MPEG2DEC	
+
+config BR2_PACKAGE_PREBUILTS_VP8DEC
+	bool "vp8 dec"
+	depends on BR2_PACKAGE_PREBUILTS_VIDDRIVER
+	default y
+	select BR2_PACKAGE_PREBUILTS_MPEG2DEC	
+
+config BR2_PACKAGE_PREBUILTS_MPEG4DEC
+	bool "mpeg4 dec"
+	depends on BR2_PACKAGE_PREBUILTS_VIDDRIVER
+	default y
+	select BR2_PACKAGE_PREBUILTS_MPEG2DEC	
+endif
+
+endif
+
+config BR2_PACKAGE_PREBUILTS_HDMIRX
+	bool "hdmi rx driver"
+	depends on BR2_PACKAGE_PREBUILTS_VIDDRIVER
+	default n
+
+
+menuconfig BR2_PACKAGE_PREBUILTS_USBDRIVER
+	bool "usb driver"
+	select CONFIG_DRV_LNXDRIVER
+	select CONFIG_DRV_SOFTIRQ
+	select BR2_PACKAGE_PREBUILTS_USBDRIVER_MSG
+	default n
+
+if BR2_PACKAGE_PREBUILTS_USBDRIVER
+config BR2_PACKAGE_PREBUILTS_USBDRIVER_MSG
+	bool "Mass storage"
+	default y
+
+config BR2_PACKAGE_PREBUILTS_USBDRIVER_HID
+	bool "HID"
+	default n
+
+endif
+
+
+
+menuconfig BR2_PACKAGE_PREBUILTS_USBGADGETDRIVER
+	bool "usb gadget driver"
+	select BR2_PACKAGE_PREBUILTS_USBDRIVER
+	default n
+
+if BR2_PACKAGE_PREBUILTS_USBGADGETDRIVER
+config BR2_PACKAGE_PREBUILTS_USBGADGETDRIVER_MSC
+	bool "Mass storage"
+	default y
+	help
+	  The Mass Storage Gadget acts as a USB Mass Storage disk drive.
+	  As its storage repository it can use a regular file or a block
+	  device (in much the same way as the "loop" device driver),
+	  specified as a module parameter or sysfs option.
+
+config BR2_PACKAGE_PREBUILTS_USBGADGETDRIVER_NCM
+	bool "Network Control Model (NCM) support"
+	default n
+	help
+	  NCM is an advanced protocol for Ethernet encapsulation, allows
+	  grouping of several ethernet frames into one USB transfer and
+	  different alignment possibilities.
+
+config BR2_PACKAGE_PREBUILTS_USBGADGETDRIVER_SERIAL
+	bool "Serial Gadget (with CDC ACM and CDC OBEX support)"
+	default n
+	help
+	help
+	  The Serial Gadget talks to the Linux-USB generic serial driver.
+	  This driver supports a CDC-ACM module option, which can be used
+	  to interoperate with MS-Windows hosts or with the Linux-USB
+
+config BR2_PACKAGE_PREBUILTS_USBGADGETDRIVER_HID
+	select CONFIG_USB_GADGET_HID_VENDOR
+	bool "HID gadget"
+	default n
+endif
+
+
+config BR2_PACKAGE_PREBUILTS_SDMMCDRIVER
+	bool "sd-mmc driver"
+	select CONFIG_DRV_LNXDRIVER
+	select CONFIG_DRV_SOFTIRQ
+	default n
+
+config BR2_PACKAGE_PREBUILTS_NTFS
+	bool "ntfs support"
+	default n
+
+choice 
+	prompt "MAC PHY select"
+	default BR2_PACKAGE_PREBUILTS_NOMAC
+	
+	config BR2_PACKAGE_PREBUILTS_NOMAC
+		bool "no mac support"
+
+	config BR2_PACKAGE_PREBUILTS_TOE
+		bool "mac support for general"
+		depends on CONFIG_NET
+		select CONFIG_DRV_LNXDRIVER
+		select CONFIG_DRV_SOFTIRQ
+
+	config BR2_PACKAGE_PREBUILTS_TOE2
+		bool "mac support for motorcomm PHY"
+		depends on CONFIG_NET
+		select CONFIG_DRV_LNXDRIVER
+		select CONFIG_DRV_SOFTIRQ
+endchoice		
+
+config BR2_PACKAGE_PREBUILTS_LIBGE
+	bool "libge"
+	default n
+	select CONFIG_DRV_HCGE
+
+config BR2_PACKAGE_PREBUILTS_LIBDSC
+	bool "libdsc"
+	default n
+
+config BR2_PACKAGE_PREBUILTS_SPECTRUM
+	bool "libspectrum"
+	default n
+
+config BR2_PACKAGE_PREBUILTS_3A
+	bool "lib3a"
+	default n
+
+config BR2_PACKAGE_PREBUILTS_DRC
+	bool "libdrc"
+	default n
+
+config BR2_PACKAGE_PREBUILTS_LIBLRBALANCE
+	bool "liblrbalance"
+	default n
+
+config BR2_PACKAGE_PREBUILTS_LIBEQ6
+	bool "libeq6"
+	default n
+
+config BR2_PACKAGE_PREBUILTS_LIBTWOTONE
+	bool "libtwotone"
+	default n
+
+config BR2_PACKAGE_PREBUILTS_LIBWS2811
+	bool "libws2811"
+	default n
+
+config BR2_PACKAGE_PREBUILTS_LIBEFUSE
+	bool "efuse driver"
+	default y
+
+config BR2_PACKAGE_PREBUILTS_RTL8188FU
+	bool "rtl8188fu"
+	default n
+
+config BR2_PACKAGE_PREBUILTS_RTL8188EU
+	bool "rtl8188eu"
+	default n
+
+config BR2_PACKAGE_PREBUILTS_RTL8811CU
+	bool "rtl8811cu"
+	default n
+
+config BR2_PACKAGE_PREBUILTS_RTL8733BU
+	bool "rtl8733bu"
+	default n
+
+config BR2_PACKAGE_PREBUILTS_WPA_SUPPLICANT
+	bool "wpa_supplicant"
+	select CONFIG_DEV_URANDOM
+	default n
+
+config BR2_PACKAGE_PREBUILTS_WIFI_WIRELESS_TOOLS
+	bool "wireless tools"
+	default n
+
+config BR2_PACKAGE_PREBUILTS_LIBYOUTUBE
+	bool "libYouTube"
+	select BR2_PACKAGE_PCRE
+	select BR2_PACKAGE_CJSON
+	select BR2_PACKAGE_LIBCURL
+	select BR2_PACKAGE_LIBOPENSSL
+	default n
+
+endif

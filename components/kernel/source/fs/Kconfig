@@ -1,0 +1,34 @@
+menu "File system configuration"
+
+menuconfig CONFIG_VFS
+	bool "Enable VFS"
+	default y
+
+if CONFIG_VFS
+source "vfs/Kconfig"
+endif
+
+menuconfig CONFIG_MMAP
+	bool "Enable mmap"
+	default y
+
+if CONFIG_MMAP
+source "mmap/Kconfig"
+endif
+
+source "elmfat/Kconfig"
+source "romfs/Kconfig"
+source "littlefs/Kconfig"
+source "yaffs2/Kconfig"
+
+menuconfig CONFIG_PARTITION
+	bool "Enable partition"
+	default n
+
+if CONFIG_PARTITION
+source "partition/Kconfig"
+endif
+
+source "mount/Kconfig"
+
+endmenu

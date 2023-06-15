@@ -1,0 +1,47 @@
+menu "Device Tree Control"
+
+config CONFIG_OF_CONTROL
+	bool "Run-time configuration via Device Tree"
+	select CONFIG_LIB_FDT
+	default y
+	help
+	  This feature provides for run-time configuration via a flattened
+	  device tree.
+
+choice           
+	prompt "Provider of DTB for DT control"
+	depends on CONFIG_OF_CONTROL
+
+config CONFIG_OF_SEPARATE
+	bool "Separate DTB for DT control"
+	help
+	  If this option is enabled, the device tree is passed by bootloader
+	  via content in register 0xb8800004.
+	  dtbaddr=MIPS_CACHED_ADDR(PHY_ADDR(*(uint32_t*)0xb8800004))
+
+config CONFIG_OF_EMBED
+	bool "Embedded DTB for DT control"
+	help 
+	  If this option is enabled, the device tree will be picked up and
+	  built into the kernel. This is suitable for local debugging
+	  and development only and is not recommended for production devices.
+endchoice
+
+menuconfig CONFIG_CUSTOM_DTS
+	bool "Generate custom DTB"
+
+if CONFIG_CUSTOM_DTS
+config CONFIG_CUSTOM_DTS_PATH
+	string "Device Tree Source file paths"
+	help
+	  Space-separated list of paths to device tree source files
+	  that will be used to generated dtb file.
+
+config CONFIG_DEFAULT_DEVICE_TREE
+	string "Default Device Tree"
+	help
+	  The generated DTB filename that will be installed into
+	  $(IMAGES_DIR). The kernel will include it from $(IMAGES_DIR)
+	  as embedded data if CONFIG_OF_EMBED is enabled.
+endif
+endmenu

@@ -1,0 +1,5 @@
+#modprobe 8188fu && wpa_supplicant -D nl80211 -i wlan0 -c /etc/wpa_supplicant.conf -B
+#modprobe 8188fu && wpa_supplicant -D nl80211 -i wlan0 -c /etc/wpa_supplicant-acs.conf -B && ifconfig wlan0 192.168.1.100 up
+modprobe 8188fu && hostapd /etc/hostapd_sink_2G.conf -B && ifconfig wlan0 192.168.1.100 up
+
+display_sink &

@@ -1,0 +1,10 @@
+[
+    {
+        "Name"                  : "FreeRTOS",
+        "License"               : "MIT License",
+        "License File"          : "LICENSE.md",
+        "Version Number"        : "V10.4.4",
+        "Upstream URL"          : "https://github.com/FreeRTOS/FreeRTOS-Kernel.git",
+        "Description"           : "Developed in partnership with the world’s leading chip companies over a 18 year period, FreeRTOS is a market-leading real--time operating system (RTOS) for microcontrollers and small microprocessors. Distributed freely under the MIT open source license, FreeRTOS includes a kernel and a growing set of libraries suitable for use across all industry sectors. With one download every 170 seconds, FreeRTOS is built with an emphasis on reliability, accessibility, and ease of use"
+    }
+]

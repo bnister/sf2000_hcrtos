@@ -1,0 +1,31 @@
+menu "Architecture"
+
+config CONFIG_SYS_ARCH
+	default "mips" if CONFIG_CPU_MIPS32R1 || CONFIG_CPU_MIPS74KEF
+
+config CONFIG_SYS_CPU
+	default "mips32r1" if CONFIG_CPU_MIPS32R1
+	default "mips74kef" if CONFIG_CPU_MIPS74KEF
+
+choice
+	prompt "CPU selection"
+	default CONFIG_CPU_MIPS32R1
+
+config CONFIG_CPU_MIPS32R1
+	bool "MIPS32R1"
+	help
+	  Choose this option to build an for MIPS32R1 architecture.
+
+config CONFIG_CPU_MIPS74KEF
+	bool "MIPS74KEF"
+	help
+	  Choose this option to build an for MIPS74KEF architecture.
+
+endchoice
+
+config CONFIG_SYS_RST_WDT
+	bool "hardware init hook IP reset watchdog"
+	default n
+
+endmenu
+

@@ -1,0 +1,6 @@
+config CONFIG_FS_YAFFS2
+	bool "yaffs2 file system"
+	default n
+	depends on !CONFIG_DISABLE_MOUNTPOINT
+	---help---
+		Enable Yaffs2 filesystem support
