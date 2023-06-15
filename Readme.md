@@ -5,7 +5,7 @@ This is the repository for the Custom Firmware for the SF2000 from DataFrog.
 <h2>Project Members:</h2>
 
 <b>Ignatz:</b> Maintainer of this repository, main dev on the SF2000 Custom Firmeware
-<b>Osaka:</b> 
+<br><b>Osaka:</b> 
 
 <h2>Links:</h2><br>
 Original SDK Dump and firmware files:<br>
@@ -25,5 +25,5 @@ Please note that donations are not a guarantee for the project to continue, or t
 
 <b>Ignatz:</b> <br>
 https://www.paypal.com/paypalme/ignatzDraconis
-<b>Osaka:</b> <br>
+<br><b>Osaka:</b> <br>
 (Comming Soon)
