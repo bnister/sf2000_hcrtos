@@ -1,25 +1,25 @@
-Welcome :-) 
+<h1>Welcome :-)</h1> 
 
 This is the repository for the Custom Firmware for the SF2000 from DataFrog. 
 
-Project Members:
+<h2>Project Members:</h2>
 
-Ignatz: Maintainer of this repository, main dev on the SF2000 Custom Firmeware
+<b>Ignatz:</b> Maintainer of this repository, main dev on the SF2000 Custom Firmeware
 
-Links:
-Original SDK Dump and firmware files:
-https://cloud.maschath.de/s/PKfPaHS4qsqewEk
-General information about the device:
-https://vonmillhausen.github.io/sf2000/
+<h2>Links:</h2><br>
+Original SDK Dump and firmware files:<br>
+https://cloud.maschath.de/s/PKfPaHS4qsqewEk <br>
+General information about the device:<br>
+https://vonmillhausen.github.io/sf2000/ <br>
 
-Support:
+<h2>Support: </h2>
 
 If you want to help on the project, please contact Ignatz on the Retro Handheld Discord, in the data_frog_sf2000/SF2000 Dev Channel. He is the current maintainer of the project. 
 
-Donations:
+<h2>Donations:</h2>
 
 Please note that donations are not a guarantee for the project to continue, or to succeed. If you decide to donate anyway, we will be very greatfull about that.
 If you want to donate something for the project, you can do so with the following links:
 
-Ignatz: 
+<b>Ignatz:</b> <br>
 https://www.paypal.com/paypalme/ignatzDraconis
