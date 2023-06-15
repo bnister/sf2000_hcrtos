@@ -19,7 +19,8 @@ If you want to help on the project, please contact Ignatz on the Retro Handheld 
 <h2>Donations:</h2>
 
 Please note that donations are not a guarantee for the project to continue, or to succeed. If you decide to donate anyway, we will be very greatfull about that.
-If you want to donate something for the project, you can do so with the following links:
+<br>If you want to donate something for the project, you can do so with the following links.
+<br>Due to organizational limitations, its only possible to donate to individual members of the project.
 
 <b>Ignatz:</b> <br>
 https://www.paypal.com/paypalme/ignatzDraconis
