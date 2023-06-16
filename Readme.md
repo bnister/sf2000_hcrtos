@@ -13,7 +13,7 @@ Slightly Longer Answer: At this point its nearly impossible to say how long this
 - Do we need funding?
     - No. Check the Donation part of this readme for more details. 
 - Does the Firmeware have a name? 
-    - No, not yet. But we are collecting possible names, and will do a community pol once the project is mature enough
+    - No, not yet. But we are collecting possible names, and are currently doing a community poll to find the best one. Once the project is mature enough, we will pick the most voted name. (Link to the poll: https://cloud.maschath.de/apps/polls/s/sFak08ki)
 
 <h2>Project Members:</h2>
 
@@ -43,6 +43,7 @@ https://www.paypal.com/paypalme/ignatzDraconis
 (Comming Soon)
 
 <h2>Possible Project Names:</h2>
+(Name voting can be found here: https://cloud.maschath.de/apps/polls/s/sFak08ki)
 
 - AmphibiOS (By BL4Z3D247)
 - ZephOS (By BL4Z3D247)
