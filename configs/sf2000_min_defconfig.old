@@ -503,8 +503,7 @@ BR2_PACKAGE_FFMPEG_FILTERS=""
 # BR2_PACKAGE_FFMPEG_OUTDEVS is not set
 BR2_PACKAGE_FFMPEG_EXTRACONF="--disable-decklink --disable-avfilter --disable-avdevice --disable-swresample --disable-doc --disable-hwaccels"
 # BR2_PACKAGE_FFMPEG_GDB_DBG is not set
-BR2_PACKAGE_HC_EXAMPLES=y
-# BR2_PACKAGE_HDMI_WIREELSS_EXAMPLE is not set
+# BR2_PACKAGE_HC_EXAMPLES is not set
 BR2_PACKAGE_OPENCORE_AMR=y
 # BR2_PACKAGE_LIBUSB is not set
 # BR2_PACKAGE_HCFOTA is not set
