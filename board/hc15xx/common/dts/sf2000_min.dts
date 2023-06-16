@@ -22,7 +22,7 @@
 #define CONFIG_DE4K_OUTPUT_SUPPORT 0
 #define CONFIG_DUAL_OUTPUT_SUPPORT 0
 #define CONFIG_VGA_OUTPUT_SUPPORT 0
-#define CONFIG_CVBS_OUTPUT_SUPPORT 0
+#define CONFIG_CVBS_OUTPUT_SUPPORT 1
 
 #define CONFIG_MM_FB_SIZE (0x10cf200)
 #define CONFIG_MM_VBV_SIZE (0x12c000)
@@ -193,10 +193,10 @@ hcrtos {
 		 * TV_LINE_3840X2160_30 = 24,
 		*/
 
-		tvtype = <15>;
+		tvtype = <1>;
 		cvbs-output = <CONFIG_CVBS_OUTPUT_SUPPORT>;
 		vga-output = <CONFIG_VGA_OUTPUT_SUPPORT>;
-		status = "disabled";
+		status = "okay";
 	};
 
 	pwm@0 {
