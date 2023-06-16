@@ -54,3 +54,13 @@ https://www.paypal.com/paypalme/ignatzDraconis
 - MaschathIO (By akirawisnu)
     -  I and O stands for Ignatz and Osaka
 - DataDragon or FrogDragon (By akirawisnu)
+- SlippyOS (By Kev)
+- FroggerOS (By Kev)
+- FrogfuciusOS (By Kev)
+    - from Super Mario RPG
+- AogaeruOS (By SidonCryerd)
+- MamuOS (By BL4Z3D247)
+- WartOS (By BL4Z3D247)
+- PondOS (By Cadence)
+- FrogOS (By Cadence)
+- YomamaOS (By yessirballs2)
