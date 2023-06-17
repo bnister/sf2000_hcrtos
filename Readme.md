@@ -14,7 +14,7 @@ https://cloud.maschath.de/s/PKfPaHS4qsqewEk <br>
 General information about the device:<br>
 https://vonmillhausen.github.io/sf2000/ <br>
 
-<h2>Support: </h2>
+<h2>Support:</h2>
 
 If you want to help on the project, please contact Ignatz on the Retro Handheld Discord, in the data_frog_sf2000/SF2000 Dev Channel. He is the current maintainer of the project. 
 
@@ -28,3 +28,4 @@ Please note that donations are not a guarantee for the project to continue, or t
 https://www.paypal.com/paypalme/ignatzDraconis
 <br><b>Osaka:</b> <br>
 (Coming Soon)
+<br><b>xTxNinjaZx AKA Kev: https://paypal.me/kkestner91</b> <br>
