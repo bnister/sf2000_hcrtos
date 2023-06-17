@@ -18,6 +18,7 @@ local.mk
 *.si4project
 *.code-workspace
 .stamp_*
+*.asd
 
 output/
 bl/
