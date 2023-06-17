@@ -28,4 +28,5 @@ Please note that donations are not a guarantee for the project to continue, or t
 https://www.paypal.com/paypalme/ignatzDraconis
 <br><b>Osaka:</b> <br>
 (Coming Soon)
-<br><b>xTxNinjaZx AKA Kev: https://paypal.me/kkestner91</b> <br>
+<br><b>xTxNinjaZx AKA Kev:</b><br>
+https://paypal.me/kkestner91 
