@@ -18,7 +18,8 @@ Slightly Longer Answer: At this point its nearly impossible to say how long this
 <h2>Project Members:</h2>
 
 <b>Ignatz:</b> Maintainer of this repository, main dev on the SF2000 Custom Firmeware and Project Manager. Has ADHD, so might be unrelaiable at times, but allways has the best intent.
-<br><b>Osaka:</b> A researcher of the original firmware, author of the bootloader fix and the sample custom code (BMP viewer) 
+<br><b>Osaka:</b> A researcher of the original firmware, author of the bootloader fix and the sample custom code (BMP viewer)
+<br><b>xTxNinjaZx AKA Kev:</b> Researcher/tester of the current firmware on the SF2000 and Custom Firmware Dev support
 
 <h2>Links:</h2><br>
 Original SDK Dump and firmware files:<br>
@@ -32,7 +33,7 @@ If you want to help on the project, please contact Ignatz on the Retro Handheld 
 
 <h2>Donations:</h2>
 
-Please note that donations are not a guarantee for the project to continue, or to succeed. If you decide to donate anyway, we will be very greatfull about that.<br>
+Please note that donations are not a guarantee for the project to continue, or to succeed. If you decide to donate anyway, we will be very greatful about that.<br>
 We also dont need any funding at the moment. We have the tools we need to work. We just need time. So Anything you might donate, will be just out of kidness, and might highten the sprit of the devs, but it will not increase production speed.
 <br>If you want to donate something for the project, you can do so with the following links.
 <br>Due to organizational limitations, its only possible to donate to individual members of the project.
@@ -41,6 +42,8 @@ We also dont need any funding at the moment. We have the tools we need to work. 
 https://www.paypal.com/paypalme/ignatzDraconis
 <br><b>Osaka:</b> <br>
 (Comming Soon)
+<br><b>xTxNinjaZx AKA Kev:</b><br>
+https://paypal.me/kkestner91
 
 <h2>Possible Project Names:</h2>
 (Name voting can be found here: https://cloud.maschath.de/apps/polls/s/sFak08ki)
