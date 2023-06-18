@@ -44,7 +44,7 @@ https://www.paypal.com/paypalme/ignatzDraconis
 <br><b>Osaka:</b> <br>
 (Coming Soon)
 <br><b>xTxNinjaZx AKA Kev:</b><br>
-https://paypal.me/kkestner91
+https://www.paypal.com/paypalme/kkestner91
 
 <h2>Possible Project Names:</h2>
 (Name voting can be found here: https://cloud.maschath.de/apps/polls/s/sFak08ki)
