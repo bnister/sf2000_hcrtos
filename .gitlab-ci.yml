@@ -1,6 +1,11 @@
 build-job:
   stage: build
   script:
+    - chmod +x ci.sh
+    - chmod +x install-dependencies.sh
+    - chmod +x install-toolchain.sh
+    - chmod +x buildSfClean.sh
+    - chmod +x buildSf.sh
     - ./ci.sh
   artifacts:
     paths:
