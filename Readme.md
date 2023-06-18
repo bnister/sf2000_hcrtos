@@ -21,7 +21,8 @@ Slightly Longer Answer: At this point it's nearly impossible to say how long thi
 <br><b>Osaka:</b> A researcher of the original firmware, author of the bootloader fix and the sample custom code (BMP viewer).
 <br><b>xTxNinjaZx AKA Kev:</b> Researcher/tester of the current firmware on the SF2000 and Custom Firmware Dev support. Has OCD which can be a blessing and a curse, you decide. Also, a father and a husband so only working on this when he can :-)
 
-<h2>Links:</h2><br>
+<h2>Links:</h2>
+
 Original SDK Dump and firmware files:<br>
 https://cloud.maschath.de/s/PKfPaHS4qsqewEk <br>
 General information about the device:<br>
