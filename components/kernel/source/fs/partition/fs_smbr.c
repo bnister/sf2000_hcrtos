@@ -552,7 +552,7 @@ static void parse_unixware(struct parsed_partitions *state, unsigned int offset,
 		put_dev_sector(state->state, sect);
 		return;
 	}
-	log_d(" %s%d: <unixware:", state->name, origin);
+	//log_d(" %s%d: <unixware:", state->name, origin);
 	p = &l->vtoc.v_slice[1];
 	/* I omit the 0th slice as it is the same as whole disk. */
 	while (p - &l->vtoc.v_slice[0] < UNIXWARE_NUMSLICE) {
@@ -706,7 +706,7 @@ int check_msdos_partition(struct parsed_partitions *state)
 		}
 	}
 
-	log_d("");
+	log_d("_");
 
 	/* second pass - output for each on a separate line */
 	p = (struct partition *)(0x1be + data);

@@ -210,7 +210,7 @@ static ssize_t ftl_read(FAR struct inode *inode, unsigned char *buffer,
 {
   FAR struct ftl_struct_s *dev;
 
-  finfo("sector: %" PRIuOFF " nsectors: %u\n", start_sector, nsectors);
+  //finfo("sector: %" PRIuOFF " nsectors: %i\n", start_sector, nsectors);
 
   DEBUGASSERT(inode && inode->i_private);
 
@@ -444,7 +444,7 @@ static ssize_t ftl_write(FAR struct inode *inode,
 {
   struct ftl_struct_s *dev;
 
-  finfo("sector: %" PRIuOFF " nsectors: %u\n", start_sector, nsectors);
+  //finfo("sector: %" PRIuOFF " nsectors: %i\n", start_sector, nsectors);
 
   DEBUGASSERT(inode && inode->i_private);
   dev = (struct ftl_struct_s *)inode->i_private;
@@ -481,8 +481,8 @@ static int ftl_geometry(FAR struct inode *inode,
 
       finfo("available: true mediachanged: false writeenabled: %s\n",
             geometry->geo_writeenabled ? "true" : "false");
-      finfo("nsectors: %" PRIuOFF " sectorsize: %u\n",
-            geometry->geo_nsectors, geometry->geo_sectorsize);
+      //finfo("nsectors: %" PRIuOFF " sectorsize: %li\n",
+      //      geometry->geo_nsectors, geometry->geo_sectorsize);
 
       return OK;
     }

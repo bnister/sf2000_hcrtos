@@ -114,7 +114,7 @@ static void pwm_dump(FAR const char *msg, FAR const struct pwm_info_s *info,
   int i;
 #endif
 
-  pwminfo("%s: frequency: %" PRId32 "\n", msg, info->frequency);
+  //pwminfo("%s: frequency: %" PRId32 "\n", msg, info->frequency);
 
 #ifdef CONFIG_PWM_MULTICHAN
   for (i = 0; i < CONFIG_PWM_NCHANNELS; i++)
@@ -123,7 +123,7 @@ static void pwm_dump(FAR const char *msg, FAR const struct pwm_info_s *info,
               info->channels[i].channel, info->channels[i].duty);
     }
 #else
-  pwminfo(" duty: %08" PRIx32 "\n", info->duty);
+  pwminfo(" duty: %08" PRIx32 "\n", info->duty_ns);
 #endif
 
 #ifdef CONFIG_PWM_PULSECOUNT

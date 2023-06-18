@@ -235,8 +235,8 @@ static ssize_t rd_read(FAR struct inode *inode, unsigned char *buffer,
   DEBUGASSERT(inode && inode->i_private);
   dev = (FAR struct rd_struct_s *)inode->i_private;
 
-  log_i("sector: %" PRIu32 " nsectors: %u sectorsize: %d\n",
-        start_sector, nsectors, dev->rd_sectsize);
+  //log_i("sector: %" PRIu32 " nsectors: %u sectorsize: %d\n",
+  //      start_sector, nsectors, dev->rd_sectsize);
 
   if ((uint32_t)start_sector < dev->rd_nsectors &&
       start_sector + nsectors <= dev->rd_nsectors)
@@ -269,8 +269,8 @@ static ssize_t rd_write(FAR struct inode *inode, const unsigned char *buffer,
   DEBUGASSERT(inode && inode->i_private);
   dev = (struct rd_struct_s *)inode->i_private;
 
-  log_i("sector: %" PRIu32 " nsectors: %u sectorsize: %d\n",
-        start_sector, nsectors, dev->rd_sectsize);
+  //log_i("sector: %" PRIu32 " nsectors: %u sectorsize: %d\n",
+  //      start_sector, nsectors, dev->rd_sectsize);
 
   if (!RDFLAG_IS_WRENABLED(dev->rd_flags))
     {
@@ -317,8 +317,8 @@ static int rd_geometry(FAR struct inode *inode, struct geometry *geometry)
 
       log_i("available: true mediachanged: false writeenabled: %s\n",
             geometry->geo_writeenabled ? "true" : "false");
-      log_i("nsectors: %" PRIu32 " sectorsize: %" PRIu32 "\n",
-            geometry->geo_nsectors, geometry->geo_sectorsize);
+      //log_i("nsectors: %" PRIu32 " sectorsize: %" PRIu32 "\n",
+      //      geometry->geo_nsectors, geometry->geo_sectorsize);
 
       return OK;
     }
