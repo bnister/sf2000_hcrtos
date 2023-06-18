@@ -7,7 +7,7 @@
 #endif
 
 #ifndef ELOG_OUTPUT_LVL
-#define ELOG_OUTPUT_LVL ELOG_LVL_ERROR
+#define ELOG_OUTPUT_LVL ELOG_LVL_VERBOSE
 #endif
 
 #include <kernel/elog.h>

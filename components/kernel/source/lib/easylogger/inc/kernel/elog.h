@@ -54,6 +54,12 @@ extern "C" {
 /* EasyLogger software version number */
 #define ELOG_SW_VERSION                      "2.0.3"
 
+/* Force Verbose Logging */
+#undef ELOG_OUTPUT_LVL
+#undef LOG_LVL
+#define ELOG_OUTPUT_LVL ELOG_LVL_VERBOSE
+#define LOG_LVL ELOG_LVL_VERBOSE
+
 /* EasyLogger assert for developer. */
 #ifdef ELOG_ASSERT_ENABLE
     #define ELOG_ASSERT(EXPR)                                                 \
