@@ -336,7 +336,7 @@ hcrtos {
 	persistentmem {
 		mtdname = "persistentmem";
 		size = <4096>;
-		status = "okay";
+		status = "disabled";
 	};
 
 	sfspi {

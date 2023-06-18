@@ -28,21 +28,28 @@ int main(void)
 
 static void app_main(void *pvParameters)
 {
-	log_d("starting app_main\n");
-	log_d("ribbit\n");
-	log_d("Hello Froggy!\n");
 	assert(module_init("all") == 0);
 
 	/* Set default time zone is GMT+8 */
 	setenv("TZ", CONFIG_APP_TIMEZONE, 1);
 	tzset();
+	// For some reason, printf does not work before this point. 
 
-	console_init();
+	//console_init();
 	/* Console loop */
-	console_start();
+	//console_start();
 
+	printf("Pre Main Loop\n");
+	fflush(stdout);
+        printf("ribbit\n");
+        fflush(stdout);
+        printf("Hello Froggy!\n");
+        fflush(stdout);
 	/* Program should not run to here. */
-	for (;;);
+	for (;;)
+	{
+		vTaskDelay(100);
+	}
 
 	/* Delete current thread. */
 	vTaskDelete(NULL);
