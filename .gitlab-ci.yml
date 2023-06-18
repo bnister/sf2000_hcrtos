@@ -1,0 +1,7 @@
+build-job:
+  stage: build
+  script:
+    - ./ci.sh
+  artifacts:
+    paths:
+      - bisrv.asd
