@@ -5,3 +5,5 @@ build-job:
   artifacts:
     paths:
       - bisrv.asd
+  tags:
+    - runner
