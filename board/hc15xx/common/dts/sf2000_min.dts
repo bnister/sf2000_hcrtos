@@ -351,7 +351,7 @@ hcrtos {
 			reg = <0>;
 			status = "okay";
 			partitions {
-				part-num = <4>;
+				part-num = <0>;
 
 				/* part0 is for entire norflash by default */
 				/* Old Partition Table, Removed for now
