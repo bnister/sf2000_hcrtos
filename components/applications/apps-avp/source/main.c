@@ -28,6 +28,9 @@ int main(void)
 
 static void app_main(void *pvParameters)
 {
+	log_d("starting app_main\n");
+	log_d("ribbit\n");
+	log_d("Hello Froggy!\n");
 	assert(module_init("all") == 0);
 
 	/* Set default time zone is GMT+8 */

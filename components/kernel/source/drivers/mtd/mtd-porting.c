@@ -321,6 +321,7 @@ int mtd_device_register(struct mtd_info *mtd, const char *node)
 	fdt_get_property_u_32_index(np, "part-num", 0, &npart);
 
 	for (i = 0; i <= (int)npart; i++) {
+                log_d("MTD: Creating Partition Numvber %lu\n", (unsigned long) i);
 		start = 0;
 		size = 0;
 		partname = NULL;
@@ -335,10 +336,12 @@ int mtd_device_register(struct mtd_info *mtd, const char *node)
 			/* part0 is for entire flash by default */
 			start = 0;
 			size = master->size;
+			log_d("Setting Partition size to: %lu\n",(unsigned long) master->size);
 			partname = "mtd_master";
 		}
 
 		firstblock = start / master->writesize;
+		log_d("Master Writesize: %lu\n", (unsigned long) master->writesize);
 		nblocks = size / master->writesize;
 		part = mtd_partition(master, firstblock, nblocks);
 		if (!part) {

@@ -2273,7 +2273,7 @@ static const struct flash_info *spi_nor_read_id(struct spi_nor *nor)
 						 manufacturers[i]->nparts,
 						 id);
 		if (info) {
-			dev_dbg(nor->dev, "Found manufactur. Chip: %s", manufacturers[i]->name);
+			dev_dbg(nor->dev, "Found manufactur: %s\n", manufacturers[i]->name);
 			nor->manufacturer = manufacturers[i];
 			return info;
 		}
@@ -3642,7 +3642,7 @@ int spi_nor_probe(struct spi_mem *spimem, const char *node)
 	 * set to "m25p80" and then "type" provides a real chip name.
 	 * If that's the case, respect "type" and ignore a "name".
 	 */
-	flash_name = "m25p80"; /* auto-detect */
+	flash_name = "XM25QH40B"; /* auto-detect */
 
 	ret = spi_nor_scan(nor, flash_name, &hwcaps);
 	if (ret)
