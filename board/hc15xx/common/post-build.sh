@@ -129,60 +129,60 @@ volume=$(PATH=$PYPATH ${FDTINFO} --dtb ${DTB} --node /hcrtos/i2so --prop volume)
 ${GENPERSISTENTMEM} -v ${firmware_version} -p ${BR2_EXTERNAL_PRODUCT_NAME} -V ${volume} -t ${tvtype} -o ${IMAGES_DIR}/persistentmem.bin
 message "Generating persistentmem.bin done"
 
-sfbin=${IMAGES_DIR}/sfburn.bin
-message "Generating ${sfbin} ....."
-sfbin=${IMAGES_DIR}/sfburn.bin
-rm -f ${sfbin}
-PATH=$PYPATH ${GENSFBIN} --wkdir ${IMAGES_DIR} --output ${sfbin} --dtb ${DTB} --fill 0xff
-[ $? != 0 ] && exit 1;
-message "Generating ${sfbin} done!"
+#sfbin=${IMAGES_DIR}/sfburn.bin
+#message "Generating ${sfbin} ....."
+#sfbin=${IMAGES_DIR}/sfburn.bin
+#rm -f ${sfbin}
+#PATH=$PYPATH ${GENSFBIN} --wkdir ${IMAGES_DIR} --output ${sfbin} --dtb ${DTB} --fill 0xff
+#[ $? != 0 ] && exit 1;
+#message "Generating ${sfbin} done!"
 
-message "Generating sfburn.ini ....."
-md5=$(md5sum ${sfbin} | awk '{print $1}')
-rm -f ${sfbin}.*
-cp ${sfbin} ${sfbin}.${md5}
+#message "Generating sfburn.ini ....."
+#md5=$(md5sum ${sfbin} | awk '{print $1}')
+#rm -f ${sfbin}.*
+#cp ${sfbin} ${sfbin}.${md5}
 
-sfbin_size=$(wc -c ${sfbin} | awk '{print $1}' | xargs -i printf "0x%08x" {})
-((sfbin_size_align=((sfbin_size + 0xffff) / 0x10000) * 0x10000))
+#sfbin_size=$(wc -c ${sfbin} | awk '{print $1}' | xargs -i printf "0x%08x" {})
+#((sfbin_size_align=((sfbin_size + 0xffff) / 0x10000) * 0x10000))
 
-cat << EOF > ${IMAGES_DIR}/sfburn.ini
-[Project]
-RunMode=0
-InitMode=0
-RunAddr=0xA0000200
-FileNum=2
-[File0]
-File=$(basename ${sfbin}.${md5})
-Type=1
-Addr=0xA0060000
-[File1]
-File=flashwr_unify.abs
-Type=1
-Addr=0xA0000200
-[AutoRun]
-AutoRun0=wm 0x800001F0 $(printf 0x%08x $sfbin_size_align)
-AutoRun1=wm 0x800001F4 0x00000000
-AutoRun2=wm 0x800001F8 0x80060000
-AutoRun3=wm 0xb8818504 0x0
-EOF
-message "Generating sfburn.ini done!"
+#cat << EOF > ${IMAGES_DIR}/sfburn.ini
+#[Project]
+#RunMode=0
+#InitMode=0
+#RunAddr=0xA0000200
+#FileNum=2
+#[File0]
+#File=$(basename ${sfbin}.${md5})
+#Type=1
+#Addr=0xA0060000
+#[File1]
+#File=flashwr_unify.abs
+#Type=1
+#Addr=0xA0000200
+#[AutoRun]
+#AutoRun0=wm 0x800001F0 $(printf 0x%08x $sfbin_size_align)
+#AutoRun1=wm 0x800001F4 0x00000000
+#AutoRun2=wm 0x800001F8 0x80060000
+#AutoRun3=wm 0xb8818504 0x0
+#EOF
+#message "Generating sfburn.ini done!"
 
-message "Generating hcprog.ini ....!"
-PATH=$PYPATH ${HCPROGINI} --output ${IMAGES_DIR}/hcprog.ini \
-				--dtb ${DTB} \
-				--chip H15XX \
-				--product ${BR2_EXTERNAL_PRODUCT_NAME} \
-				--draminit $(basename ${BR2_EXTERNAL_BOARD_DDRINIT_FILE}) \
-				--version ${firmware_version}
-message "Generating hcprog.ini done"
-
-if [ -f ${IMAGES_DIR}/hcprog.ini ];then
-	message "Generating HCFOTA_*******_*******.bin .....!"
-	rm -f ${IMAGES_DIR}/HCFOTA*.bin
-	${TOPDIR}/build/tools/HCFota_Generator --i=${IMAGES_DIR}/hcprog.ini
-	cp ${IMAGES_DIR}/HCFOTA_*.bin  ${IMAGES_DIR}/HCFOTA.bin 
-	message "Generating HCFOTA_*******_*******.bin done!"
-fi
+#message "Generating hcprog.ini ....!"
+#PATH=$PYPATH ${HCPROGINI} --output ${IMAGES_DIR}/hcprog.ini \
+#				--dtb ${DTB} \
+#				--chip H15XX \
+#				--product ${BR2_EXTERNAL_PRODUCT_NAME} \
+#				--draminit $(basename ${BR2_EXTERNAL_BOARD_DDRINIT_FILE}) \
+#				--version ${firmware_version}
+#message "Generating hcprog.ini done"
+#
+#if [ -f ${IMAGES_DIR}/hcprog.ini ];then
+#	message "Generating HCFOTA_*******_*******.bin .....!"
+#	rm -f ${IMAGES_DIR}/HCFOTA*.bin
+#	${TOPDIR}/build/tools/HCFota_Generator --i=${IMAGES_DIR}/hcprog.ini
+#	cp ${IMAGES_DIR}/HCFOTA_*.bin  ${IMAGES_DIR}/HCFOTA.bin 
+#	message "Generating HCFOTA_*******_*******.bin done!"
+#fi
 
 if [ "${BR2_PACKAGE_APPS_HCUSBCAST}" = "y" ];then
 	message "Generating IUM_*******_*******.bin .....!"
@@ -191,13 +191,13 @@ if [ "${BR2_PACKAGE_APPS_HCUSBCAST}" = "y" ];then
 	message "Generating IUM_${BR2_EXTERNAL_PRODUCT_NAME}_${firmware_version} done!"
 fi
 
-cp -vf ${TOPDIR}/build/tools/flashwr_unify.abs ${IMAGES_DIR}/
-cp -vf ${TOPDIR}/build/tools/spinandwr.out ${IMAGES_DIR}/
-cp -vf ${TOPDIR}/build/tools/HCProgram_bridge.exe ${IMAGES_DIR}/
-cp -vf ${TOPDIR}/build/tools/HCFota_Generator.exe ${IMAGES_DIR}/
-cp -vf ${TOPDIR}/build/tools/updater.bin ${IMAGES_DIR}/
+#cp -vf ${TOPDIR}/build/tools/flashwr_unify.abs ${IMAGES_DIR}/
+#cp -vf ${TOPDIR}/build/tools/spinandwr.out ${IMAGES_DIR}/
+#cp -vf ${TOPDIR}/build/tools/HCProgram_bridge.exe ${IMAGES_DIR}/
+#cp -vf ${TOPDIR}/build/tools/HCFota_Generator.exe ${IMAGES_DIR}/
+#cp -vf ${TOPDIR}/build/tools/updater.bin ${IMAGES_DIR}/
 
 
-GEN_UPG_DIR=$(dirname $0)
-chmod +x ${GEN_UPG_DIR}/gen_upgrade_pkt.sh
-source ${GEN_UPG_DIR}/gen_upgrade_pkt.sh ${IMAGES_DIR} ${BR2_CONFIG}
+#GEN_UPG_DIR=$(dirname $0)
+#chmod +x ${GEN_UPG_DIR}/gen_upgrade_pkt.sh
+#source ${GEN_UPG_DIR}/gen_upgrade_pkt.sh ${IMAGES_DIR} ${BR2_CONFIG}

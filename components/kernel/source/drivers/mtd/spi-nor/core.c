@@ -2273,6 +2273,7 @@ static const struct flash_info *spi_nor_read_id(struct spi_nor *nor)
 						 manufacturers[i]->nparts,
 						 id);
 		if (info) {
+			dev_dbg(nor->dev, "Found manufactur. Chip: %s", manufacturers[i]->name);
 			nor->manufacturer = manufacturers[i];
 			return info;
 		}

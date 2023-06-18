@@ -354,7 +354,7 @@ hcrtos {
 				part-num = <4>;
 
 				/* part0 is for entire norflash by default */
-
+				/* Old Partition Table, Removed for now
 				part1-label = "boot";
 				part1-reg = <0x0 0x60000>;
 				part1-filename = "bootloader.bin";
@@ -369,7 +369,7 @@ hcrtos {
 
 				part4-label = "persistentmem";
 				part4-reg = <0x3e0000 0x20000>;
-				part4-filename = "persistentmem.bin";
+				part4-filename = "persistentmem.bin"; */
 			};
 		};
 
