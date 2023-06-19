@@ -2,6 +2,7 @@
 #include <signal.h>
 #include <errno.h>
 #include <pthread.h>
+#include <dirent.h>
 
 #include <hcuapi/audsink.h>
 #include <time.h>
@@ -67,9 +68,45 @@ static void start_watchdog_task()
     pthread_create(&pid, NULL, watchdog_task, NULL);
 }
 
+void list_dir(char* dir_name)
+{
+    DIR *dirp = NULL;
+    struct dirent *entry = NULL;
+    int check_count = 10;
+    char sub_path[1024];
+    while(check_count --) {
+        if ((dirp = opendir(dir_name)) == NULL) {
+            api_sleep_ms(100);
+            continue;
+        }
+
+        while (1) {
+            entry = readdir(dirp);
+            if (!entry)
+                break;
+
+            if(!strcmp(entry->d_name, ".") ||
+               !strcmp(entry->d_name, "..")){
+                //skip the upper dir
+                continue;
+            }
+
+            if (strlen(entry->d_name) && entry->d_type == 4){ //dir
+                printf("%s/%s", dir_name, entry->d_name);
+                if (entry->d_type == 4) { //dir
+                    sprintf(sub_path, "%s/%s", dir_name, entry->d_name);
+                    list_dir(sub_path);
+                }
+            }
+
+        }
+    }
+}
+
 void * main_sf2000(void *arg)
 {
     printf("Welcom to SF2000!\n");
+    list_dir("/");
 
     app_ffplay_init();
     api_logo_show(NULL);
@@ -95,3 +132,4 @@ void * main_sf2000(void *arg)
 
     return 0;
 }
+
