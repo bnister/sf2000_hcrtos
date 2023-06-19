@@ -1,0 +1,8 @@
+menuconfig BR2_PACKAGE_APPS_SF2000
+	bool "sf2000"
+	select BR2_PACKAGE_PREBUILTS_LIBGE
+	select BR2_PACKAGE_LIBLVGL
+
+if BR2_PACKAGE_APPS_SF2000
+source "source/Kconfig"
+endif

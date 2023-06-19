@@ -1,0 +1,67 @@
+include $(BR2_MKENTRY)
+ifeq ($(skip-makefile),)
+
+include $(BR2_MKLINK)
+
+# Strip quotes and then whitespaces
+qstrip=$(strip $(subst ",,$(1)))
+#"))
+
+target-y := $(call qstrip,$(CONFIG_APPS_NAME))
+
+ifeq ($(BR2_PACKAGE_PREBUILTS_RTL8188EU),y)
+	cflags-y += -DWIFI_RTL8188ETV_SUPPORT
+	cflags-y += -DWIFI_SUPPORT
+endif
+
+ifeq ($(BR2_PACKAGE_PREBUILTS_RTL8188FU),y)
+	cflags-y += -DWIFI_RTL8188FU_SUPPORT
+	cflags-y += -DWIFI_SUPPORT
+endif
+
+ifeq ($(BR2_PACKAGE_PREBUILTS_RTL8733BU),y)
+	cflags-y += -DWIFI_RTL8733BU_SUPPORT
+	cflags-y += -DWIFI_SUPPORT
+endif
+
+ifeq ($(CONFIG_SOC_HC15XX),y)
+	cflags-y += -DNOT_SUPPORT_4K
+	cflags-y += -DSOC_HC15XX
+endif
+
+ifeq ($(BR2_PACKAGE_PREBUILTS_FFPLAYER),y)
+	cflags-y += -DSUPPORT_FFPLAYER
+endif
+
+all : $(target-y).bin FORCE
+
+main-y = main.o
+
+obj-y += main.o
+obj-y += src/
+
+$(target-y).bin: $(target-y).out
+	$(OBJCOPY) -O binary $< $@
+
+$(target-y).out: built-in.o
+	$(Q)$(LD) $(ldflags-y) -o $@ -Map $@.map --start-group $^ $(ldlibs-y) --whole-archive $(wholearchivelibs-y) --no-whole-archive --end-group
+
+built-in.o: FORCE
+	$(Q)$(MAKE) $(build)=.
+
+install: FORCE
+	install -m 0664 $(target-y).out $(IMAGES_DIR)/
+	install -m 0664 $(target-y).out.map $(IMAGES_DIR)/
+	install -m 0664 $(target-y).bin $(IMAGES_DIR)/
+
+clean: FORCE
+	$(Q)$(MAKE) $(clean)=.
+	-rm -f $(target-y).out
+	-rm -f $(target-y).out.map
+	-rm -f $(target-y).bin
+
+.PHONY: FORCE
+
+FORCE:
+
+endif
