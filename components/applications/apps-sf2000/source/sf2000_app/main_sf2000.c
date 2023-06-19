@@ -91,22 +91,29 @@ void list_dir(char* dir_name)
                 continue;
             }
 
-            if (strlen(entry->d_name) && entry->d_type == 4){ //dir
-                printf("%s/%s", dir_name, entry->d_name);
+            if (strlen(entry->d_name)){
+                printf("(%d) %s / %s", entry->d_type, dir_name, entry->d_name);
+                printf("\n");
+                memset(&sub_path[0], 0, sizeof(sub_path));
                 if (entry->d_type == 4) { //dir
-                    sprintf(sub_path, "%s/%s", dir_name, entry->d_name);
+                    if (!strcmp(dir_name, "/"))
+                        sprintf(sub_path, "/%s", entry->d_name);
+                    else
+                        sprintf(sub_path, "%s/%s", dir_name, entry->d_name);
                     list_dir(sub_path);
                 }
             }
 
         }
+        break;
     }
 }
 
 void * main_sf2000(void *arg)
 {
+    api_sleep_ms(2000); //Wait 2 seconds for mmc to init
     printf("Welcom to SF2000!\n");
-    list_dir("/");
+    //list_dir("/");
 
     app_ffplay_init();
     api_logo_show(NULL);
