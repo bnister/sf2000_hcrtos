@@ -371,7 +371,7 @@ void app_ffplay_init(void)
 
     if (m_ffplay_init) return;
 
-    hcplayer_init(1);
+    hcplayer_init(5);
     m_ffplay_init = true;
 #endif
 }

@@ -269,7 +269,7 @@ typedef struct{
 	uint32_t	msg_code;
 }control_msg_t;
 
-#define MUSIC_LOGO "media/mmcblk0p2/music_bg_logo.264"
+#define MUSIC_LOGO "media/mmcblk0p2/audio_test.mp3"
 
 
 extern void *g_gpio_reset_hld;

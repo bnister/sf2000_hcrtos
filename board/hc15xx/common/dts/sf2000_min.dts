@@ -156,7 +156,7 @@ hcrtos {
 		avc-cmd-queue-size = <CONFIG_AVC_CMD_QUEUE_SIZE>;
 		avc-vbv-size = <CONFIG_AVC_VBV_SIZE>;
 		avc-mem-size = <CONFIG_AVC_MEM_SIZE>;
-		status = "disabled";
+		status = "okay";
 	};
 
 	DE: de-engine {
@@ -196,7 +196,7 @@ hcrtos {
 		tvtype = <1>;
 		cvbs-output = <CONFIG_CVBS_OUTPUT_SUPPORT>;
 		vga-output = <CONFIG_VGA_OUTPUT_SUPPORT>;
-		status = "okay";
+		status = "disabled";
 	};
 
 	pwm@0 {
