@@ -263,7 +263,7 @@ hcrtos {
 	};
 
 	stdio {
-		serial0 = "/hcrtos/uart@1";
+		serial0 = "/hcrtos/fileuart";
 	};
 
 	boot-stdio {
