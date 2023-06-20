@@ -7,6 +7,7 @@
 #include <hcuapi/audsink.h>
 #include <time.h>
 #include "com_api.h"
+#include "hc_gpio.h"
 #include "lvgl/lvgl.h"
 #include "../lvgl/src/misc/lv_types.h"
 #include "key.h"
@@ -109,9 +110,19 @@ void list_dir(char* dir_name)
     }
 }
 
+void setUpPins()
+{
+    gpio_configure(PINPAD_R07, GPIO_DIR_OUTPUT) //Speaker Disable
+    gpio_set_output(PINPAD_R07, false) // high = disable, low = enable;
+
+    gpio_configure(PINPAD_R05, GPIO_DIR_OUTPUT) //AV / LCD switch
+    gpio_set_output(PINPAD_R05, true) // high = LCD, low = AV;
+}
+
 void * main_sf2000(void *arg)
 {
     api_sleep_ms(2000); //Wait 2 seconds for mmc to init
+    setUpPins();
     printf("Welcom to SF2000!\n");
     //list_dir("/");
 

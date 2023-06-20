@@ -41,6 +41,30 @@
 	};
 */
 
+/* SF2000
+24 D15   106 T06
+23 D14   105 T05
+22 D13   104 T04
+21 D12   103 T03
+20 D11   102 T02
+19 D10   114 T14
+18 D9    113 T13
+17 D8    112 T12
+16 D7    111 T11
+15 D6    110 T10
+14 D5    109 T09
+13 D4    5   L06
+12 D3    4   L05
+11 D2    3   L04
+10 D1    2   L03
+9  D0    1   L02
+8  RD    100 T00
+7  WR    6   L07
+6  RS    101 T01
+5  CS    9   L10
+4  RESET 128 L01
+ */
+
 
 static void st7789v2_spi_sends_data(unsigned char *data,unsigned char len);
 static void st7789v2_write_command(unsigned short cmds);
@@ -50,18 +74,28 @@ static int st7789v2_rorate(lcd_rotate_type_e dir);
 static void lcd_reset(void);
 
 typedef struct st7789v2_dev{
-	u32 spi_clk_num;
-	u32 spi_clk_vaild_edge;
-	u32 spi_cs_num;
-	u32 spi_cs_polar;  
-	u32 spi_mosi_num;
-	u32 spi_miso_num;
-	u32 spi_is_9bit;
-	u32 spi_mode;
+	u32 lcd_cs_num;
+    u32 lcd_rs_num;
+    u32 lcd_wr_num;
+    u32 lcd_rd_num;
+    u32 lcd_d0_num;
+    u32 lcd_d1_num;
+    u32 lcd_d2_num;
+    u32 lcd_d3_num;
+    u32 lcd_d4_num;
+    u32 lcd_d5_num;
+    u32 lcd_d6_num;
+    u32 lcd_d7_num;
+    u32 lcd_d8_num;
+    u32 lcd_d9_num;
+    u32 lcd_d10_num;
+    u32 lcd_d11_num;
+    u32 lcd_d12_num;
+    u32 lcd_d13_num;
+    u32 lcd_d14_num;
+    u32 lcd_d15_num;
 	u32 lcd_reset_num;
 	u32 lcd_reset_polar;
-	u32 lcd_stbyb_num;
-	u32 lcd_stbyb_polar;
 	u32 cur_type;
 }st7789v2_dev_t;
 static st7789v2_dev_t st7789v2dev;
@@ -90,10 +124,27 @@ static int st7789v2_rorate(lcd_rotate_type_e dir)
 }
 static int st7789v2_display_init(void)
 {
-	gpio_configure(st7789v2dev.spi_clk_num,GPIO_DIR_OUTPUT);//clk
-	gpio_configure(st7789v2dev.spi_cs_num,GPIO_DIR_OUTPUT);//mosi
-	gpio_configure(st7789v2dev.spi_mosi_num,GPIO_DIR_OUTPUT);//cs
-	gpio_configure(st7789v2dev.lcd_reset_num,GPIO_DIR_OUTPUT);//reset
+    gpio_configure(st7789v2dev.lcd_cs_num,GPIO_DIR_OUTPUT);
+    gpio_configure(st7789v2dev.lcd_rs_num,GPIO_DIR_OUTPUT);
+    gpio_configure(st7789v2dev.lcd_wr_num,GPIO_DIR_OUTPUT);
+    gpio_configure(st7789v2dev.lcd_rd_num,GPIO_DIR_OUTPUT);
+    gpio_configure(st7789v2dev.lcd_d0_num,GPIO_DIR_OUTPUT);
+    gpio_configure(st7789v2dev.lcd_d1_num,GPIO_DIR_OUTPUT);
+    gpio_configure(st7789v2dev.lcd_d2_num,GPIO_DIR_OUTPUT);
+    gpio_configure(st7789v2dev.lcd_d3_num,GPIO_DIR_OUTPUT);
+    gpio_configure(st7789v2dev.lcd_d4_num,GPIO_DIR_OUTPUT);
+    gpio_configure(st7789v2dev.lcd_d5_num,GPIO_DIR_OUTPUT);
+    gpio_configure(st7789v2dev.lcd_d6_num,GPIO_DIR_OUTPUT);
+    gpio_configure(st7789v2dev.lcd_d7_num,GPIO_DIR_OUTPUT);
+    gpio_configure(st7789v2dev.lcd_d8_num,GPIO_DIR_OUTPUT);
+    gpio_configure(st7789v2dev.lcd_d9_num,GPIO_DIR_OUTPUT);
+    gpio_configure(st7789v2dev.lcd_d10_num,GPIO_DIR_OUTPUT);
+    gpio_configure(st7789v2dev.lcd_d11_num,GPIO_DIR_OUTPUT);
+    gpio_configure(st7789v2dev.lcd_d12_num,GPIO_DIR_OUTPUT);
+    gpio_configure(st7789v2dev.lcd_d13_num,GPIO_DIR_OUTPUT);
+    gpio_configure(st7789v2dev.lcd_d14_num,GPIO_DIR_OUTPUT);
+    gpio_configure(st7789v2dev.lcd_d15_num,GPIO_DIR_OUTPUT);
+    gpio_configure(st7789v2dev.lcd_reset_num,GPIO_DIR_OUTPUT);
 	printf("%s %d\n", __FUNCTION__,__LINE__);
 
 	lcd_reset();
@@ -303,39 +354,40 @@ static void gpio_spi_generate_clk(void)
 	else
 		lcd_gpio_set_output(st7789v2dev.spi_clk_num,1);
 }
-static void gpio_spi_enable_cs(void)//==0
+static void gpio_set_cs(bool state)
 {
-	if(st7789v2dev.spi_cs_polar == 0)	
-		lcd_gpio_set_output(st7789v2dev.spi_cs_num,0);
-	else
-		lcd_gpio_set_output(st7789v2dev.spi_cs_num,1);
+    lcd_gpio_set_output(st7789v2dev.spi_cs_num,state);
 }
 
-static void gpio_spi_disable_cs(void)
+static void gpio_set_rs(bool state)
 {
-	if(st7789v2dev.spi_cs_polar == 0)
-		lcd_gpio_set_output(st7789v2dev.spi_cs_num,1);//cs
-	else
-		lcd_gpio_set_output(st7789v2dev.spi_cs_num,0);//cs
+    lcd_gpio_set_output(st7789v2dev.spi_rs_num,state);
 }
 
-static void gpio_spi_init_clk(void)
+static void gpio_set_wr(bool state)
 {
-	if(st7789v2dev.spi_clk_vaild_edge == 1)//1 //==1
-		lcd_gpio_set_output(st7789v2dev.spi_clk_num,0);//sck
-	else
-		lcd_gpio_set_output(st7789v2dev.spi_clk_num,1);//sck
-		
+    lcd_gpio_set_output(st7789v2dev.spi_wr_num,state);
 }
 
-static void lcd_gpio_spi_config_write(unsigned char bit_9,unsigned char cmd)
+static void gpio_set_data(int pin, bool state)
+{
+    switch (pin)
+    {
+        case 0:
+            lcd_gpio_set_output(st7789v2dev.lcd_d0_num,state);
+    }
+
+}
+
+static void lcd_gpio_spi_config_write(unsigned int cmd)
 {
 	int i=0;
 	unsigned char cmd_val = 0;
-	gpio_spi_disable_cs();//cs
+	gpio_set_cs(0);
+    gpio_set_rs(0);
+    gpio_set_wr(0);
 	usleep(10);
-	gpio_spi_init_clk();//sck
-	gpio_spi_enable_cs();
+	gpio_enable_cs();
 	usleep(2);
 	if(st7789v2dev.spi_is_9bit == 1)
 	{

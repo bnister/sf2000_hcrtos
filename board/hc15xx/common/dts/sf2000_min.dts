@@ -196,7 +196,7 @@ hcrtos {
 		tvtype = <1>;
 		cvbs-output = <CONFIG_CVBS_OUTPUT_SUPPORT>;
 		vga-output = <CONFIG_VGA_OUTPUT_SUPPORT>;
-		status = "disabled";
+		status = "okay";
 	};
 
 	pwm@0 {
@@ -247,7 +247,7 @@ hcrtos {
 	};
 
 	uart@1 {
-		pinmux-active = <PINPAD_R05 2 PINPAD_R08 2>;
+		pinmux-active = <PINPAD_R05 0 PINPAD_R08 2>;
 		devpath = "/dev/uart1";
 		status = "okay";
 	};
@@ -262,8 +262,13 @@ hcrtos {
 		status = "okay";
 	};
 
+    fileuart {
+        devpath = "/dev/fileuart";
+        status = "okay";
+    };
+
 	stdio {
-		serial0 = "/hcrtos/fileuart";
+		serial0 = "/hcrtos/uart@1";
 	};
 
 	boot-stdio {
