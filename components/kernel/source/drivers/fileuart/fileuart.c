@@ -42,7 +42,7 @@ static int fileuart_fs_mount_notify(struct notifier_block *self, unsigned long a
 {
 	char log_file_path[512] = { 0 };
 
-	switch (action) {
+	switch (action) {		
 	case USB_MSC_NOTIFY_MOUNT: {
 		xSemaphoreTake(g_dev.sem, portMAX_DELAY);
 		if (g_dev.fd < 0) {
@@ -56,6 +56,30 @@ static int fileuart_fs_mount_notify(struct notifier_block *self, unsigned long a
 		break;
 	}
 	case USB_MSC_NOTIFY_UMOUNT: {
+		xSemaphoreTake(g_dev.sem, portMAX_DELAY);
+		if (g_dev.fd >= 0) {
+			if (!strncmp(g_dev.devname, dev, strlen(g_dev.devname))) {
+				close(g_dev.fd);
+				memset(g_dev.devname, 0, DISK_NAME_LEN);
+				g_dev.fd = -1;
+			}
+		}
+		xSemaphoreGive(g_dev.sem);
+		break;
+	}
+	case SDMMC_NOTIFY_MOUNT: {
+		xSemaphoreTake(g_dev.sem, portMAX_DELAY);
+		if (g_dev.fd < 0) {
+			snprintf(log_file_path, sizeof(log_file_path), "/media/%s/log.txt", (char *)dev);
+			g_dev.fd = open(log_file_path, O_CREAT | O_WRONLY);
+			if (g_dev.fd >= 0) {
+				memcpy(g_dev.devname, dev, DISK_NAME_LEN);
+			}
+		}
+		xSemaphoreGive(g_dev.sem);
+		break;
+	}
+	case SDMMC_NOTIFY_UMOUNT: {
 		xSemaphoreTake(g_dev.sem, portMAX_DELAY);
 		if (g_dev.fd >= 0) {
 			if (!strncmp(g_dev.devname, dev, strlen(g_dev.devname))) {
