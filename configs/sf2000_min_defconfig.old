@@ -427,7 +427,7 @@ BR2_PACKAGE_FFMPEG_FFMPEG=y
 # BR2_PACKAGE_FFMPEG_AVRESAMPLE is not set
 BR2_PACKAGE_FFMPEG_SWSCALE=y
 BR2_PACKAGE_FFMPEG_ENCODERS=""
-BR2_PACKAGE_FFMPEG_DECODERS=""
+BR2_PACKAGE_FFMPEG_DECODERS="bmp mp3"
 BR2_PACKAGE_FFMPEG_MUXERS=""
 BR2_PACKAGE_FFMPEG_DEMUXERS="mp3 aac ac3 avi asf amr ape amrnb amrwb dts dvbsub dvbtxt eac3 flac flv h261 h263 h264 hevc hls mjpeg m4v mov mpegps mpegts mpegtsraw mjpeg_2000 mpegvideo mpjpeg matroska ogg pcm_alaw pcm_f32be pcm_f32le pcm_f64be pcm_f64le pcm_mulaw pcm_s16be pcm_s16le pcm_s24be pcm_s24le pcm_s32be pcm_s32le pcm_s8 pcm_u16be pcm_u16le pcm_u24be pcm_u24le pcm_u32be pcm_u32le pcm_u8 rm rtp rtsp spdif wav"
 BR2_PACKAGE_FFMPEG_PARSERS="aac aac_latm ac3 flac gif h261 h263 h264 hevc jpeg2000 mjpeg mpeg4video mpegaudio mpegvideo opus vc1 vorbis"
