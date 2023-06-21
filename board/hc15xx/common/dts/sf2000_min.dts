@@ -247,6 +247,7 @@ hcrtos {
 		lcd_wr 		= <PINPAD_L07>;
 		lcd_rd 		= <PINPAD_T00>;
 		lcd_reset	= <PINPAD_L01>;
+        lcd_vsync   = <PINPAD_L08>;
 		lcd_d0		= <PINPAD_L02>;
 		lcd_d1		= <PINPAD_L03>;
 		lcd_d2		= <PINPAD_L04>;

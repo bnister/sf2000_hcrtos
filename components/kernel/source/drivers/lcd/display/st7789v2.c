@@ -79,6 +79,7 @@ typedef struct st7789v2_dev{
     u32 lcd_wr_num;
     u32 lcd_rd_num;
     u32 lcd_reset_num;
+    u32 lcd_vsync_num;
     u32 lcd_d0_num;
     u32 lcd_d1_num;
     u32 lcd_d2_num;
@@ -120,6 +121,20 @@ static int st7789v2_rorate(lcd_rotate_type_e dir)
 	st7789v2_write_command(0x36);	  st7789v2_write_data(data);//(data); //v
 	return 0;
 }
+
+static void vsync_irq(uint32_t param) {
+    st7789v2_write_command(0x2B);
+    st7789v2_write_data(0x00);
+    st7789v2_write_data(0x00);
+    st7789v2_write_data(0x01);
+    st7789v2_write_data(0x3F);
+    st7789v2_write_command(0x2A);
+    st7789v2_write_data(0x00);
+    st7789v2_write_data(0x00);
+    st7789v2_write_data(0x00);
+    st7789v2_write_data(0xEF);
+}
+
 static int st7789v2_display_init(void)
 {
     gpio_configure(st7789v2dev.lcd_cs_num,GPIO_DIR_OUTPUT);
@@ -143,6 +158,12 @@ static int st7789v2_display_init(void)
     gpio_configure(st7789v2dev.lcd_d14_num,GPIO_DIR_OUTPUT);
     gpio_configure(st7789v2dev.lcd_d15_num,GPIO_DIR_OUTPUT);
     gpio_configure(st7789v2dev.lcd_reset_num,GPIO_DIR_OUTPUT);
+    gpio_configure(st7789v2dev.lcd_vsync_num,GPIO_DIR_INPUT | GPIO_IRQ_RISING);
+
+    ret = gpio_irq_request(st7789v2dev.lcd_vsync_num, vsync_irq, (uint32_t)0x0); //param is not needed, but I dont know if I have to pass it.
+    if (ret < 0)
+        return -1;
+
 	printf("%s %d\n", __FUNCTION__,__LINE__);
 
 	lcd_reset();
@@ -493,6 +514,7 @@ static int st7789v2_probe(const char *node)
 	st7789v2dev.lcd_wr_num = PINPAD_INVALID;
 	st7789v2dev.lcd_rd_num = PINPAD_INVALID;
 	st7789v2dev.lcd_reset_num = PINPAD_INVALID;
+    st7789v2dev.lcd_vsync_num = PINPAD_INVALID;
 	st7789v2dev.lcd_d0_num = PINPAD_INVALID;
 	st7789v2dev.lcd_d1_num = PINPAD_INVALID;
 	st7789v2dev.lcd_d2_num = PINPAD_INVALID;
@@ -526,6 +548,7 @@ static int st7789v2_probe(const char *node)
 	fdt_get_property_u_32_index(np, "lcd_wr", 0, st7789v2dev.lcd_wr_num);
 	fdt_get_property_u_32_index(np, "lcd_rd", 0, st7789v2dev.lcd_rd_num);
 	fdt_get_property_u_32_index(np, "lcd_reset", 0, st7789v2dev.lcd_reset_num);
+    fdt_get_property_u_32_index(np, "lcd_vsync", 0, st7789v2dev.lcd_vsync_num);
 	fdt_get_property_u_32_index(np, "lcd_d0", 0, st7789v2dev.lcd_d0_num);
 	fdt_get_property_u_32_index(np, "lcd_d1", 0, st7789v2dev.lcd_d1_num);
 	fdt_get_property_u_32_index(np, "lcd_d2", 0, st7789v2dev.lcd_d2_num);
@@ -544,6 +567,8 @@ static int st7789v2_probe(const char *node)
 	fdt_get_property_u_32_index(np, "lcd_d15", 0, st7789v2dev.lcd_d15_num);
 
 	st7789v2_display_init();
+
+
 
 	lcd_map_register(&st7789v2_map);
 error:
