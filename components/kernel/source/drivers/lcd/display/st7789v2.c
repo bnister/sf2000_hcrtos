@@ -31,7 +31,7 @@
 		spi-gpio-mosi	= <PINPAD_L21>;
 		spi-gpio-cs		= <PINPAD_L19>;
 		reset = <PINPAD_L20>;
-		default-off;
+		default-off;wait no
 		status = "okay";
 	};
 	lcd{
@@ -406,12 +406,25 @@ static void gpio_set_data(int pin, bool state)
 
 }
 
-static void lcd_gpio_spi_config_write(unsigned int cmd)
+/*
+void LCD_cmd_80290500(int cmd)
+{
+  LCS_rs_lo_8029045c();
+  LCD_cs_lo_802903e4();
+  LCD_bus_write_80290498(cmd);
+  LCD_wr_lo_80290420();
+  LCD_wr_hi_80290440();
+  LCD_cs_hi_80290404();
+  LCD_rs_hi_8029047c();
+}
+ */
+
+static void lcd_gpio_spi_config_write(unsigned char RS, unsigned char cmd)
 {
 	int i=0;
 	unsigned char cmd_val = 0;
 	gpio_set_cs(0);
-    	gpio_set_rs(cmd);
+    	gpio_set_rs(RS);
     	gpio_set_wr(0);
 	//usleep(2);
 	for(i=7;i>=0;i--){
