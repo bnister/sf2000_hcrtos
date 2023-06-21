@@ -99,6 +99,8 @@ typedef struct st7789v2_dev{
     u32 lcd_d15_num;
 }st7789v2_dev_t;
 static st7789v2_dev_t st7789v2dev;
+static struct pinmux_setting *control_state;
+static struct pinmux_setting *rgb_state;
 
 static int st7789v2_rorate(lcd_rotate_type_e dir)
 {
@@ -124,13 +126,9 @@ static int st7789v2_rorate(lcd_rotate_type_e dir)
 }
 
 static void vsync_irq(uint32_t param) {
-
-    control_state = fdt_get_property_pinmux(np, "control");
     if (control_state) {
         pinmux_select_setting(control_state);
-        free(control_state);
     }
-
     st7789v2_write_command(0x2B);
     st7789v2_write_data(0x00);
     st7789v2_write_data(0x00);
@@ -142,16 +140,14 @@ static void vsync_irq(uint32_t param) {
     st7789v2_write_data(0x00);
     st7789v2_write_data(0xEF);
     st7789v2_write_command( 0x2C);
-
-    rgb_state = fdt_get_property_pinmux(np, "rgb");
     if (rgb_state) {
         pinmux_select_setting(rgb_state);
-        free(rgb_state);
     }
 }
 
 static int st7789v2_display_init(void)
 {
+    printf("%s %d\n", __FUNCTION__,__LINE__);
     gpio_configure(st7789v2dev.lcd_cs_num,GPIO_DIR_OUTPUT);
     gpio_configure(st7789v2dev.lcd_rs_num,GPIO_DIR_OUTPUT);
     gpio_configure(st7789v2dev.lcd_wr_num,GPIO_DIR_OUTPUT);
@@ -175,19 +171,17 @@ static int st7789v2_display_init(void)
     gpio_configure(st7789v2dev.lcd_reset_num,GPIO_DIR_OUTPUT);
     gpio_configure(st7789v2dev.lcd_vsync_num,GPIO_DIR_INPUT | GPIO_IRQ_RISING);
 
-    ret = gpio_irq_request(st7789v2dev.lcd_vsync_num, vsync_irq, (uint32_t)0x0); //param is not needed, but I dont know if I have to pass it.
-    if (ret < 0)
-        return -1;
+    printf("%s %d\n", __FUNCTION__,__LINE__);
 
-    control_state = fdt_get_property_pinmux(np, "control");
     if (control_state) {
         pinmux_select_setting(control_state);
-        free(control_state);
     }
 
 	printf("%s %d\n", __FUNCTION__,__LINE__);
 
 	lcd_reset();
+
+    printf("%s %d\n", __FUNCTION__,__LINE__);
 
 	msleep(120);
 #if 0//old spi 	
@@ -280,6 +274,7 @@ static int st7789v2_display_init(void)
 	st7789v2_write_command(0x29);
 #endif 
 	#if 1
+    printf("%s %d\n", __FUNCTION__,__LINE__);
 	st7789v2_write_command( 0x11); 
 
 	msleep(120);
@@ -374,10 +369,16 @@ static int st7789v2_display_init(void)
 
 	st7789v2_write_command( 0x2C);
 
-    rgb_state = fdt_get_property_pinmux(np, "rgb");
+    printf("%s %d\n", __FUNCTION__,__LINE__);
+
+    int ret = gpio_irq_request(st7789v2dev.lcd_vsync_num, vsync_irq, (uint32_t)0x0); //param is not needed, but I dont know if I have to pass it.
+    if (ret < 0)
+        return -1;
+
+    printf("%s %d\n", __FUNCTION__,__LINE__);
+
     if (rgb_state) {
         pinmux_select_setting(rgb_state);
-        free(rgb_state);
     }
 	#endif
 	return 0;
@@ -385,17 +386,17 @@ static int st7789v2_display_init(void)
 
 static void gpio_set_cs(bool state)
 {
-    lcd_gpio_set_output(st7789v2dev.spi_cs_num,state);
+    lcd_gpio_set_output(st7789v2dev.lcd_cs_num,state);
 }
 
 static void gpio_set_rs(bool state)
 {
-    lcd_gpio_set_output(st7789v2dev.spi_rs_num,state);
+    lcd_gpio_set_output(st7789v2dev.lcd_rs_num,state);
 }
 
 static void gpio_set_wr(bool state)
 {
-    lcd_gpio_set_output(st7789v2dev.spi_wr_num,state);
+    lcd_gpio_set_output(st7789v2dev.lcd_wr_num,state);
 }
 
 static void gpio_set_data(int pin, bool state)
@@ -479,10 +480,10 @@ static void lcd_gpio_spi_config_write(unsigned char RS, unsigned char cmd)
 		cmd_val = (cmd>>(i))&0x1;
 		gpio_set_data(i, cmd_val);
 	}
-	usleep(10); //data setup time
+	//usleep(10); //data setup time
 	gpio_set_wr(1);
 	//usleep(10); //Address hold time
-	usleep(15); //control pulse duration
+	//usleep(15); //control pulse duration
 	gpio_set_wr(0);
 	gpio_set_cs(1);
 }
@@ -529,11 +530,15 @@ static struct lcd_map_list st7789v2_map = {
 static int st7789v2_probe(const char *node)
 {
 	int np = fdt_node_probe_by_path(node);
-
+    printf("%s %d\n", __FUNCTION__,__LINE__);
 	if(np < 0){
 		goto error;
 	}
 
+    control_state = fdt_get_property_pinmux(np, "control");
+    rgb_state = fdt_get_property_pinmux(np, "rgb");
+
+    printf("%s %d\n", __FUNCTION__,__LINE__);
 	memset(&st7789v2dev,0,sizeof(struct st7789v2_dev));
 
 	st7789v2dev.lcd_cs_num = PINPAD_INVALID;
@@ -570,34 +575,36 @@ static int st7789v2_probe(const char *node)
 	st7789v2dev.lcd_reset_polar=0;
 #endif
 
-	fdt_get_property_u_32_index(np, "lcd_cs", 0, st7789v2dev.lcd_cs_num);
-	fdt_get_property_u_32_index(np, "lcd_rs", 0, st7789v2dev.lcd_rs_num);
-	fdt_get_property_u_32_index(np, "lcd_wr", 0, st7789v2dev.lcd_wr_num);
-	fdt_get_property_u_32_index(np, "lcd_rd", 0, st7789v2dev.lcd_rd_num);
-	fdt_get_property_u_32_index(np, "lcd_reset", 0, st7789v2dev.lcd_reset_num);
-    fdt_get_property_u_32_index(np, "lcd_vsync", 0, st7789v2dev.lcd_vsync_num);
-	fdt_get_property_u_32_index(np, "lcd_d0", 0, st7789v2dev.lcd_d0_num);
-	fdt_get_property_u_32_index(np, "lcd_d1", 0, st7789v2dev.lcd_d1_num);
-	fdt_get_property_u_32_index(np, "lcd_d2", 0, st7789v2dev.lcd_d2_num);
-	fdt_get_property_u_32_index(np, "lcd_d3", 0, st7789v2dev.lcd_d3_num);
-	fdt_get_property_u_32_index(np, "lcd_d4", 0, st7789v2dev.lcd_d4_num);
-	fdt_get_property_u_32_index(np, "lcd_d5", 0, st7789v2dev.lcd_d5_num);
-	fdt_get_property_u_32_index(np, "lcd_d6", 0, st7789v2dev.lcd_d6_num);
-	fdt_get_property_u_32_index(np, "lcd_d7", 0, st7789v2dev.lcd_d7_num);
-	fdt_get_property_u_32_index(np, "lcd_d8", 0, st7789v2dev.lcd_d8_num);
-	fdt_get_property_u_32_index(np, "lcd_d9", 0, st7789v2dev.lcd_d9_num);
-	fdt_get_property_u_32_index(np, "lcd_d10", 0, st7789v2dev.lcd_d10_num);
-	fdt_get_property_u_32_index(np, "lcd_d11", 0, st7789v2dev.lcd_d11_num);
-	fdt_get_property_u_32_index(np, "lcd_d12", 0, st7789v2dev.lcd_d12_num);
-	fdt_get_property_u_32_index(np, "lcd_d13", 0, st7789v2dev.lcd_d13_num);
-	fdt_get_property_u_32_index(np, "lcd_d14", 0, st7789v2dev.lcd_d14_num);
-	fdt_get_property_u_32_index(np, "lcd_d15", 0, st7789v2dev.lcd_d15_num);
+	fdt_get_property_u_32_index(np, "lcd_cs", 0, &st7789v2dev.lcd_cs_num);
+	fdt_get_property_u_32_index(np, "lcd_rs", 0, &st7789v2dev.lcd_rs_num);
+	fdt_get_property_u_32_index(np, "lcd_wr", 0, &st7789v2dev.lcd_wr_num);
+	fdt_get_property_u_32_index(np, "lcd_rd", 0, &st7789v2dev.lcd_rd_num);
+	fdt_get_property_u_32_index(np, "lcd_reset", 0, &st7789v2dev.lcd_reset_num);
+    fdt_get_property_u_32_index(np, "lcd_vsync", 0, &st7789v2dev.lcd_vsync_num);
+	fdt_get_property_u_32_index(np, "lcd_d0", 0, &st7789v2dev.lcd_d0_num);
+	fdt_get_property_u_32_index(np, "lcd_d1", 0, &st7789v2dev.lcd_d1_num);
+	fdt_get_property_u_32_index(np, "lcd_d2", 0, &st7789v2dev.lcd_d2_num);
+	fdt_get_property_u_32_index(np, "lcd_d3", 0, &st7789v2dev.lcd_d3_num);
+	fdt_get_property_u_32_index(np, "lcd_d4", 0, &st7789v2dev.lcd_d4_num);
+	fdt_get_property_u_32_index(np, "lcd_d5", 0, &st7789v2dev.lcd_d5_num);
+	fdt_get_property_u_32_index(np, "lcd_d6", 0, &st7789v2dev.lcd_d6_num);
+	fdt_get_property_u_32_index(np, "lcd_d7", 0, &st7789v2dev.lcd_d7_num);
+	fdt_get_property_u_32_index(np, "lcd_d8", 0, &st7789v2dev.lcd_d8_num);
+	fdt_get_property_u_32_index(np, "lcd_d9", 0, &st7789v2dev.lcd_d9_num);
+	fdt_get_property_u_32_index(np, "lcd_d10", 0, &st7789v2dev.lcd_d10_num);
+	fdt_get_property_u_32_index(np, "lcd_d11", 0, &st7789v2dev.lcd_d11_num);
+	fdt_get_property_u_32_index(np, "lcd_d12", 0, &st7789v2dev.lcd_d12_num);
+	fdt_get_property_u_32_index(np, "lcd_d13", 0, &st7789v2dev.lcd_d13_num);
+	fdt_get_property_u_32_index(np, "lcd_d14", 0, &st7789v2dev.lcd_d14_num);
+	fdt_get_property_u_32_index(np, "lcd_d15", 0, &st7789v2dev.lcd_d15_num);
 
+    printf("%s %d\n", __FUNCTION__,__LINE__);
 	st7789v2_display_init();
-
+    printf("%s %d\n", __FUNCTION__,__LINE__);
 
 
 	lcd_map_register(&st7789v2_map);
+    printf("%s %d\n", __FUNCTION__,__LINE__);
 error:
 	return 0;
 }

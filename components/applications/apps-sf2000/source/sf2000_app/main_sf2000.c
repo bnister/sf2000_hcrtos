@@ -125,19 +125,22 @@ void setUpPins()
 
 void * main_sf2000(void *arg)
 {
+    printf("%s %d\n", __FUNCTION__,__LINE__);
     api_sleep_ms(2000); //Wait 2 seconds for mmc to init
+    printf("%s %d\n", __FUNCTION__,__LINE__);
     setUpPins();
+    printf("%s %d\n", __FUNCTION__,__LINE__);
     printf("Welcom to SF2000!\n");
     //list_dir("/");
-
+    printf("%s %d\n", __FUNCTION__,__LINE__);
     app_ffplay_init();
-    api_logo_show(NULL);
 
     start_watchdog_task();
 
     api_system_init();
     api_video_init();
     api_audio_init();
+    printf("%s %d\n", __FUNCTION__,__LINE__);
     api_logo_show(VIDEO_LOGO);
     printf("After Logo!\n");
 
