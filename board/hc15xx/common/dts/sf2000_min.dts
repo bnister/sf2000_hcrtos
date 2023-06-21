@@ -241,6 +241,36 @@ hcrtos {
 		status = "okay";
 	};
 
+	lcd-st7789v2{
+		lcd_cs 		= <PINPAD_L10>;
+		lcd_rs 		= <PINPAD_T01>;
+		lcd_wr 		= <PINPAD_L07>;
+		lcd_rd 		= <PINPAD_T00>;
+		lcd_reset	= <PINPAD_L01>;
+		lcd_d0		= <PINPAD_L02>;
+		lcd_d1		= <PINPAD_L03>;
+		lcd_d2		= <PINPAD_L04>;
+		lcd_d3		= <PINPAD_L05>;
+		lcd_d4		= <PINPAD_L06>;
+		lcd_d5		= <PINPAD_L09>;
+		lcd_d6		= <PINPAD_T10>;
+		lcd_d7		= <PINPAD_T11>;
+		lcd_d8		= <PINPAD_T12>;
+		lcd_d9		= <PINPAD_T13>;
+		lcd_d10		= <PINPAD_T14>;
+		lcd_d11		= <PINPAD_T02>;
+		lcd_d12		= <PINPAD_T03>;
+		lcd_d13		= <PINPAD_T04>;
+		lcd_d14		= <PINPAD_T05>;
+		lcd_d15		= <PINPAD_T06>;
+		status = "okay";
+	};
+
+	lcd{
+		lcd-map-name = "lcd-st7789v2";
+		status = "okay";
+	};
+
 	uart@0 {
 		devpath = "/dev/uart0";
 		status = "disabled";
