@@ -138,7 +138,7 @@ void * main_sf2000(void *arg)
     api_system_init();
     api_video_init();
     api_audio_init();
-    api_logo_show(MUSIC_LOGO);
+    api_logo_show(VIDEO_LOGO);
     printf("After Logo!\n");
 
     api_lvgl_init(OSD_MAX_WIDTH, OSD_MAX_HEIGHT);

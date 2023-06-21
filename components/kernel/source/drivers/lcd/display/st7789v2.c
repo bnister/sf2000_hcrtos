@@ -21,6 +21,7 @@
 #include <unistd.h>
 #include <sys/ioctl.h>
 #include "../lcd_main.h"
+#include <hcuapi/pinmux.h>
 
 /*
 *	TIME: 2023 04 23
@@ -123,6 +124,13 @@ static int st7789v2_rorate(lcd_rotate_type_e dir)
 }
 
 static void vsync_irq(uint32_t param) {
+
+    control_state = fdt_get_property_pinmux(np, "control");
+    if (control_state) {
+        pinmux_select_setting(control_state);
+        free(control_state);
+    }
+
     st7789v2_write_command(0x2B);
     st7789v2_write_data(0x00);
     st7789v2_write_data(0x00);
@@ -133,6 +141,13 @@ static void vsync_irq(uint32_t param) {
     st7789v2_write_data(0x00);
     st7789v2_write_data(0x00);
     st7789v2_write_data(0xEF);
+    st7789v2_write_command( 0x2C);
+
+    rgb_state = fdt_get_property_pinmux(np, "rgb");
+    if (rgb_state) {
+        pinmux_select_setting(rgb_state);
+        free(rgb_state);
+    }
 }
 
 static int st7789v2_display_init(void)
@@ -163,6 +178,12 @@ static int st7789v2_display_init(void)
     ret = gpio_irq_request(st7789v2dev.lcd_vsync_num, vsync_irq, (uint32_t)0x0); //param is not needed, but I dont know if I have to pass it.
     if (ret < 0)
         return -1;
+
+    control_state = fdt_get_property_pinmux(np, "control");
+    if (control_state) {
+        pinmux_select_setting(control_state);
+        free(control_state);
+    }
 
 	printf("%s %d\n", __FUNCTION__,__LINE__);
 
@@ -351,7 +372,13 @@ static int st7789v2_display_init(void)
 
 	st7789v2_write_command( 0x29); 
 
-	st7789v2_write_command( 0x2C); 
+	st7789v2_write_command( 0x2C);
+
+    rgb_state = fdt_get_property_pinmux(np, "rgb");
+    if (rgb_state) {
+        pinmux_select_setting(rgb_state);
+        free(rgb_state);
+    }
 	#endif
 	return 0;
 }
