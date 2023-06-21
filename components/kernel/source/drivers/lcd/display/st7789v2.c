@@ -78,6 +78,7 @@ typedef struct st7789v2_dev{
     u32 lcd_rs_num;
     u32 lcd_wr_num;
     u32 lcd_rd_num;
+    u32 lcd_reset_num;
     u32 lcd_d0_num;
     u32 lcd_d1_num;
     u32 lcd_d2_num;
@@ -94,9 +95,6 @@ typedef struct st7789v2_dev{
     u32 lcd_d13_num;
     u32 lcd_d14_num;
     u32 lcd_d15_num;
-	u32 lcd_reset_num;
-	u32 lcd_reset_polar;
-	u32 cur_type;
 }st7789v2_dev_t;
 static st7789v2_dev_t st7789v2dev;
 
@@ -337,23 +335,6 @@ static int st7789v2_display_init(void)
 	return 0;
 }
 
-static void gpio_spi_set_mosi(unsigned char data)
-{
-    lcd_gpio_set_output(st7789v2dev.spi_mosi_num,(bool)data);
-}
-
-static void gpio_spi_generate_clk(void)
-{   
-    if(st7789v2dev.spi_clk_vaild_edge == 1)//1 
-		lcd_gpio_set_output(st7789v2dev.spi_clk_num,1);
-	else
-		lcd_gpio_set_output(st7789v2dev.spi_clk_num,0);
-	usleep(2);
-	if(st7789v2dev.spi_clk_vaild_edge == 1)//1 
-		lcd_gpio_set_output(st7789v2dev.spi_clk_num,0);
-	else
-		lcd_gpio_set_output(st7789v2dev.spi_clk_num,1);
-}
 static void gpio_set_cs(bool state)
 {
     lcd_gpio_set_output(st7789v2dev.spi_cs_num,state);
@@ -374,7 +355,53 @@ static void gpio_set_data(int pin, bool state)
     switch (pin)
     {
         case 0:
-            lcd_gpio_set_output(st7789v2dev.lcd_d0_num,state);
+		lcd_gpio_set_output(st7789v2dev.lcd_d0_num,state);
+		break;
+	case 1:
+		lcd_gpio_set_output(st7789v2dev.lcd_d1_num,state);
+		break;
+	case 2:
+		lcd_gpio_set_output(st7789v2dev.lcd_d2_num,state);
+		break;
+	case 3:
+		lcd_gpio_set_output(st7789v2dev.lcd_d3_num,state);
+		break;
+	case 4:
+		lcd_gpio_set_output(st7789v2dev.lcd_d4_num,state);
+		break;
+	case 5:
+		lcd_gpio_set_output(st7789v2dev.lcd_d5_num,state);
+		break;
+	case 6:
+		lcd_gpio_set_output(st7789v2dev.lcd_d6_num,state);
+		break;
+	case 7:
+		lcd_gpio_set_output(st7789v2dev.lcd_d7_num,state);
+		break;
+	case 8:
+		lcd_gpio_set_output(st7789v2dev.lcd_d8_num,state);
+		break;
+	case 9:
+		lcd_gpio_set_output(st7789v2dev.lcd_d9_num,state);
+		break;
+	case 10:
+		lcd_gpio_set_output(st7789v2dev.lcd_d10_num,state);
+		break;
+	case 11:
+		lcd_gpio_set_output(st7789v2dev.lcd_d11_num,state);
+		break;
+	case 12:
+		lcd_gpio_set_output(st7789v2dev.lcd_d12_num,state);
+		break;
+	case 13:
+		lcd_gpio_set_output(st7789v2dev.lcd_d13_num,state);
+		break;
+	case 14:
+		lcd_gpio_set_output(st7789v2dev.lcd_d14_num,state);
+		break;
+	case 15:
+		lcd_gpio_set_output(st7789v2dev.lcd_d15_num,state);
+		break;
     }
 
 }
@@ -384,27 +411,19 @@ static void lcd_gpio_spi_config_write(unsigned int cmd)
 	int i=0;
 	unsigned char cmd_val = 0;
 	gpio_set_cs(0);
-    gpio_set_rs(0);
-    gpio_set_wr(0);
-	usleep(10);
-	gpio_enable_cs();
-	usleep(2);
-	if(st7789v2dev.spi_is_9bit == 1)
-	{
-		gpio_spi_set_mosi(bit_9);//sda dat=0
-		usleep(3);
-		gpio_spi_generate_clk();
+    	gpio_set_rs(cmd);
+    	gpio_set_wr(0);
+	//usleep(2);
+	for(i=7;i>=0;i--){
+		cmd_val = (cmd>>(i))&0x1;
+		gpio_set_data(i, cmd_val);
 	}
-	for(i=8;i>0;i--){
-		cmd_val = (cmd>>(i-1))&0x1;
-		gpio_spi_set_mosi(cmd_val);
-		usleep(2);
-		gpio_spi_generate_clk();
-	}
-	usleep(2);
-	gpio_spi_disable_cs();
-	gpio_spi_set_mosi(0);
-	usleep(10);
+	usleep(10); //data setup time
+	gpio_set_wr(1);
+	//usleep(10); //Address hold time
+	usleep(15); //control pulse duration
+	gpio_set_wr(0);
+	gpio_set_cs(1);
 }
 
 static void st7789v2_write_data(unsigned char data)
@@ -429,11 +448,11 @@ static void lcd_reset(void)
 {
 	if(st7789v2dev.lcd_reset_num!=PINPAD_INVALID)
 	{
-		lcd_gpio_set_output(st7789v2dev.lcd_reset_num,!st7789v2dev.lcd_reset_polar);
+		lcd_gpio_set_output(st7789v2dev.lcd_reset_num,1);
 		usleep(500*1000);
-		lcd_gpio_set_output(st7789v2dev.lcd_reset_num,st7789v2dev.lcd_reset_polar);
+		lcd_gpio_set_output(st7789v2dev.lcd_reset_num,0);
 		usleep(500*1000);
-		lcd_gpio_set_output(st7789v2dev.lcd_reset_num,!st7789v2dev.lcd_reset_polar);
+		lcd_gpio_set_output(st7789v2dev.lcd_reset_num,1);
 		usleep(500*1000);
 	}
 }
@@ -456,16 +475,27 @@ static int st7789v2_probe(const char *node)
 
 	memset(&st7789v2dev,0,sizeof(struct st7789v2_dev));
 
-	st7789v2dev.spi_clk_num = PINPAD_INVALID;//lcddrv->gpio_spi_config.sck;
-	st7789v2dev.spi_clk_vaild_edge=1;
-	st7789v2dev.spi_cs_polar=0;
-	st7789v2dev.spi_is_9bit=1;
-	st7789v2dev.spi_cs_num = PINPAD_INVALID;//lcddrv->gpio_spi_config.cs;
-	st7789v2dev.spi_mosi_num = PINPAD_INVALID;//lcddrv->gpio_spi_config.mosi;
-	st7789v2dev.spi_miso_num = PINPAD_INVALID;//lcddrv->gpio_spi_config.miso;
-	st7789v2dev.lcd_stbyb_num = PINPAD_INVALID;//lcddrv->gpio_spi_config.stbyb;
-	st7789v2dev.lcd_stbyb_polar = 0;
+	st7789v2dev.lcd_cs_num = PINPAD_INVALID;
+	st7789v2dev.lcd_rs_num = PINPAD_INVALID;
+	st7789v2dev.lcd_wr_num = PINPAD_INVALID;
+	st7789v2dev.lcd_rd_num = PINPAD_INVALID;
 	st7789v2dev.lcd_reset_num = PINPAD_INVALID;
+	st7789v2dev.lcd_d0_num = PINPAD_INVALID;
+	st7789v2dev.lcd_d1_num = PINPAD_INVALID;
+	st7789v2dev.lcd_d2_num = PINPAD_INVALID;
+	st7789v2dev.lcd_d3_num = PINPAD_INVALID;
+	st7789v2dev.lcd_d4_num = PINPAD_INVALID;
+	st7789v2dev.lcd_d5_num = PINPAD_INVALID;
+	st7789v2dev.lcd_d6_num = PINPAD_INVALID;
+	st7789v2dev.lcd_d7_num = PINPAD_INVALID;
+	st7789v2dev.lcd_d8_num = PINPAD_INVALID;
+	st7789v2dev.lcd_d9_num = PINPAD_INVALID;
+	st7789v2dev.lcd_d10_num = PINPAD_INVALID;
+	st7789v2dev.lcd_d11_num = PINPAD_INVALID;
+	st7789v2dev.lcd_d12_num = PINPAD_INVALID;
+	st7789v2dev.lcd_d13_num = PINPAD_INVALID;
+	st7789v2dev.lcd_d14_num = PINPAD_INVALID;
+	st7789v2dev.lcd_d15_num = PINPAD_INVALID;
 
 #if 0
 	st7789v2dev.spi_clk_num=PINPAD_L20;
@@ -478,20 +508,29 @@ static int st7789v2_probe(const char *node)
 	st7789v2dev.lcd_reset_polar=0;
 #endif
 
-	fdt_get_property_u_32_index(np, "reset", 			0, &st7789v2dev.lcd_reset_num);
-	fdt_get_property_u_32_index(np, "spi-gpio-sck", 	0, &st7789v2dev.spi_clk_num);
-	fdt_get_property_u_32_index(np, "spi-gpio-mosi", 	0, &st7789v2dev.spi_mosi_num);
-	fdt_get_property_u_32_index(np, "spi-gpio-miso", 	0, &st7789v2dev.spi_miso_num);
-	fdt_get_property_u_32_index(np, "spi-gpio-cs", 		0, &st7789v2dev.spi_cs_num);
-	fdt_get_property_u_32_index(np, "spi-gpio-stbyb", 	0, &st7789v2dev.lcd_stbyb_num);
-	log_d("st7789v2dev.lcd_stbyb_num = %d %d %d %d\n",st7789v2dev.spi_clk_num,st7789v2dev.spi_mosi_num,st7789v2dev.spi_cs_num,st7789v2dev.lcd_stbyb_num);
+	fdt_get_property_u_32_index(np, "lcd_cs", 0, st7789v2dev.lcd_cs_num);
+	fdt_get_property_u_32_index(np, "lcd_rs", 0, st7789v2dev.lcd_rs_num);
+	fdt_get_property_u_32_index(np, "lcd_wr", 0, st7789v2dev.lcd_wr_num);
+	fdt_get_property_u_32_index(np, "lcd_rd", 0, st7789v2dev.lcd_rd_num);
+	fdt_get_property_u_32_index(np, "lcd_reset", 0, st7789v2dev.lcd_reset_num);
+	fdt_get_property_u_32_index(np, "lcd_d0", 0, st7789v2dev.lcd_d0_num);
+	fdt_get_property_u_32_index(np, "lcd_d1", 0, st7789v2dev.lcd_d1_num);
+	fdt_get_property_u_32_index(np, "lcd_d2", 0, st7789v2dev.lcd_d2_num);
+	fdt_get_property_u_32_index(np, "lcd_d3", 0, st7789v2dev.lcd_d3_num);
+	fdt_get_property_u_32_index(np, "lcd_d4", 0, st7789v2dev.lcd_d4_num);
+	fdt_get_property_u_32_index(np, "lcd_d5", 0, st7789v2dev.lcd_d5_num);
+	fdt_get_property_u_32_index(np, "lcd_d6", 0, st7789v2dev.lcd_d6_num);
+	fdt_get_property_u_32_index(np, "lcd_d7", 0, st7789v2dev.lcd_d7_num);
+	fdt_get_property_u_32_index(np, "lcd_d8", 0, st7789v2dev.lcd_d8_num);
+	fdt_get_property_u_32_index(np, "lcd_d9", 0, st7789v2dev.lcd_d9_num);
+	fdt_get_property_u_32_index(np, "lcd_d10", 0, st7789v2dev.lcd_d10_num);
+	fdt_get_property_u_32_index(np, "lcd_d11", 0, st7789v2dev.lcd_d11_num);
+	fdt_get_property_u_32_index(np, "lcd_d12", 0, st7789v2dev.lcd_d12_num);
+	fdt_get_property_u_32_index(np, "lcd_d13", 0, st7789v2dev.lcd_d13_num);
+	fdt_get_property_u_32_index(np, "lcd_d14", 0, st7789v2dev.lcd_d14_num);
+	fdt_get_property_u_32_index(np, "lcd_d15", 0, st7789v2dev.lcd_d15_num);
 
-	int default_off = 0;
-	fdt_get_property_u_32_index(np, "default-off", 	0, &default_off);
-	if(default_off ==0)
-		st7789v2_display_init();
-
-	st7789v2_map.map.default_off_val = default_off;
+	st7789v2_display_init();
 
 	lcd_map_register(&st7789v2_map);
 error:
