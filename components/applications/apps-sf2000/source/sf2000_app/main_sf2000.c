@@ -117,7 +117,7 @@ void setUpPins()
     gpio_set_output(PINPAD_R07, false); // high = disable, low = enable;
 
     gpio_configure(PINPAD_R05, GPIO_DIR_OUTPUT); //AV / LCD switch
-    gpio_set_output(PINPAD_R05, true); // high = LCD, low = AV;
+    gpio_set_output(PINPAD_R05, false); // high = LCD, low = AV;
 
     gpio_configure(PINPAD_L00, GPIO_DIR_OUTPUT); //Charging LED
     gpio_set_output(PINPAD_L00, false); // high = off, low = on;
