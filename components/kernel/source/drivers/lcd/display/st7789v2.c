@@ -480,10 +480,10 @@ static void lcd_gpio_spi_config_write(unsigned char RS, unsigned char cmd)
 		cmd_val = (cmd>>(i))&0x1;
 		gpio_set_data(i, cmd_val);
 	}
-	//usleep(10); //data setup time
+	usleep(10); //data setup time
 	gpio_set_wr(1);
 	//usleep(10); //Address hold time
-	//usleep(15); //control pulse duration
+	usleep(15); //control pulse duration
 	gpio_set_wr(0);
 	gpio_set_cs(1);
 }

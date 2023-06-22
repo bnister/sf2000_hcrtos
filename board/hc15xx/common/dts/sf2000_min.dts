@@ -20,8 +20,8 @@
 #define CONFIG_VIN_TVDEC_SUPPORT 0 
 #define CONFIG_VIDEO_IN_SUPPORT (CONFIG_HDMI_RX_SUPPORT | CONFIG_VIN_DVP_SUPPORT | CONFIG_VIN_TVDEC_SUPPORT)
 #define CONFIG_DE4K_OUTPUT_SUPPORT 0
-#define CONFIG_DUAL_OUTPUT_SUPPORT 0
-#define CONFIG_VGA_OUTPUT_SUPPORT 0
+#define CONFIG_DUAL_OUTPUT_SUPPORT 1
+#define CONFIG_VGA_OUTPUT_SUPPORT 1
 #define CONFIG_CVBS_OUTPUT_SUPPORT 1
 
 #define CONFIG_MM_FB_SIZE (0x10cf200)
@@ -469,14 +469,14 @@ hcrtos {
 
 	fb0 {
 		bits_per_pixel = <32>;
-		xres = <1280>;
-		yres = <720>;
-		xres_virtual = <1280>;
-		yres_virtual = <720>;
+		xres = <320>;
+		yres = <240>;
+		xres_virtual = <320>;
+		yres_virtual = <240>;
 		xoffset = <0>;
 		yoffset = <0>;
 
-		scale = <1280 720 1920 1080>;
+		scale = <320 240 320 240>;
 
 		reg = <CONFIG_FB0_REG 0x1000>;
 		/*
@@ -568,8 +568,8 @@ hcrtos {
 			* 0: MODE_PRGB_888_10bit 
 			* 1: MODE_PRGB_666
 			*/
-			prgb-mode = <0>; 
-			lcd-width = <800>;
+			prgb-mode = <1>;
+			lcd-width = <320>;
 			b-disable-ejtag = <1>;
 			b-dlpc-enale = <0>;
 			timing-para {
@@ -593,23 +593,23 @@ hcrtos {
 				*/
 				output-clock = <1>;
 
-				h-total-len = <1026>;
-				v-total-len = <525>;
+				h-total-len = <320>;
+				v-total-len = <240>;
 
-				h-active-len = <800>;
-				v-active-len = <480>;
+				h-active-len = <320>;
+				v-active-len = <240>;
 
-				h-front-len = <210>;
-				h-sync-len = <6>;
-				h-back-len = <10>;
+				h-front-len = <0>;
+				h-sync-len = <0>;
+				h-back-len = <0>;
 
-				v-front-len = <22>;
-				v-sync-len = <3>;
-				v-back-len = <20>;
+				v-front-len = <0>;
+				v-sync-len = <0>;
+				v-back-len = <0>;
 				/* bool type, 0 or 1*/
 				h-sync-level = <0>;
 				/* bool type, 0 or 1*/
-				v-sync-level = <0>;
+				v-sync-level = <1>;
 				frame-rate = <50000>;
 			};
 		};
