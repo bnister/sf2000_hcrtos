@@ -354,7 +354,7 @@ hcrtos {
 	};
 
 	i2so {
-		volume = <5>;
+		volume = <90>;
 		status = "okay";
 	};
 
@@ -363,7 +363,7 @@ hcrtos {
     };
 
     i2si {
-		volume = <5>;
+		volume = <90>;
 		status = "disabled";
 	};
 
