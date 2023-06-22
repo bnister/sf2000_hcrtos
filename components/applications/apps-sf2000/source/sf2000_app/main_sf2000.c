@@ -12,6 +12,7 @@
 #include "key.h"
 #include "hcuapi/gpio.h"
 #include "hcuapi/pinpad.h"
+#include <ffplayer.h>
 
 
 static void exit_console(int signo)
@@ -140,7 +141,7 @@ void playVideo()
     if (!m_logo_player)
     {
         printf("hcplayer_create() fail!\n");
-        return -1;
+        return;
     }
 
     hcplayer_play(m_logo_player);
