@@ -398,7 +398,7 @@ static int st7789v2_display_init(void)
 	//1011h
 	st7789v2_write_command( 0x11);
 	//2063h
-	msleep(63);
+	msleep(120);
 
 	// 1036h
 	st7789v2_write_command( 0x36);
