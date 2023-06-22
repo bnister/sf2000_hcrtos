@@ -196,7 +196,7 @@ hcrtos {
 		tvtype = <1>;
 		cvbs-output = <CONFIG_CVBS_OUTPUT_SUPPORT>;
 		vga-output = <CONFIG_VGA_OUTPUT_SUPPORT>;
-		status = "okay";
+		status = "disabled";
 	};
 
 	pwm@0 {
