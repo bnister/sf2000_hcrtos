@@ -139,7 +139,7 @@ static void vsync_irq(uint32_t param) {
     st7789v2_write_data(0x00);
     st7789v2_write_data(0x00);
     st7789v2_write_data(0xEF);
-    st7789v2_write_command( 0x2C);
+    st7789v2_write_command( 0x2C); //memory write
     if (rgb_state) {
         pinmux_select_setting(rgb_state);
     }
@@ -272,8 +272,9 @@ static int st7789v2_display_init(void)
 	st7789v2_write_command(0x55);
 	st7789v2_write_data(0x11);
 	st7789v2_write_command(0x29);
-#endif 
-	#if 1
+#endif
+	//driver default
+	#if 0
     printf("%s %d\n", __FUNCTION__,__LINE__);
 	st7789v2_write_command( 0x11); 
 
@@ -369,6 +370,180 @@ static int st7789v2_display_init(void)
 
 	st7789v2_write_command( 0x2C);
 
+	#endif
+
+	// sf2000 original init 10xx are commands, 20xx are delays, 00xx are data
+	/*
+	 * 1011h,  2063h,  1036h,    60h,
+103Ah,    55h,  10B1h,    40h,
+   4h,    14h,  10B2h,     Ch,
+   Ch,     0h,    33h,    33h,
+10B7h,    71h,  10BBh,    3Bh,
+10C0h,    2Ch,  10C2h,     1h,
+10C3h,    13h,  10C4h,    20h,
+10C6h,     Fh,  10D0h,    A4h,
+  A1h,  10D6h,    A1h,  10E0h,
+  D0h,     6h,     6h,     Eh,
+   Dh,     6h,    2Fh,    3Ah,
+  47h,     8h,    15h,    14h,
+  2Ch,    33h,  10E1h,    D0h,
+   6h,     6h,     Eh,     Dh,
+   6h,    2Fh,    3Bh,    47h,
+   8h,    15h,    14h,    2Ch,
+  33h,  102Ah,     0h,     0h,
+   1h,    3Fh,  102Bh,     0h,
+   0h,     0h,    EFh,  1021h,
+1029h,  FFFFh
+	 */
+#if 1
+	//1011h
+	st7789v2_write_command( 0x11);
+	//2063h
+	msleep(63);
+
+	// 1036h
+	st7789v2_write_command( 0x36);
+	// 60h
+	st7789v2_write_data(0x60);
+
+	//103Ah
+	st7789v2_write_command( 0x3A);
+	//55h
+	st7789v2_write_data(0x55);
+
+	//10B1h
+	st7789v2_write_command(0xB1);
+	//40h,	4h,    14h,
+	st7789v2_write_data(0x40);
+	st7789v2_write_data(0x04);
+	st7789v2_write_data(0x14);
+
+	//10B2h
+	st7789v2_write_command( 0xB2);
+	//Ch,	 Ch,     0h,    33h,    33h,
+	st7789v2_write_data(0x0C);
+	st7789v2_write_data(0x0C);
+	st7789v2_write_data(0x00);
+	st7789v2_write_data(0x33);
+	st7789v2_write_data(0x33);
+
+	//10B7h
+	st7789v2_write_command( 0xB7);
+	//71h
+	st7789v2_write_data(0x71);
+
+	//10BBh
+	st7789v2_write_command( 0xBB);
+	//3Bh
+	st7789v2_write_data(0x3B);
+
+	//10C0h
+	st7789v2_write_command( 0xC0);
+	//2Ch
+	st7789v2_write_data(0x2C);
+
+	//10C2h
+	st7789v2_write_command( 0xC2);
+	//1h
+	st7789v2_write_data(0x01);
+
+	//10C3h
+	st7789v2_write_command( 0xC3);
+	//13h
+	st7789v2_write_data(0x13);//4.5V
+
+	//10C4h
+	st7789v2_write_command( 0xC4);
+	//20h
+	st7789v2_write_data(0x20);
+
+	//10C6h
+	st7789v2_write_command( 0xC6);
+	//Fh
+	st7789v2_write_data(0x0F);
+
+	//10D0h,
+	st7789v2_write_command( 0xD0);
+	//A4h,A1h,
+	st7789v2_write_data(0xA4);
+	st7789v2_write_data(0xA1);
+
+	//10D6h,
+	st7789v2_write_command( 0xD6);
+	//A1h
+	st7789v2_write_data(0xA1);
+
+	//10E0h,
+	st7789v2_write_command( 0xE0);
+	//  D0h,     6h,     6h,     Eh,
+	//   Dh,     6h,    2Fh,    3Ah,
+	//  47h,     8h,    15h,    14h,
+	//  2Ch,    33h,
+	st7789v2_write_data(0xD0);
+	st7789v2_write_data(0x06);
+	st7789v2_write_data(0x06);
+	st7789v2_write_data(0x0E);
+	st7789v2_write_data(0x0D);
+	st7789v2_write_data(0x06);
+	st7789v2_write_data(0x2F);
+	st7789v2_write_data(0x3A);
+	st7789v2_write_data(0x47);
+	st7789v2_write_data(0x08);
+	st7789v2_write_data(0x15);
+	st7789v2_write_data(0x14);
+	st7789v2_write_data(0x2C);
+	st7789v2_write_data(0x33);
+
+	//10E1h,
+	st7789v2_write_command( 0xE1);
+	//  D0h,
+	//   6h,     6h,     Eh,     Dh,
+	//   6h,    2Fh,    3Bh,    47h,
+	//   8h,    15h,    14h,    2Ch,
+	//  33h,
+	st7789v2_write_data(0xD0);
+	st7789v2_write_data(0x06);
+	st7789v2_write_data(0x06);
+	st7789v2_write_data(0x0E);
+	st7789v2_write_data(0x0D);
+	st7789v2_write_data(0x06);
+	st7789v2_write_data(0x2F);
+	st7789v2_write_data(0x3B);
+	st7789v2_write_data(0x47);
+	st7789v2_write_data(0x08);
+	st7789v2_write_data(0x15);
+	st7789v2_write_data(0x14);
+	st7789v2_write_data(0x2C);
+	st7789v2_write_data(0x33);
+
+	//102Ah,
+	st7789v2_write_command(0x2A);
+	// 0h,     0h,
+	//   1h,    3Fh,
+	st7789v2_write_data(0x00);
+	st7789v2_write_data(0x00);
+	st7789v2_write_data(0x01);
+	st7789v2_write_data(0x3F);
+
+	//102Bh,
+	st7789v2_write_command(0x2B);
+	// 0h,
+	//   0h,     0h,    EFh,
+	st7789v2_write_data(0x00);
+	st7789v2_write_data(0x00);
+	st7789v2_write_data(0x00);
+	st7789v2_write_data(0xEF);
+
+	//1021h,
+	st7789v2_write_command( 0x21);
+
+	//1029h
+	st7789v2_write_command( 0x29);
+
+	//Memory Write
+	st7789v2_write_command( 0x2C);
+#endif
+
     printf("%s %d\n", __FUNCTION__,__LINE__);
 
     int ret = gpio_irq_request(st7789v2dev.lcd_vsync_num, vsync_irq, (uint32_t)0x0); //param is not needed, but I dont know if I have to pass it.
@@ -380,7 +555,6 @@ static int st7789v2_display_init(void)
     if (rgb_state) {
         pinmux_select_setting(rgb_state);
     }
-	#endif
 	return 0;
 }
 
