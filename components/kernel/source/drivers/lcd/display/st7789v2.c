@@ -73,6 +73,7 @@ static void st7789v2_write_data(unsigned char data);
 static int st7789v2_display_init(void);
 static int st7789v2_rorate(lcd_rotate_type_e dir);
 static void lcd_reset(void);
+static void lcd_write_rgb(unsigned int cmd);
 
 typedef struct st7789v2_dev{
 	u32 lcd_cs_num;
@@ -542,6 +543,23 @@ static int st7789v2_display_init(void)
 
 	//Memory Write
 	st7789v2_write_command( 0x2C);
+
+    //TestImage
+    for(int x = 0; x < 320;x++)
+    {
+        for(int y = 0; x < 240;x++)
+        {
+            int r = x;
+            int g = y;
+            int b = 320-x;
+            int data = ((r&0b11111000) << 8)
+                    | ((g&0b11111100) << 3)
+                    | ((b&0b11111000) || 3);
+            lcd_write_rgb(data); //r565
+        }
+    }
+
+    usleep(2 * 1000 * 1000); // 2 seconds delay;
 #endif
 
     printf("%s %d\n", __FUNCTION__,__LINE__);
@@ -641,6 +659,26 @@ void LCD_cmd_80290500(int cmd)
   LCD_rs_hi_8029047c();
 }
  */
+
+static void lcd_write_rgb(unsigned int cmd)
+{
+    int i=0;
+    unsigned char cmd_val = 0;
+    gpio_set_cs(0);
+    gpio_set_rs(1);
+    gpio_set_wr(0);
+    //usleep(2);
+    for(i=15;i>=0;i--){
+        cmd_val = (cmd>>(i))&0x1;
+        gpio_set_data(i, cmd_val);
+    }
+    usleep(10); //data setup time
+    gpio_set_wr(1);
+    //usleep(10); //Address hold time
+    usleep(15); //control pulse duration
+    gpio_set_wr(0);
+    gpio_set_cs(1);
+}
 
 static void lcd_gpio_spi_config_write(unsigned char RS, unsigned char cmd)
 {

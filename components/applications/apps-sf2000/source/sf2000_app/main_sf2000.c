@@ -127,6 +127,8 @@ void setUpPins()
     gpio_set_output(PINPAD_T07, true); // high = off, low = on;
 }
 
+static void *m_video_player = NULL;
+
 void playVideo()
 {
     char *file_path = "media/mmcblk0p2/video_test.mp4";
@@ -137,14 +139,14 @@ void playVideo()
     player_args.msg_id = 0;
     player_args.sync_type = HCPLAYER_VIDEO_MASTER;
 
-    m_logo_player = hcplayer_create(&player_args);
-    if (!m_logo_player)
+    m_video_player = hcplayer_create(&player_args);
+    if (!m_video_player)
     {
         printf("hcplayer_create() fail!\n");
         return;
     }
 
-    hcplayer_play(m_logo_player);
+    hcplayer_play(m_video_player);
 }
 
 void * main_sf2000(void *arg)
