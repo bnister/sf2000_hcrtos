@@ -126,6 +126,26 @@ void setUpPins()
     gpio_set_output(PINPAD_T07, true); // high = off, low = on;
 }
 
+void playVideo()
+{
+    char *file_path = "media/mmcblk0p2/video_test.mp4";
+
+    HCPlayerInitArgs player_args;
+    memset(&player_args, 0, sizeof(player_args));
+    player_args.uri = file_path;
+    player_args.msg_id = 0;
+    player_args.sync_type = HCPLAYER_VIDEO_MASTER;
+
+    m_logo_player = hcplayer_create(&player_args);
+    if (!m_logo_player)
+    {
+        printf("hcplayer_create() fail!\n");
+        return -1;
+    }
+
+    hcplayer_play(m_logo_player);
+}
+
 void * main_sf2000(void *arg)
 {
     printf("%s %d\n", __FUNCTION__,__LINE__);
@@ -144,15 +164,15 @@ void * main_sf2000(void *arg)
     api_video_init();
     api_audio_init();
     printf("%s %d\n", __FUNCTION__,__LINE__);
-    api_logo_show(VIDEO_LOGO);
+    playVideo();
     printf("After Logo!\n");
 
-    api_lvgl_init(OSD_MAX_WIDTH, OSD_MAX_HEIGHT);
+    //api_lvgl_init(OSD_MAX_WIDTH, OSD_MAX_HEIGHT);
 
     /*Handle LitlevGL tasks (tickless mode)*/
     while (1)
     {
-        lv_task_handler();
+        //lv_task_handler();
         usleep(1000);//frank, the sleep time will result in the OSD UI flush
     }
 
