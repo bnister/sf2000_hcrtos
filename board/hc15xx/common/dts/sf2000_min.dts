@@ -20,9 +20,9 @@
 #define CONFIG_VIN_TVDEC_SUPPORT 0 
 #define CONFIG_VIDEO_IN_SUPPORT (CONFIG_HDMI_RX_SUPPORT | CONFIG_VIN_DVP_SUPPORT | CONFIG_VIN_TVDEC_SUPPORT)
 #define CONFIG_DE4K_OUTPUT_SUPPORT 0
-#define CONFIG_DUAL_OUTPUT_SUPPORT 0
+#define CONFIG_DUAL_OUTPUT_SUPPORT 1
 #define CONFIG_VGA_OUTPUT_SUPPORT 1
-#define CONFIG_CVBS_OUTPUT_SUPPORT 0
+#define CONFIG_CVBS_OUTPUT_SUPPORT 1
 
 #define CONFIG_MM_FB_SIZE (0x10cf200)
 #define CONFIG_MM_VBV_SIZE (0x12c000)
@@ -196,7 +196,7 @@ hcrtos {
 		tvtype = <1>;
 		cvbs-output = <CONFIG_CVBS_OUTPUT_SUPPORT>;
 		vga-output = <CONFIG_VGA_OUTPUT_SUPPORT>;
-		status = "disabled";
+		status = "okay";
 	};
 
 	pwm@0 {
@@ -568,7 +568,7 @@ hcrtos {
 			* 0: MODE_PRGB_888_10bit 
 			* 1: MODE_PRGB_666
 			*/
-			prgb-mode = <1>;
+			prgb-mode = <0>;
 			lcd-width = <320>;
 			b-disable-ejtag = <1>;
 			b-dlpc-enale = <0>;
@@ -591,7 +591,7 @@ hcrtos {
 				* VPO_RGB_CLOCK_54M = 13,//H1600
 				* VPO_RGB_CLOCK_132M = 14,//H1600
 				*/
-				output-clock = <1>;
+				output-clock = <8>;
 
 				h-total-len = <320>;
 				v-total-len = <240>;
@@ -609,7 +609,7 @@ hcrtos {
 				/* bool type, 0 or 1*/
 				h-sync-level = <0>;
 				/* bool type, 0 or 1*/
-				v-sync-level = <1>;
+				v-sync-level = <0>;
 				frame-rate = <50000>;
 			};
 		};
