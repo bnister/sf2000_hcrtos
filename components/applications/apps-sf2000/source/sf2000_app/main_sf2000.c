@@ -121,6 +121,9 @@ void setUpPins()
 
     gpio_configure(PINPAD_L00, GPIO_DIR_OUTPUT); //Charging LED
     gpio_set_output(PINPAD_L00, false); // high = off, low = on;
+
+    gpio_configure(PINPAD_T07, GPIO_DIR_OUTPUT); //Speaker fix?
+    gpio_set_output(PINPAD_T07, true); // high = off, low = on;
 }
 
 void * main_sf2000(void *arg)
