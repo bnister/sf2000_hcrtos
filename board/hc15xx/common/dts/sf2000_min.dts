@@ -301,7 +301,10 @@ hcrtos {
             PINPAD_L03 PINMUX_L03_GPIO
             PINPAD_L02 PINMUX_L02_GPIO
             PINPAD_L07 PINMUX_L07_GPIO
-            PINPAD_L10 PINMUX_L10_GPIO>;
+            PINPAD_L10 PINMUX_L10_GPIO
+            PINPAD_T01 PINMUX_T01_GPIO
+            PINPAD_T00 PINMUX_T00_GPIO
+            PINPAD_L01 PINMUX_L01_GPIO>;
 		status = "okay";
 	};
 

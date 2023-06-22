@@ -148,6 +148,10 @@ static void vsync_irq(uint32_t param) {
 
 static int st7789v2_display_init(void)
 {
+    if (control_state) {
+        pinmux_select_setting(control_state);
+    }
+
     printf("%s %d\n", __FUNCTION__,__LINE__);
     gpio_configure(st7789v2dev.lcd_cs_num,GPIO_DIR_OUTPUT);
     gpio_configure(st7789v2dev.lcd_rs_num,GPIO_DIR_OUTPUT);
@@ -171,12 +175,6 @@ static int st7789v2_display_init(void)
     gpio_configure(st7789v2dev.lcd_d15_num,GPIO_DIR_OUTPUT);
     gpio_configure(st7789v2dev.lcd_reset_num,GPIO_DIR_OUTPUT);
     gpio_configure(st7789v2dev.lcd_vsync_num,GPIO_DIR_INPUT | GPIO_IRQ_RISING);
-
-    printf("%s %d\n", __FUNCTION__,__LINE__);
-
-    if (control_state) {
-        pinmux_select_setting(control_state);
-    }
 
 	printf("%s %d\n", __FUNCTION__,__LINE__);
 
