@@ -22,6 +22,12 @@
 #include <sys/ioctl.h>
 #include "../lcd_main.h"
 #include <hcuapi/pinmux.h>
+#include <hcuapi/gpio.h>
+#include <kernel/ld.h>
+
+
+#define OUTPUT_VAL_REG                  0x10
+
 
 /*
 *	TIME: 2023 04 23
@@ -69,7 +75,7 @@
 
 static void st7789v2_spi_sends_data(unsigned char *data,unsigned char len);
 static void st7789v2_write_command(unsigned short cmds);
-static void st7789v2_write_data(unsigned char data);
+static void st7789v2_write_data(unsigned short data);
 static int st7789v2_display_init(void);
 static int st7789v2_rorate(lcd_rotate_type_e dir);
 static void lcd_reset(void);
@@ -418,8 +424,8 @@ static int st7789v2_display_init(void)
 	st7789v2_write_data(0x14);
 
 	//10B2h
-	st7789v2_write_command( 0xB2);
-	//Ch,	 Ch,     0h,    33h,    33h,
+	st7789v2_write_command( 0xB2);  //PORCTRL
+	//Ch,	 Ch,     0h,    33h,    33h, //Default Value
 	st7789v2_write_data(0x0C);
 	st7789v2_write_data(0x0C);
 	st7789v2_write_data(0x00);
@@ -427,53 +433,53 @@ static int st7789v2_display_init(void)
 	st7789v2_write_data(0x33);
 
 	//10B7h
-	st7789v2_write_command( 0xB7);
+	st7789v2_write_command( 0xB7); // Gate Controll
 	//71h
 	st7789v2_write_data(0x71);
 
 	//10BBh
-	st7789v2_write_command( 0xBB);
+	st7789v2_write_command( 0xBB); //vcom setting
 	//3Bh
 	st7789v2_write_data(0x3B);
 
 	//10C0h
-	st7789v2_write_command( 0xC0);
+	st7789v2_write_command( 0xC0); //lcom setting
 	//2Ch
 	st7789v2_write_data(0x2C);
 
 	//10C2h
-	st7789v2_write_command( 0xC2);
+	st7789v2_write_command( 0xC2);  //vdv and vrh command enable
 	//1h
 	st7789v2_write_data(0x01);
 
 	//10C3h
-	st7789v2_write_command( 0xC3);
+	st7789v2_write_command( 0xC3); //vrh set
 	//13h
 	st7789v2_write_data(0x13);//4.5V
 
 	//10C4h
-	st7789v2_write_command( 0xC4);
+	st7789v2_write_command( 0xC4); //vdv set
 	//20h
 	st7789v2_write_data(0x20);
 
 	//10C6h
-	st7789v2_write_command( 0xC6);
+	st7789v2_write_command( 0xC6); //framerate control
 	//Fh
-	st7789v2_write_data(0x0F);
+	st7789v2_write_data(0x0F); //60hz
 
 	//10D0h,
-	st7789v2_write_command( 0xD0);
+	st7789v2_write_command( 0xD0); // Power controll
 	//A4h,A1h,
 	st7789v2_write_data(0xA4);
 	st7789v2_write_data(0xA1);
 
 	//10D6h,
-	st7789v2_write_command( 0xD6);
+	st7789v2_write_command( 0xD6); // unknown command
 	//A1h
 	st7789v2_write_data(0xA1);
 
 	//10E0h,
-	st7789v2_write_command( 0xE0);
+	st7789v2_write_command( 0xE0); // positive voltage gama controll
 	//  D0h,     6h,     6h,     Eh,
 	//   Dh,     6h,    2Fh,    3Ah,
 	//  47h,     8h,    15h,    14h,
@@ -494,7 +500,7 @@ static int st7789v2_display_init(void)
 	st7789v2_write_data(0x33);
 
 	//10E1h,
-	st7789v2_write_command( 0xE1);
+	st7789v2_write_command( 0xE1); // negative voltage gama control
 	//  D0h,
 	//   6h,     6h,     Eh,     Dh,
 	//   6h,    2Fh,    3Bh,    47h,
@@ -516,7 +522,7 @@ static int st7789v2_display_init(void)
 	st7789v2_write_data(0x33);
 
 	//102Ah,
-	st7789v2_write_command(0x2A);
+	st7789v2_write_command(0x2A); //CASET Colum adress Set
 	// 0h,     0h,
 	//   1h,    3Fh,
 	st7789v2_write_data(0x00);
@@ -525,7 +531,7 @@ static int st7789v2_display_init(void)
 	st7789v2_write_data(0x3F);
 
 	//102Bh,
-	st7789v2_write_command(0x2B);
+	st7789v2_write_command(0x2B); //RASET // Row adress Set
 	// 0h,
 	//   0h,     0h,    EFh,
 	st7789v2_write_data(0x00);
@@ -534,10 +540,10 @@ static int st7789v2_display_init(void)
 	st7789v2_write_data(0xEF);
 
 	//1021h,
-	st7789v2_write_command( 0x21);
+	st7789v2_write_command( 0x20); // display inversion on(21) off (20)
 
 	//1029h
-	st7789v2_write_command( 0x29);
+	st7789v2_write_command( 0x29); // display on
 
 	//Memory Write
 	st7789v2_write_command( 0x2C);
@@ -552,8 +558,8 @@ static int st7789v2_display_init(void)
             int b = 320-x;
             int data = ((r&0b11111000) << 8)
                     | ((g&0b11111100) << 3)
-                    | ((b&0b11111000) || 3);
-            lcd_write_rgb(data); //r565
+                    | ((b&0b11111000) >> 3);
+            st7789v2_write_data(data); //r565
         }
     }
 
@@ -658,47 +664,27 @@ void LCD_cmd_80290500(int cmd)
 }
  */
 
-static void lcd_write_rgb(unsigned int cmd)
+static void* LREG = (void*)&GPIOLCTRL + OUTPUT_VAL_REG;
+static void* TREG = (void*)&GPIOTCTRL + OUTPUT_VAL_REG;
+
+static void lcd_write_data(unsigned short cmd)
 {
-    int i=0;
-    unsigned char cmd_val = 0;
-    //gpio_set_cs(0); // Chip Select setup time 15 ns (from chip select to write)
-    gpio_set_rs(1); // adress hold time 10 ns (from write, to change)
-    //gpio_set_wr(0); // controll pulse low/high duration 15 ns, until change
-    for(i=15;i>=0;i--){  // data setup time 10 ns, until wright high
-        cmd_val = (cmd>>(i))&0x1;
-        gpio_set_data(i, cmd_val);
-    }  // data hold time 10 ns, after write till data change
-    //usleep(16); //data setup time and chip select time (15 min, 16 for safety)
-    gpio_set_wr(1);
-    //usleep(10); //Address hold time
-    //usleep(16); //control pulse duration for write (15 min, 16 for safety)
+    REG32_WRITE(LREG,REG32_READ(LREG) & 0xffffff83 | (cmd & 0x1f) << 2);
+    REG32_WRITE(TREG,REG32_READ(TREG) & 0xffff8183 | (cmd & 0x7e0) << 4 | cmd >> 9 & 0x7c);
+}
+
+static void lcd_gpio_spi_config_write(unsigned char RS, unsigned short cmd)
+{
+    gpio_set_rs(RS);
+    gpio_set_cs(0);
+    lcd_write_data(cmd);
     gpio_set_wr(0);
-    //gpio_set_cs(1);
-    //usleep(11); //chip select wait time, 10 min, 11 for safety
+    gpio_set_wr(1);
+    gpio_set_cs(1);
+    gpio_set_rs(1);
 }
 
-static void lcd_gpio_spi_config_write(unsigned char RS, unsigned char cmd)
-{
-	int i=0;
-	unsigned char cmd_val = 0;
-	//gpio_set_cs(0); // Chip Select setup time 15 ns (from chip select to write)
-    gpio_set_rs(RS); // adress hold time 10 ns (from write, to change)
-    //gpio_set_wr(0); // controll pulse low/high duration 15 ns, until change
-	for(i=7;i>=0;i--){  // data setup time 10 ns, until wright high
-		cmd_val = (cmd>>(i))&0x1;
-		gpio_set_data(i, cmd_val);
-	}  // data hold time 10 ns, after write till data change
-	//usleep(16); //data setup time and chip select time (15 min, 16 for safety)
-	gpio_set_wr(1);
-	//usleep(10); //Address hold time
-	//usleep(16); //control pulse duration for write (15 min, 16 for safety)
-	gpio_set_wr(0);
-	//gpio_set_cs(1);
-    //usleep(11); //chip select wait time, 10 min, 11 for safety
-}
-
-static void st7789v2_write_data(unsigned char data)
+static void st7789v2_write_data(unsigned short data)
 {
 	lcd_gpio_spi_config_write(1,data);
 }
