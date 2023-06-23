@@ -81,6 +81,7 @@ static int st7789v2_rorate(lcd_rotate_type_e dir);
 static void lcd_reset(void);
 static void lcd_write_rgb(unsigned int cmd);
 
+
 typedef struct st7789v2_dev{
 	u32 lcd_cs_num;
     u32 lcd_rs_num;
@@ -156,7 +157,7 @@ void lcd_pinmux_rgb(bool pinmux_rgb) {
     }
 }
 
-void lcd_set_gpio_output() {
+static void lcd_configure_gpio_output(void) {
     gpio_configure(PINPAD_L10,GPIO_DIR_OUTPUT);
     gpio_configure(PINPAD_T01,GPIO_DIR_OUTPUT);
     gpio_configure(PINPAD_L07,GPIO_DIR_OUTPUT);
@@ -182,7 +183,7 @@ void lcd_set_gpio_output() {
 
 static void vsync_irq(uint32_t param) {
     lcd_pinmux_rgb(0);
-    lcd_set_gpio_output();
+    lcd_configure_gpio_output();
     st7789v2_write_command(0x2B);
     st7789v2_write_data(0x00);
     st7789v2_write_data(0x00);
@@ -204,11 +205,12 @@ static int st7789v2_display_init(void)
 
 
     gpio_configure(PINPAD_L08,GPIO_DIR_INPUT | GPIO_IRQ_RISING);
-    lcd_set_gpio_output();
+    lcd_configure_gpio_output();
 
 	printf("%s %d\n", __FUNCTION__,__LINE__);
 
-	lcd_reset();
+	//lcd_reset();
+    lcd_gpio_set_output(st7789v2dev.lcd_reset_num,1);
 
     printf("%s %d\n", __FUNCTION__,__LINE__);
 
@@ -697,9 +699,14 @@ static void lcd_write_data(unsigned short cmd)
 
 static void lcd_gpio_spi_config_write(unsigned char RS, unsigned short cmd)
 {
+    int i = 0;
+    int cmd_val = 0;
     gpio_set_rs(RS);
     gpio_set_cs(0);
-    lcd_write_data(cmd);
+    for(i=15;i>=0;i--){
+        cmd_val = (cmd>>(i))&0x1;
+        gpio_set_data(i, cmd_val);
+    }
     gpio_set_wr(0);
     gpio_set_wr(1);
     gpio_set_cs(1);
