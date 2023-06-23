@@ -552,7 +552,7 @@ static int st7789v2_display_init(void)
             int b = 320-x;
             int data = ((r&0b11111000) << 8)
                     | ((g&0b11111100) << 3)
-                    | ((b&0b11111000) || 3);
+                    | ((b&0b11111000) >> 3);
             lcd_write_rgb(data); //r565
         }
     }
@@ -662,40 +662,32 @@ static void lcd_write_rgb(unsigned int cmd)
 {
     int i=0;
     unsigned char cmd_val = 0;
-    //gpio_set_cs(0); // Chip Select setup time 15 ns (from chip select to write)
-    gpio_set_rs(1); // adress hold time 10 ns (from write, to change)
-    //gpio_set_wr(0); // controll pulse low/high duration 15 ns, until change
+    gpio_set_rs(1);
+    gpio_set_cs(0);
     for(i=15;i>=0;i--){  // data setup time 10 ns, until wright high
         cmd_val = (cmd>>(i))&0x1;
         gpio_set_data(i, cmd_val);
     }  // data hold time 10 ns, after write till data change
-    //usleep(16); //data setup time and chip select time (15 min, 16 for safety)
-    gpio_set_wr(1);
-    //usleep(10); //Address hold time
-    //usleep(16); //control pulse duration for write (15 min, 16 for safety)
     gpio_set_wr(0);
-    //gpio_set_cs(1);
-    //usleep(11); //chip select wait time, 10 min, 11 for safety
+    gpio_set_wr(1);
+    gpio_set_cs(1);
+    gpio_set_rs(1);
 }
 
 static void lcd_gpio_spi_config_write(unsigned char RS, unsigned char cmd)
 {
 	int i=0;
 	unsigned char cmd_val = 0;
-	//gpio_set_cs(0); // Chip Select setup time 15 ns (from chip select to write)
-    gpio_set_rs(RS); // adress hold time 10 ns (from write, to change)
-    //gpio_set_wr(0); // controll pulse low/high duration 15 ns, until change
+    gpio_set_rs(RS);
+    gpio_set_cs(0);
 	for(i=7;i>=0;i--){  // data setup time 10 ns, until wright high
 		cmd_val = (cmd>>(i))&0x1;
 		gpio_set_data(i, cmd_val);
 	}  // data hold time 10 ns, after write till data change
-	//usleep(16); //data setup time and chip select time (15 min, 16 for safety)
-	gpio_set_wr(1);
-	//usleep(10); //Address hold time
-	//usleep(16); //control pulse duration for write (15 min, 16 for safety)
-	gpio_set_wr(0);
-	//gpio_set_cs(1);
-    //usleep(11); //chip select wait time, 10 min, 11 for safety
+    gpio_set_wr(0);
+    gpio_set_wr(1);
+    gpio_set_cs(1);
+    gpio_set_rs(1);
 }
 
 static void st7789v2_write_data(unsigned char data)
