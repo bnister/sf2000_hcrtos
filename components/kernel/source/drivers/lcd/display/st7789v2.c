@@ -126,10 +126,32 @@ static int st7789v2_rorate(lcd_rotate_type_e dir)
 	return 0;
 }
 
-static void vsync_irq(uint32_t param) {
-    if (control_state) {
-        pinmux_select_setting(control_state);
+// Extracted from original firmware
+void lcd_pinmux_rgb(bool pinmux_rgb) {
+    if (pinmux_rgb) {
+        REG32_WRITE((void*)0xb8808084,REG32_READ(0xb8808084) & 0xfffffeff);
+        REG32_WRITE((void*)0xb8808000,REG32_READ(0xb8808000) & 0xffffff00 | 0x15);
+        REG32_WRITE((void*)0xb88004a4,0xb6060606);
+        REG32_WRITE((void*)0xb88004a0,REG32_READ(0xb88004a0) & 0xffff | 0x6060000);
+        REG32_WRITE((void*)0xb8800508,REG32_READ(0xb8800508) & 0xff | 0x6060600);
+        REG32_WRITE((void*)0xb880050c,REG32_READ(0xb880050c) & 0xff000000 | 0x60606);
+        REG32_WRITE((void*)0xb8800500,REG32_READ(0xb8800500) & 0xffff | 0x6060000);
+        REG32_WRITE((void*)0xb8800504,REG32_READ(0xb8800504) & 0xff000000 | 0x60606);
+        REG32_WRITE((void*)0xb88004a8,REG32_READ(0xb88004a8) & 0xff00ffff | 0x60000);
     }
+    else {
+        REG32_WRITE((void*)0xb88004a4,0x0);
+        REG32_WRITE((void*)0xb88004a8,REG32_READ(0xb88004a8) & 0xff00ffff);
+        REG32_WRITE((void*)0xb88004a0,REG32_READ(0xb88004a0) & 0xffff);
+        REG32_WRITE((void*)0xb8800508,REG32_READ(0xb8800508) & 0xff);
+        REG32_WRITE((void*)0xb880050c,REG32_READ(0xb880050c) & 0xff000000);
+        REG32_WRITE((void*)0xb8800500,REG32_READ(0xb8800500) & 0xffff);
+        REG32_WRITE((void*)0xb8800504,REG32_READ(0xb8800504) & 0xff000000);
+    }
+}
+
+static void vsync_irq(uint32_t param) {
+    lcd_pinmux_rgb(0);
     st7789v2_write_command(0x2B);
     st7789v2_write_data(0x00);
     st7789v2_write_data(0x00);
@@ -141,39 +163,34 @@ static void vsync_irq(uint32_t param) {
     st7789v2_write_data(0x00);
     st7789v2_write_data(0xEF);
     st7789v2_write_command( 0x2C); //memory write
-    if (rgb_state) {
-        pinmux_select_setting(rgb_state);
-    }
+    lcd_pinmux_rgb(1);
 }
 
 static int st7789v2_display_init(void)
 {
-    if (control_state) {
-        pinmux_select_setting(control_state);
-    }
-
+    lcd_pinmux_rgb(0);
     printf("%s %d\n", __FUNCTION__,__LINE__);
-    gpio_configure(st7789v2dev.lcd_cs_num,GPIO_DIR_OUTPUT);
-    gpio_configure(st7789v2dev.lcd_rs_num,GPIO_DIR_OUTPUT);
-    gpio_configure(st7789v2dev.lcd_wr_num,GPIO_DIR_OUTPUT);
-    gpio_configure(st7789v2dev.lcd_rd_num,GPIO_DIR_OUTPUT);
-    gpio_configure(st7789v2dev.lcd_d0_num,GPIO_DIR_OUTPUT);
-    gpio_configure(st7789v2dev.lcd_d1_num,GPIO_DIR_OUTPUT);
-    gpio_configure(st7789v2dev.lcd_d2_num,GPIO_DIR_OUTPUT);
-    gpio_configure(st7789v2dev.lcd_d3_num,GPIO_DIR_OUTPUT);
-    gpio_configure(st7789v2dev.lcd_d4_num,GPIO_DIR_OUTPUT);
-    gpio_configure(st7789v2dev.lcd_d5_num,GPIO_DIR_OUTPUT);
-    gpio_configure(st7789v2dev.lcd_d6_num,GPIO_DIR_OUTPUT);
-    gpio_configure(st7789v2dev.lcd_d7_num,GPIO_DIR_OUTPUT);
-    gpio_configure(st7789v2dev.lcd_d8_num,GPIO_DIR_OUTPUT);
-    gpio_configure(st7789v2dev.lcd_d9_num,GPIO_DIR_OUTPUT);
-    gpio_configure(st7789v2dev.lcd_d10_num,GPIO_DIR_OUTPUT);
-    gpio_configure(st7789v2dev.lcd_d11_num,GPIO_DIR_OUTPUT);
-    gpio_configure(st7789v2dev.lcd_d12_num,GPIO_DIR_OUTPUT);
-    gpio_configure(st7789v2dev.lcd_d13_num,GPIO_DIR_OUTPUT);
-    gpio_configure(st7789v2dev.lcd_d14_num,GPIO_DIR_OUTPUT);
-    gpio_configure(st7789v2dev.lcd_d15_num,GPIO_DIR_OUTPUT);
-    gpio_configure(st7789v2dev.lcd_reset_num,GPIO_DIR_OUTPUT);
+    //gpio_configure(st7789v2dev.lcd_cs_num,GPIO_DIR_OUTPUT);
+    //gpio_configure(st7789v2dev.lcd_rs_num,GPIO_DIR_OUTPUT);
+    //gpio_configure(st7789v2dev.lcd_wr_num,GPIO_DIR_OUTPUT);
+    //gpio_configure(st7789v2dev.lcd_rd_num,GPIO_DIR_OUTPUT);
+    //gpio_configure(st7789v2dev.lcd_d0_num,GPIO_DIR_OUTPUT);
+    //gpio_configure(st7789v2dev.lcd_d1_num,GPIO_DIR_OUTPUT);
+    //gpio_configure(st7789v2dev.lcd_d2_num,GPIO_DIR_OUTPUT);
+    //gpio_configure(st7789v2dev.lcd_d3_num,GPIO_DIR_OUTPUT);
+    //gpio_configure(st7789v2dev.lcd_d4_num,GPIO_DIR_OUTPUT);
+    //gpio_configure(st7789v2dev.lcd_d5_num,GPIO_DIR_OUTPUT);
+    //gpio_configure(st7789v2dev.lcd_d6_num,GPIO_DIR_OUTPUT);
+    //gpio_configure(st7789v2dev.lcd_d7_num,GPIO_DIR_OUTPUT);
+    //gpio_configure(st7789v2dev.lcd_d8_num,GPIO_DIR_OUTPUT);
+    //gpio_configure(st7789v2dev.lcd_d9_num,GPIO_DIR_OUTPUT);
+    //gpio_configure(st7789v2dev.lcd_d10_num,GPIO_DIR_OUTPUT);
+    //gpio_configure(st7789v2dev.lcd_d11_num,GPIO_DIR_OUTPUT);
+    //gpio_configure(st7789v2dev.lcd_d12_num,GPIO_DIR_OUTPUT);
+    //gpio_configure(st7789v2dev.lcd_d13_num,GPIO_DIR_OUTPUT);
+    //gpio_configure(st7789v2dev.lcd_d14_num,GPIO_DIR_OUTPUT);
+    //gpio_configure(st7789v2dev.lcd_d15_num,GPIO_DIR_OUTPUT);
+    //gpio_configure(st7789v2dev.lcd_reset_num,GPIO_DIR_OUTPUT);
     gpio_configure(st7789v2dev.lcd_vsync_num,GPIO_DIR_INPUT | GPIO_IRQ_RISING);
 
 	printf("%s %d\n", __FUNCTION__,__LINE__);
@@ -568,9 +585,7 @@ static int st7789v2_display_init(void)
 
     printf("%s %d\n", __FUNCTION__,__LINE__);
 
-    if (rgb_state) {
-        pinmux_select_setting(rgb_state);
-    }
+    lcd_pinmux_rgb(1);
 	return 0;
 }
 
