@@ -156,8 +156,33 @@ void lcd_pinmux_rgb(bool pinmux_rgb) {
     }
 }
 
+void lcd_set_gpio_output() {
+    gpio_configure(PINPAD_L10,GPIO_DIR_OUTPUT);
+    gpio_configure(PINPAD_T01,GPIO_DIR_OUTPUT);
+    gpio_configure(PINPAD_L07,GPIO_DIR_OUTPUT);
+    gpio_configure(PINPAD_T00,GPIO_DIR_OUTPUT);
+    gpio_configure(PINPAD_L01,GPIO_DIR_OUTPUT);
+    gpio_configure(PINPAD_L02,GPIO_DIR_OUTPUT);
+    gpio_configure(PINPAD_L03,GPIO_DIR_OUTPUT);
+    gpio_configure(PINPAD_L04,GPIO_DIR_OUTPUT);
+    gpio_configure(PINPAD_L05,GPIO_DIR_OUTPUT);
+    gpio_configure(PINPAD_L06,GPIO_DIR_OUTPUT);
+    gpio_configure(PINPAD_T09,GPIO_DIR_OUTPUT);
+    gpio_configure(PINPAD_T10,GPIO_DIR_OUTPUT);
+    gpio_configure(PINPAD_T11,GPIO_DIR_OUTPUT);
+    gpio_configure(PINPAD_T12,GPIO_DIR_OUTPUT);
+    gpio_configure(PINPAD_T13,GPIO_DIR_OUTPUT);
+    gpio_configure(PINPAD_T14,GPIO_DIR_OUTPUT);
+    gpio_configure(PINPAD_T02,GPIO_DIR_OUTPUT);
+    gpio_configure(PINPAD_T03,GPIO_DIR_OUTPUT);
+    gpio_configure(PINPAD_T04,GPIO_DIR_OUTPUT);
+    gpio_configure(PINPAD_T05,GPIO_DIR_OUTPUT);
+    gpio_configure(PINPAD_T06,GPIO_DIR_OUTPUT);
+}
+
 static void vsync_irq(uint32_t param) {
     lcd_pinmux_rgb(0);
+    lcd_set_gpio_output();
     st7789v2_write_command(0x2B);
     st7789v2_write_data(0x00);
     st7789v2_write_data(0x00);
@@ -176,28 +201,10 @@ static int st7789v2_display_init(void)
 {
     lcd_pinmux_rgb(0);
     printf("%s %d\n", __FUNCTION__,__LINE__);
-    //gpio_configure(st7789v2dev.lcd_cs_num,GPIO_DIR_OUTPUT);
-    //gpio_configure(st7789v2dev.lcd_rs_num,GPIO_DIR_OUTPUT);
-    //gpio_configure(st7789v2dev.lcd_wr_num,GPIO_DIR_OUTPUT);
-    //gpio_configure(st7789v2dev.lcd_rd_num,GPIO_DIR_OUTPUT);
-    //gpio_configure(st7789v2dev.lcd_d0_num,GPIO_DIR_OUTPUT);
-    //gpio_configure(st7789v2dev.lcd_d1_num,GPIO_DIR_OUTPUT);
-    //gpio_configure(st7789v2dev.lcd_d2_num,GPIO_DIR_OUTPUT);
-    //gpio_configure(st7789v2dev.lcd_d3_num,GPIO_DIR_OUTPUT);
-    //gpio_configure(st7789v2dev.lcd_d4_num,GPIO_DIR_OUTPUT);
-    //gpio_configure(st7789v2dev.lcd_d5_num,GPIO_DIR_OUTPUT);
-    //gpio_configure(st7789v2dev.lcd_d6_num,GPIO_DIR_OUTPUT);
-    //gpio_configure(st7789v2dev.lcd_d7_num,GPIO_DIR_OUTPUT);
-    //gpio_configure(st7789v2dev.lcd_d8_num,GPIO_DIR_OUTPUT);
-    //gpio_configure(st7789v2dev.lcd_d9_num,GPIO_DIR_OUTPUT);
-    //gpio_configure(st7789v2dev.lcd_d10_num,GPIO_DIR_OUTPUT);
-    //gpio_configure(st7789v2dev.lcd_d11_num,GPIO_DIR_OUTPUT);
-    //gpio_configure(st7789v2dev.lcd_d12_num,GPIO_DIR_OUTPUT);
-    //gpio_configure(st7789v2dev.lcd_d13_num,GPIO_DIR_OUTPUT);
-    //gpio_configure(st7789v2dev.lcd_d14_num,GPIO_DIR_OUTPUT);
-    //gpio_configure(st7789v2dev.lcd_d15_num,GPIO_DIR_OUTPUT);
-    //gpio_configure(st7789v2dev.lcd_reset_num,GPIO_DIR_OUTPUT);
-    gpio_configure(st7789v2dev.lcd_vsync_num,GPIO_DIR_INPUT | GPIO_IRQ_RISING);
+
+
+    gpio_configure(PINPAD_L08,GPIO_DIR_INPUT | GPIO_IRQ_RISING);
+    lcd_set_gpio_output();
 
 	printf("%s %d\n", __FUNCTION__,__LINE__);
 
