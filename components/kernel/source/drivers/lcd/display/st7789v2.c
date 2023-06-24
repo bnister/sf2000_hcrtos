@@ -200,6 +200,8 @@ static void vsync_irq(uint32_t param) {
 
 static int st7789v2_display_init(void)
 {
+    *(volatile uint32_t *)0xb8800094 |= 0x10000;
+
     lcd_pinmux_rgb(0);
     printf("%s %d\n", __FUNCTION__,__LINE__);
 
@@ -566,7 +568,7 @@ static int st7789v2_display_init(void)
 	st7789v2_write_data(0xEF);
 
 	//1021h,
-	st7789v2_write_command( 0x20); // display inversion on(21) off (20)
+	st7789v2_write_command( 0x21); // display inversion on(21) off (20)
 
 	//1029h
 	st7789v2_write_command( 0x29); // display on
@@ -699,14 +701,15 @@ static void lcd_write_data(unsigned short cmd)
 
 static void lcd_gpio_spi_config_write(unsigned char RS, unsigned short cmd)
 {
-    int i = 0;
-    int cmd_val = 0;
+    //int i = 0;
+    //int cmd_val = 0;
     gpio_set_rs(RS);
     gpio_set_cs(0);
-    for(i=15;i>=0;i--){
-        cmd_val = (cmd>>(i))&0x1;
-        gpio_set_data(i, cmd_val);
-    }
+    //for(i=15;i>=0;i--){
+    //    cmd_val = (cmd>>(i))&0x1;
+    //    gpio_set_data(i, cmd_val);
+    //}
+    lcd_write_data(cmd);
     gpio_set_wr(0);
     gpio_set_wr(1);
     gpio_set_cs(1);
