@@ -12,6 +12,7 @@ config CONFIG_APPS_NAME
 	default "hcscreen" if BR2_PACKAGE_APPS_HCSCREEN
 	default "hcscreen-p1" if BR2_PACKAGE_APPS_HCSCREEN_P1
 	default "hcscreen-p2" if BR2_PACKAGE_APPS_HCSCREEN_P2
+	default "sf2000" if BR2_PACKAGE_APPS_SF2000
 	default "spinandwr" if BR2_PACKAGE_APPS_SPINANDWR
 	default "b2bupdater" if BR2_PACKAGE_APPS_B2BUPDATER
 	default "hcusbcast" if BR2_PACKAGE_APPS_HCUSBCAST
@@ -44,6 +45,7 @@ source "apps-hccast-samplecode/Kconfig"
 source "apps-hcscreen/Kconfig"
 source "apps-hcscreen-p1/Kconfig"
 source "apps-hcscreen-p2/Kconfig"
+source "apps-sf2000/Kconfig"
 source "apps-spinandwr/Kconfig"
 source "apps-b2bupdater/Kconfig"
 source "apps-kidev/Kconfig"

@@ -108,11 +108,11 @@ BR2_PACKAGE_PREBUILTS_USBDRIVER=y
 BR2_PACKAGE_PREBUILTS_USBDRIVER_MSG=y
 # BR2_PACKAGE_PREBUILTS_USBDRIVER_HID is not set
 # BR2_PACKAGE_PREBUILTS_USBGADGETDRIVER is not set
-# BR2_PACKAGE_PREBUILTS_SDMMCDRIVER is not set
+BR2_PACKAGE_PREBUILTS_SDMMCDRIVER=y
 BR2_PACKAGE_PREBUILTS_NTFS=y
 BR2_PACKAGE_PREBUILTS_NOMAC=y
 BR2_PACKAGE_PREBUILTS_LIBGE=y
-# BR2_PACKAGE_PREBUILTS_LIBDSC is not set
+BR2_PACKAGE_PREBUILTS_LIBDSC=y
 # BR2_PACKAGE_PREBUILTS_SPECTRUM is not set
 # BR2_PACKAGE_PREBUILTS_3A is not set
 # BR2_PACKAGE_PREBUILTS_DRC is not set
@@ -132,10 +132,10 @@ BR2_PACKAGE_PREBUILTS_LIBEFUSE=y
 #
 # Applications Configuration
 #
-CONFIG_APPS_NAME="avp"
+CONFIG_APPS_NAME="sf2000"
 CONFIG_APP_HOSTNAME="hichip"
 CONFIG_APP_TIMEZONE="GMT-8"
-CONFIG_APP_LOG_LEVEL=5
+CONFIG_APP_LOG_LEVEL=1
 
 #
 # Application Selection
@@ -148,7 +148,7 @@ CONFIG_APP_LOG_LEVEL=5
 #
 # Select multi-applications will cause un-expected result!
 #
-BR2_PACKAGE_APPS_AVP=y
+# BR2_PACKAGE_APPS_AVP is not set
 # BR2_PACKAGE_APPS_BOOTLOADER is not set
 # BR2_PACKAGE_APPS_HDMISWITCH is not set
 # BR2_PACKAGE_APPS_PROJECTOR is not set
@@ -158,6 +158,7 @@ BR2_PACKAGE_APPS_AVP=y
 # BR2_PACKAGE_APPS_HCSCREEN is not set
 # BR2_PACKAGE_APPS_HCSCREEN_P1 is not set
 # BR2_PACKAGE_APPS_HCSCREEN_P2 is not set
+BR2_PACKAGE_APPS_SF2000=y
 # BR2_PACKAGE_APPS_SPINANDWR is not set
 # BR2_PACKAGE_APPS_B2BUPDATER is not set
 # BR2_PACKAGE_APPS_KIDEV is not set
@@ -258,7 +259,7 @@ CONFIG_MEM_NR_MMZ=1
 CONFIG_DRV_UART=y
 CONFIG_UART_RX_BUF_SIZE=1024
 # CONFIG_DRV_VIRTUART is not set
-# CONFIG_DRV_FILEUART is not set
+CONFIG_DRV_FILEUART=y
 CONFIG_DRV_DUMMYUART=y
 CONFIG_DRV_DEVNULL=y
 # CONFIG_DRV_DEVZERO is not set
@@ -392,7 +393,16 @@ CONFIG_DRV_HCGE=y
 # CONFIG_DRV_DVP is not set
 # CONFIG_DEV_URANDOM is not set
 # CONFIG_USB_GADGET_VENDOR is not set
-# CONFIG_DRV_LCD is not set
+CONFIG_DRV_LCD=y
+# CONFIG_DRV_LCD_DEV is not set
+# CONFIG_DRV_LCD_NT35510 is not set
+# CONFIG_DRV_LCD_GC9505 is not set
+# CONFIG_DRV_LCD_JDI026 is not set
+# CONFIG_DRV_LCD_SC5014A is not set
+# CONFIG_DRV_LCD_JD9168 is not set
+CONFIG_DRV_LCD_ST7789V2=y
+# CONFIG_DRV_LCD_N116BGE is not set
+CONFIG_DRV_BACKLIGHT=y
 CONFIG_SOUND=y
 CONFIG_AUDSINK_16BIT_OUT=y
 # CONFIG_AUDSINK_24BIT_OUT is not set
@@ -417,7 +427,7 @@ BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS=y
 BR2_PACKAGE_FFMPEG=y
 # BR2_PACKAGE_FFMPEG_GPL is not set
 # BR2_PACKAGE_FFMPEG_NONFREE is not set
-# BR2_PACKAGE_FFMPEG_FFMPEG is not set
+BR2_PACKAGE_FFMPEG_FFMPEG=y
 
 #
 # ffplay needs a toolchain w/ dynamic library
@@ -428,20 +438,21 @@ BR2_PACKAGE_FFMPEG_SWSCALE=y
 BR2_PACKAGE_FFMPEG_ENCODERS=""
 BR2_PACKAGE_FFMPEG_DECODERS="gsm gsm_ms ape bmp gif png mjpeg tiff ico webp targa pcm_dvd pgssub srt dvbsub dvdsub ass movtext srt ssa microdvd sami mpl2 webvtt vplayer stl pjs subviewer1 text subrip adpcm_4xm adpcm_afc adpcm_agm adpcm_aica adpcm_argo adpcm_ct adpcm_dtk adpcm_ea adpcm_ea_maxis_xa adpcm_ea_r1 adpcm_ea_r2 adpcm_ea_r3 adpcm_ea_xas adpcm_ima_amv adpcm_ima_apc adpcm_ima_apm adpcm_ima_cunning adpcm_ima_dat4 adpcm_ima_dk3 adpcm_ima_dk4 adpcm_ima_ea_eacs adpcm_ima_ea_sead adpcm_ima_iss adpcm_ima_moflex adpcm_ima_mtf adpcm_ima_oki adpcm_ima_qt adpcm_ima_rad adpcm_ima_ssi adpcm_ima_smjpeg adpcm_ima_alp adpcm_ima_wav adpcm_ima_ws adpcm_ms adpcm_mtaf adpcm_psx adpcm_sbpro_2 adpcm_sbpro_3 adpcm_sbpro_4 adpcm_swf adpcm_thp_le adpcm_thp adpcm_xa adpcm_yamaha adpcm_zork pcm_bluray"
 BR2_PACKAGE_FFMPEG_MUXERS=""
-BR2_PACKAGE_FFMPEG_DEMUXERS="gsm mp3 aac ac3 avi asf amr ape amrnb amrwb dts dvbsub dvbtxt eac3 flac flv h261 h263 h264 hls mjpeg m4v mov mpegps mpegts mpegtsraw mjpeg_2000 mpegvideo mpjpeg matroska ogg pcm_alaw pcm_f32be pcm_f32le pcm_f64be pcm_f64le pcm_mulaw pcm_s16be pcm_s16le pcm_s24be pcm_s24le pcm_s32be pcm_s32le pcm_s8 pcm_u16be pcm_u16le pcm_u24be pcm_u24le pcm_u32be pcm_u32le pcm_u8 rm rtp rtsp spdif wav image2 image2pipe image_bmp_pipe image_gif_pipe image_jpeg_pipe image_jpegls_pipe image_png_pipe srt ass microdvd mpl2 sami webvtt vobsub ico lrc"
-BR2_PACKAGE_FFMPEG_PARSERS="gsm aac aac_latm ac3 flac gif h261 h263 h264 jpeg2000 mjpeg mpeg4video mpegaudio mpegvideo opus vc1 vorbis dvbsub dvdsub cook webp vp8 rv30 rv40"
+BR2_PACKAGE_FFMPEG_DEMUXERS="mp3 aac ac3 avi asf amr ape amrnb amrwb dts dvbsub dvbtxt eac3 flac flv h261 h263 h264 hevc hls mjpeg m4v mov mpegps mpegts mpegtsraw mjpeg_2000 mpegvideo mpjpeg matroska ogg pcm_alaw pcm_f32be pcm_f32le pcm_f64be pcm_f64le pcm_mulaw pcm_s16be pcm_s16le pcm_s24be pcm_s24le pcm_s32be pcm_s32le pcm_s8 pcm_u16be pcm_u16le pcm_u24be pcm_u24le pcm_u32be pcm_u32le pcm_u8 rm rtp rtsp spdif wav"
+BR2_PACKAGE_FFMPEG_PARSERS="aac aac_latm ac3 flac gif h261 h263 h264 hevc jpeg2000 mjpeg mpeg4video mpegaudio mpegvideo opus vc1 vorbis"
 BR2_PACKAGE_FFMPEG_BSFS=""
-BR2_PACKAGE_FFMPEG_PROTOCOLS="file ftp data http httpproxy mmsh mmst rtmp rtmpt rtp tcp srtp udp https"
+BR2_PACKAGE_FFMPEG_PROTOCOLS="file ftp data hls http httpproxy mmsh mmst rtmp rtmpt rtp tcp srtp udp"
 BR2_PACKAGE_FFMPEG_FILTERS=""
 # BR2_PACKAGE_FFMPEG_INDEVS is not set
-# BR2_PACKAGE_FFMPEG_OUTDEVS is not set
-BR2_PACKAGE_FFMPEG_EXTRACONF="--disable-decklink --disable-avfilter --disable-avdevice --disable-swresample --disable-doc --disable-hwaccels"
+BR2_PACKAGE_FFMPEG_OUTDEVS=y
+BR2_PACKAGE_FFMPEG_EXTRACONF="--disable-decklink --disable-avfilter --disable-avdevice --disable-swresample --disable-fft --disable-doc --disable-hwaccels"
 # BR2_PACKAGE_FFMPEG_GDB_DBG is not set
 # BR2_PACKAGE_HC_EXAMPLES is not set
 BR2_PACKAGE_OPENCORE_AMR=y
 # BR2_PACKAGE_LIBUSB is not set
 # BR2_PACKAGE_HCFOTA is not set
-# BR2_PACKAGE_LIBLVGL is not set
+BR2_PACKAGE_LIBLVGL=y
+BR2_PACKAGE_LIBLVGL_CONFIG="$(TOPDIR)/components/liblvgl/liblvgl.config"
 # BR2_PACKAGE_BLUETOOTH is not set
 # BR2_PACKAGE_QUICKLZ is not set
 # BR2_PACKAGE_LIBLZO is not set

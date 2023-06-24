@@ -20,8 +20,8 @@
 #define CONFIG_VIN_TVDEC_SUPPORT 0 
 #define CONFIG_VIDEO_IN_SUPPORT (CONFIG_HDMI_RX_SUPPORT | CONFIG_VIN_DVP_SUPPORT | CONFIG_VIN_TVDEC_SUPPORT)
 #define CONFIG_DE4K_OUTPUT_SUPPORT 0
-#define CONFIG_DUAL_OUTPUT_SUPPORT 0
-#define CONFIG_VGA_OUTPUT_SUPPORT 0
+#define CONFIG_DUAL_OUTPUT_SUPPORT 1
+#define CONFIG_VGA_OUTPUT_SUPPORT 1
 #define CONFIG_CVBS_OUTPUT_SUPPORT 1
 
 #define CONFIG_MM_FB_SIZE (0x10cf200)
@@ -156,7 +156,7 @@ hcrtos {
 		avc-cmd-queue-size = <CONFIG_AVC_CMD_QUEUE_SIZE>;
 		avc-vbv-size = <CONFIG_AVC_VBV_SIZE>;
 		avc-mem-size = <CONFIG_AVC_MEM_SIZE>;
-		status = "disabled";
+		status = "okay";
 	};
 
 	DE: de-engine {
@@ -200,45 +200,119 @@ hcrtos {
 	};
 
 	pwm@0 {
-		pinmux-active = <PINPAD_L23 1>;
+		pinmux-active = <PINPAD_R05 1>;
 		devpath = "/dev/pwm0";
-		status = "disabled";
+		status = "okay";
 	};
 
 	rgb {
 		pinmux-active = <
 			// PINPAD_R08 PINMUX_R08_PRGB_R0
 			// PINPAD_T00 PINMUX_T00_PRGB_R1
-			PINPAD_T01 PINMUX_T01_PRGB_R2
-			PINPAD_T02 PINMUX_T02_PRGB_R3
-			PINPAD_T03 PINMUX_T03_PRGB_R4
-			PINPAD_T04 PINMUX_T04_PRGB_R5
-			PINPAD_T05 PINMUX_T05_PRGB_R6
 			PINPAD_T06 PINMUX_T06_PRGB_R7
-			PINPAD_T07 PINMUX_T07_PRGB_G0
-			PINPAD_T08 PINMUX_T08_PRGB_G1
-			PINPAD_T09 PINMUX_T09_PRGB_G2
-			PINPAD_T10 PINMUX_T10_PRGB_G3
-			PINPAD_T11 PINMUX_T11_PRGB_G4
-			PINPAD_T12 PINMUX_T12_PRGB_G5
-			PINPAD_T13 PINMUX_T13_PRGB_G6
+			PINPAD_T05 PINMUX_T05_PRGB_R6
+			PINPAD_T04 PINMUX_T04_PRGB_R5
+			PINPAD_T03 PINMUX_T03_PRGB_R4
+			PINPAD_T02 PINMUX_T02_PRGB_R3
 			PINPAD_T14 PINMUX_T14_PRGB_G7
-			PINPAD_T15 PINMUX_T15_PRGB_B0
-			PINPAD_L00 PINMUX_L00_PRGB_B1
-			PINPAD_L01 PINMUX_L01_PRGB_B2
-			PINPAD_L02 PINMUX_L02_PRGB_B3
-			PINPAD_L03 PINMUX_L03_PRGB_B4
-			PINPAD_L04 PINMUX_L04_PRGB_B5
-			PINPAD_L05 PINMUX_L05_PRGB_B6
+			PINPAD_T13 PINMUX_T13_PRGB_G6
+			PINPAD_T12 PINMUX_T12_PRGB_G5
+			PINPAD_T11 PINMUX_T11_PRGB_G4
+			PINPAD_T10 PINMUX_T10_PRGB_G3
+			PINPAD_T09 PINMUX_T09_PRGB_G2
 			PINPAD_L06 PINMUX_L06_PRGB_B7
+			PINPAD_L05 PINMUX_L05_PRGB_B6
+			PINPAD_L04 PINMUX_L04_PRGB_B5
+			PINPAD_L03 PINMUX_L03_PRGB_B4
+			PINPAD_L02 PINMUX_L02_PRGB_B3
+			//PINPAD_L01 PINMUX_L01_PRGB_B2
+			//PINPAD_L02 PINMUX_L02_PRGB_B3
+			//PINPAD_L03 PINMUX_L03_PRGB_B4
+			//PINPAD_L04 PINMUX_L04_PRGB_B5
+			//PINPAD_L05 PINMUX_L05_PRGB_B6
+			//PINPAD_L06 PINMUX_L06_PRGB_B7
 			PINPAD_L07 PINMUX_L07_PRGB_CLK
-			PINPAD_L08 PINMUX_L08_PRGB_HSYN
+			//PINPAD_L08 PINMUX_L08_PRGB_HSYN
 			PINPAD_L09 PINMUX_L09_PRGB_VSYNC
 			PINPAD_L10 PINMUX_L10_PRGB_DE>;
 		vcom-pwmdev = "/dev/pwm0";
 		vcom-frequency = <10000>;
 		vcom-duty = <20>;
-		status = "disabled";
+		status = "okay";
+	};
+
+	lcd-st7789v2 {
+        device_type = "hichip,hcrtos-setup-setbit";
+        reg_bit = <0xb8800094 16 1>;
+		lcd_cs = <PINPAD_L10>;
+		lcd_rs = <PINPAD_T01>;
+		lcd_wr = <PINPAD_L07>;
+		lcd_rd = <PINPAD_T00>;
+		lcd_reset = <PINPAD_L01>;
+        lcd_vsync = <PINPAD_L08>;
+		lcd_d0 = <PINPAD_L02>;
+		lcd_d1 = <PINPAD_L03>;
+		lcd_d2 = <PINPAD_L04>;
+		lcd_d3 = <PINPAD_L05>;
+		lcd_d4 = <PINPAD_L06>;
+		lcd_d5 = <PINPAD_T09>;
+		lcd_d6 = <PINPAD_T10>;
+		lcd_d7 = <PINPAD_T11>;
+		lcd_d8 = <PINPAD_T12>;
+		lcd_d9 = <PINPAD_T13>;
+		lcd_d10 = <PINPAD_T14>;
+		lcd_d11 = <PINPAD_T02>;
+		lcd_d12 = <PINPAD_T03>;
+		lcd_d13 = <PINPAD_T04>;
+		lcd_d14 = <PINPAD_T05>;
+		lcd_d15 = <PINPAD_T06>;
+        pinmux-rgb = <
+            PINPAD_T06 PINMUX_T06_PRGB_R7
+            PINPAD_T05 PINMUX_T05_PRGB_R6
+            PINPAD_T04 PINMUX_T04_PRGB_R5
+            PINPAD_T03 PINMUX_T03_PRGB_R4
+            PINPAD_T02 PINMUX_T02_PRGB_R3
+            PINPAD_T14 PINMUX_T14_PRGB_G7
+            PINPAD_T13 PINMUX_T13_PRGB_G6
+            PINPAD_T12 PINMUX_T12_PRGB_G5
+            PINPAD_T11 PINMUX_T11_PRGB_G4
+            PINPAD_T10 PINMUX_T10_PRGB_G3
+            PINPAD_T09 PINMUX_T09_PRGB_G2
+            PINPAD_L06 PINMUX_L06_PRGB_B7
+            PINPAD_L05 PINMUX_L05_PRGB_B6
+            PINPAD_L04 PINMUX_L04_PRGB_B5
+            PINPAD_L03 PINMUX_L03_PRGB_B4
+            PINPAD_L02 PINMUX_L02_PRGB_B3
+            PINPAD_L07 PINMUX_L07_PRGB_CLK
+            PINPAD_L10 PINMUX_L10_PRGB_DE>;
+        pinmux-control = <
+            PINPAD_T06 PINMUX_T06_GPIO
+            PINPAD_T05 PINMUX_T05_GPIO
+            PINPAD_T04 PINMUX_T04_GPIO
+            PINPAD_T03 PINMUX_T03_GPIO
+            PINPAD_T02 PINMUX_T02_GPIO
+            PINPAD_T14 PINMUX_T14_GPIO
+            PINPAD_T13 PINMUX_T13_GPIO
+            PINPAD_T12 PINMUX_T12_GPIO
+            PINPAD_T11 PINMUX_T11_GPIO
+            PINPAD_T10 PINMUX_T10_GPIO
+            PINPAD_T09 PINMUX_T09_GPIO
+            PINPAD_L06 PINMUX_L06_GPIO
+            PINPAD_L05 PINMUX_L05_GPIO
+            PINPAD_L04 PINMUX_L04_GPIO
+            PINPAD_L03 PINMUX_L03_GPIO
+            PINPAD_L02 PINMUX_L02_GPIO
+            PINPAD_L07 PINMUX_L07_GPIO
+            PINPAD_L10 PINMUX_L10_GPIO
+            PINPAD_T01 PINMUX_T01_GPIO
+            PINPAD_T00 PINMUX_T00_GPIO
+            PINPAD_L01 PINMUX_L01_GPIO>;
+		status = "okay";
+	};
+
+	lcd{
+		lcd-map-name = "lcd-st7789v2";
+		status = "okay";
 	};
 
 	uart@0 {
@@ -247,7 +321,7 @@ hcrtos {
 	};
 
 	uart@1 {
-		pinmux-active = <PINPAD_R05 2 PINPAD_R08 2>;
+		pinmux-active = <PINPAD_R05 0 PINPAD_R08 2>;
 		devpath = "/dev/uart1";
 		status = "okay";
 	};
@@ -261,6 +335,11 @@ hcrtos {
 		devpath = "/dev/virtuart";
 		status = "okay";
 	};
+
+    fileuart { // TODO: FileUart creates a file, bot does not log to it.
+        devpath = "/dev/fileuart";
+        status = "disabled";
+    };
 
 	stdio {
 		serial0 = "/hcrtos/uart@1";
@@ -279,13 +358,17 @@ hcrtos {
 		status = "okay";
 	};
 
-	i2so {
-		volume = <255>;
+	i2so { // Sound Output Device
+		volume = <90>; //Volume ranges from 0 - 100 in %. Using 90% to avoid clipping
 		status = "okay";
 	};
 
-	i2si {
-		volume = <255>;
+    pwm-dac { // Required for sound to work on this board, as DAC is only powered by PWM on this board.
+        status = "okay";
+    };
+
+    i2si { // Sound Input device
+		volume = <90>; //Volume ranges from 0 - 100 in %. Using 90% to avoid clipping
 		status = "disabled";
 	};
 
@@ -391,14 +474,14 @@ hcrtos {
 
 	fb0 {
 		bits_per_pixel = <32>;
-		xres = <1280>;
-		yres = <720>;
-		xres_virtual = <1280>;
-		yres_virtual = <720>;
+		xres = <320>;
+		yres = <240>;
+		xres_virtual = <320>;
+		yres_virtual = <240>;
 		xoffset = <0>;
 		yoffset = <0>;
 
-		scale = <1280 720 1920 1080>;
+		scale = <320 240 320 240>;
 
 		reg = <CONFIG_FB0_REG 0x1000>;
 		/*
@@ -490,8 +573,8 @@ hcrtos {
 			* 0: MODE_PRGB_888_10bit 
 			* 1: MODE_PRGB_666
 			*/
-			prgb-mode = <0>; 
-			lcd-width = <800>;
+			prgb-mode = <0>;
+			lcd-width = <320>;
 			b-disable-ejtag = <1>;
 			b-dlpc-enale = <0>;
 			timing-para {
@@ -513,21 +596,21 @@ hcrtos {
 				* VPO_RGB_CLOCK_54M = 13,//H1600
 				* VPO_RGB_CLOCK_132M = 14,//H1600
 				*/
-				output-clock = <1>;
+				output-clock = <8>;
 
-				h-total-len = <1026>;
-				v-total-len = <525>;
+				h-total-len = <320>;
+				v-total-len = <240>;
 
-				h-active-len = <800>;
-				v-active-len = <480>;
+				h-active-len = <320>;
+				v-active-len = <240>;
 
-				h-front-len = <210>;
-				h-sync-len = <6>;
-				h-back-len = <10>;
+				h-front-len = <0>;
+				h-sync-len = <0>;
+				h-back-len = <0>;
 
-				v-front-len = <22>;
-				v-sync-len = <3>;
-				v-back-len = <20>;
+				v-front-len = <0>;
+				v-sync-len = <0>;
+				v-back-len = <0>;
 				/* bool type, 0 or 1*/
 				h-sync-level = <0>;
 				/* bool type, 0 or 1*/

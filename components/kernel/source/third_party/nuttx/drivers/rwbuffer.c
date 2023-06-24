@@ -844,7 +844,7 @@ int rwb_initialize(FAR struct rwbuffer_s *rwb)
           return -ENOMEM;
         }
 
-      finfo("Write buffer size: %d bytes\n", allocsize);
+      finfo("Write buffer size: %ld bytes\n", allocsize);
     }
 #endif /* CONFIG_DRVR_WRITEBUFFER */
 
