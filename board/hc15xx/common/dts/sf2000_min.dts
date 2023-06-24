@@ -473,7 +473,7 @@ hcrtos {
 #endif
 
 	fb0 {
-		bits_per_pixel = <32>;
+		bits_per_pixel = <16>;
 		xres = <320>;
 		yres = <240>;
 		xres_virtual = <320>;
@@ -563,7 +563,7 @@ hcrtos {
 &DE {
 	VPInitInfo {
 		rgb-cfg{
-			b-rgb-enable = <1>;
+			b-rgb-enable = <0>;
 			/*
 			* 0: MODE_PRGB
 			* 1: MODE_SRGB
