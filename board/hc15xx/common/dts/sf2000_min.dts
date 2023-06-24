@@ -336,9 +336,9 @@ hcrtos {
 		status = "okay";
 	};
 
-    fileuart {
+    fileuart { // TODO: FileUart creates a file, bot does not log to it.
         devpath = "/dev/fileuart";
-        status = "okay";
+        status = "disabled";
     };
 
 	stdio {
@@ -358,17 +358,17 @@ hcrtos {
 		status = "okay";
 	};
 
-	i2so {
-		volume = <90>;
+	i2so { // Sound Output Device
+		volume = <90>; //Volume ranges from 0 - 100 in %. Using 90% to avoid clipping
 		status = "okay";
 	};
 
-    pwm-dac {
+    pwm-dac { // Required for sound to work on this board, as DAC is only powered by PWM on this board.
         status = "okay";
     };
 
-    i2si {
-		volume = <90>;
+    i2si { // Sound Input device
+		volume = <90>; //Volume ranges from 0 - 100 in %. Using 90% to avoid clipping
 		status = "disabled";
 	};
 
