@@ -31,6 +31,7 @@
 //#define GPIO_HARDCODED
 //#defien PINMUX_HARDCODED
 #define GPIO_FAST_WRITE
+//#define X60_INIT
 
 
 /*
@@ -239,6 +240,8 @@ static void vsync_irq(uint32_t param) {
     st7789v2_write_data(0x00);
     st7789v2_write_data(0xEF);
     st7789v2_write_command( 0x2C); //memory write
+    //*(volatile unsigned *)0xb8808084 &= 0xfffffeff;
+    //*(volatile unsigned *)0xb8808000 = *(volatile unsigned *)0xb8808000 & 0xffffff00 | 0x15;
     lcd_pinmux_rgb(1);
 }
 
@@ -253,6 +256,10 @@ static int st7789v2_display_init(void)
     gpio_configure(st7789v2dev.lcd_vsync_num, GPIO_DIR_INPUT | GPIO_IRQ_RISING);
 #endif
     lcd_configure_gpio_output();
+    lcd_gpio_set_output(st7789v2dev.lcd_cs_num,1);
+    lcd_gpio_set_output(st7789v2dev.lcd_rs_num,1);
+    lcd_gpio_set_output(st7789v2dev.lcd_wr_num,1);
+    lcd_gpio_set_output(st7789v2dev.lcd_rd_num,1);
 
 	printf("%s %d\n", __FUNCTION__,__LINE__);
 
@@ -265,7 +272,83 @@ static int st7789v2_display_init(void)
 
 	st7789v2_write_command( 0x11);// sleep out
 	msleep(120);
+#ifdef X60_INIT
+	st7789v2_write_command(0xcf);
+	st7789v2_write_data(0);
+	st7789v2_write_data(0xa1);
 
+	st7789v2_write_command(0xb1);
+	st7789v2_write_data(0);
+	st7789v2_write_data(0x1e);
+
+	st7789v2_write_command(0xb4);
+	st7789v2_write_data(2);
+
+	st7789v2_write_command(0xb6);
+	st7789v2_write_data(2);
+
+	st7789v2_write_command(0xc0);
+	st7789v2_write_data(0x0f);
+	st7789v2_write_data(0x0d);
+
+	st7789v2_write_command(0xc1);
+	st7789v2_write_data(0);
+
+	st7789v2_write_command(0xc5);
+	st7789v2_write_data(0xe7);
+
+	st7789v2_write_command(0xe0);
+	st7789v2_write_data(0x05);
+	st7789v2_write_data(0x08);
+	st7789v2_write_data(0x0d);
+	st7789v2_write_data(0x07);
+	st7789v2_write_data(0x10);
+	st7789v2_write_data(0x08);
+	st7789v2_write_data(0x33);
+	st7789v2_write_data(0x35);
+	st7789v2_write_data(0x45);
+	st7789v2_write_data(0x04);
+	st7789v2_write_data(0x0b);
+	st7789v2_write_data(0x08);
+	st7789v2_write_data(0x1a);
+	st7789v2_write_data(0x1d);
+	st7789v2_write_data(0x0f);
+
+	st7789v2_write_command(0xe1);
+	st7789v2_write_data(0x06);
+	st7789v2_write_data(0x23);
+	st7789v2_write_data(0x26);
+	st7789v2_write_data(0x00);
+	st7789v2_write_data(0x0c);
+	st7789v2_write_data(0x01);
+	st7789v2_write_data(0x39);
+	st7789v2_write_data(0x02);
+	st7789v2_write_data(0x4a);
+	st7789v2_write_data(0x02);
+	st7789v2_write_data(0x0c);
+	st7789v2_write_data(0x07);
+	st7789v2_write_data(0x31);
+	st7789v2_write_data(0x36);
+	st7789v2_write_data(0x0f);
+
+	st7789v2_write_command(0x3a);
+	st7789v2_write_data(0x55);
+
+	st7789v2_write_command(0x36);
+	st7789v2_write_data(0xa8);
+
+	st7789v2_write_command(0x2a);
+	st7789v2_write_data(0);
+	st7789v2_write_data(0);
+	st7789v2_write_data(0x01);
+	st7789v2_write_data(0x3F);
+
+	st7789v2_write_command(0x2b);
+	st7789v2_write_data(0);
+	st7789v2_write_data(0);
+	st7789v2_write_data(0x00);
+	st7789v2_write_data(0xef);
+#else
 	st7789v2_write_command( 0x36); //memory data access controll (order setup)
 	st7789v2_write_data(0x60);
 
@@ -357,6 +440,7 @@ static int st7789v2_display_init(void)
 	st7789v2_write_data(0xEF);
 
 	st7789v2_write_command( 0x21); // display inversion on(21) off (20)
+#endif
 
 	st7789v2_write_command( 0x29); // display on
 
@@ -516,7 +600,7 @@ static void lcd_reset(void)
 	if(st7789v2dev.lcd_reset_num!=PINPAD_INVALID)
 	{
         gpio_set_rs(1);
-        gpio_set_wr(0);
+        gpio_set_wr(1);
 		lcd_gpio_set_output(st7789v2dev.lcd_reset_num,1);
 		usleep(500*1000);
 		lcd_gpio_set_output(st7789v2dev.lcd_reset_num,0);
