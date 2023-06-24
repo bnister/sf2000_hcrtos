@@ -378,7 +378,6 @@ static int st7789v2_display_init(void)
     }
 
     usleep(5 * 1000 * 1000); // 5 seconds delay;
-#endif
 
     printf("%s %d\n", __FUNCTION__,__LINE__);
 
