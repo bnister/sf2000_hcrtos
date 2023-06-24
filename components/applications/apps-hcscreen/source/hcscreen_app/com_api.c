@@ -292,8 +292,6 @@ int api_logo_show(const char *file)
     //     player_args.rotate_type = ROTATE_TYPE_270; //90
     // player_args.rotate_enable = 1;
 
-    player_args.play_attached_file = 1;
-
     m_logo_player = hcplayer_create(&player_args);
     if (!m_logo_player)
     {
