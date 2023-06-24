@@ -137,7 +137,7 @@ static int st7789v2_rorate(lcd_rotate_type_e dir)
 	return 0;
 }
 
-#if PINMUX_HARDCODED
+#ifdef PINMUX_HARDCODED
 // Extracted from original firmware
 void lcd_pinmux_rgb(bool pinmux_rgb) {
     if (pinmux_rgb) {
@@ -176,7 +176,7 @@ void lcd_pinmux_rgb(bool pinmux_rgb) {
 }
 #endif
 
-#if GPIO_HARDCODED
+#ifdef GPIO_HARDCODED
 static void lcd_configure_gpio_output(void) {
     gpio_configure(PINPAD_L10,GPIO_DIR_OUTPUT);
     gpio_configure(PINPAD_T01,GPIO_DIR_OUTPUT);
@@ -247,7 +247,7 @@ static int st7789v2_display_init(void)
     lcd_pinmux_rgb(0);
     printf("%s %d\n", __FUNCTION__,__LINE__);
 
-#if GPIO_HARDCODED
+#ifdef GPIO_HARDCODED
     gpio_configure(PINPAD_L08,GPIO_DIR_INPUT | GPIO_IRQ_RISING);
 #else
     gpio_configure(st7789v2dev.lcd_vsync_num, GPIO_DIR_INPUT | GPIO_IRQ_RISING);
@@ -407,7 +407,7 @@ static void gpio_set_wr(bool state)
     lcd_gpio_set_output(st7789v2dev.lcd_wr_num,state);
 }
 
-#if GPIO_FAST_WRITE
+#ifdef GPIO_FAST_WRITE
 static void* LREG = (void*)&GPIOLCTRL + OUTPUT_VAL_REG;
 static void* TREG = (void*)&GPIOTCTRL + OUTPUT_VAL_REG;
 
@@ -478,7 +478,7 @@ static void lcd_gpio_spi_config_write(unsigned char RS, unsigned short cmd)
     gpio_set_rs(RS);
     gpio_set_cs(0);
 
-#if GPIO_FAST_WRITE
+#ifdef GPIO_FAST_WRITE
     lcd_write_data(cmd);
 #else
     int i = 0;
@@ -598,7 +598,7 @@ static int st7789v2_probe(const char *node)
     printf("%s %d\n", __FUNCTION__,__LINE__);
 	st7789v2_display_init();
     printf("%s %d\n", __FUNCTION__,__LINE__);
-    
+
 	lcd_map_register(&st7789v2_map);
     printf("%s %d\n", __FUNCTION__,__LINE__);
 error:
