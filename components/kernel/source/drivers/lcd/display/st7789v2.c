@@ -447,9 +447,9 @@ static int st7789v2_display_init(void)
 	st7789v2_write_command( 0x2C); //Memory Write
 
     //TestImage
-    for(int x = 0; x < 320;x++)
+    for(int y = 0; y < 240;y++)
     {
-        for(int y = 0; x < 240;x++)
+        for(int x = 0; x < 320;x++)
         {
             int r = x;
             int g = y;

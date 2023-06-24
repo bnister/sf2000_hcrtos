@@ -563,7 +563,7 @@ hcrtos {
 &DE {
 	VPInitInfo {
 		rgb-cfg{
-			b-rgb-enable = <0>;
+			b-rgb-enable = <1>;
 			/*
 			* 0: MODE_PRGB
 			* 1: MODE_SRGB
@@ -573,7 +573,7 @@ hcrtos {
 			* 0: MODE_PRGB_888_10bit 
 			* 1: MODE_PRGB_666
 			*/
-			prgb-mode = <0>;
+			prgb-mode = <1>;
 			lcd-width = <320>;
 			b-disable-ejtag = <1>;
 			b-dlpc-enale = <0>;
@@ -599,7 +599,7 @@ hcrtos {
 				output-clock = <8>;
 
 				h-total-len = <320>;
-				v-total-len = <240>;
+				v-total-len = <250>;
 
 				h-active-len = <320>;
 				v-active-len = <240>;
@@ -609,12 +609,12 @@ hcrtos {
 				h-back-len = <0>;
 
 				v-front-len = <0>;
-				v-sync-len = <0>;
+				v-sync-len = <10>;
 				v-back-len = <0>;
 				/* bool type, 0 or 1*/
 				h-sync-level = <0>;
 				/* bool type, 0 or 1*/
-				v-sync-level = <0>;
+				v-sync-level = <1>;
 				frame-rate = <50000>;
 			};
 		};
