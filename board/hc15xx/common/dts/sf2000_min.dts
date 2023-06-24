@@ -242,6 +242,8 @@ hcrtos {
 	};
 
 	lcd-st7789v2 {
+        device_type = "hichip,hcrtos-setup-setbit";
+        reg_bit = <0xb8800094 16 1>;
 		lcd_cs = <PINPAD_L10>;
 		lcd_rs = <PINPAD_T01>;
 		lcd_wr = <PINPAD_L07>;
