@@ -193,9 +193,10 @@ hcrtos {
 		 * TV_LINE_3840X2160_30 = 24,
 		*/
 
-		tvtype = <1>;
+		tvtype = <15>;
 		cvbs-output = <CONFIG_CVBS_OUTPUT_SUPPORT>;
 		vga-output = <CONFIG_VGA_OUTPUT_SUPPORT>;
+		bt1220-output = <0>;
 		status = "okay";
 	};
 
@@ -573,7 +574,7 @@ hcrtos {
 			* 0: MODE_PRGB_888_10bit 
 			* 1: MODE_PRGB_666
 			*/
-			prgb-mode = <1>;
+			prgb-mode = <0>;
 			lcd-width = <320>;
 			b-disable-ejtag = <1>;
 			b-dlpc-enale = <0>;
@@ -598,24 +599,27 @@ hcrtos {
 				*/
 				output-clock = <8>;
 
-				h-total-len = <320>;
-				v-total-len = <250>;
+				h-total-len = <444>;
+				v-total-len = <304>;
 
 				h-active-len = <320>;
 				v-active-len = <240>;
 
-				h-front-len = <0>;
-				h-sync-len = <0>;
-				h-back-len = <0>;
+				h-front-len = <23>;
+				h-sync-len = <2>;
+				h-back-len = <5>;
 
-				v-front-len = <0>;
-				v-sync-len = <10>;
-				v-back-len = <0>;
+				v-front-len = <18>;
+				v-sync-len = <36>;
+				v-back-len = <10>;
 				/* bool type, 0 or 1*/
 				h-sync-level = <0>;
 				/* bool type, 0 or 1*/
-				v-sync-level = <1>;
-				frame-rate = <50000>;
+				v-sync-level = <0>;
+
+				/* bool type, 0 or 1*/
+				active-polarity = <0>;
+				frame-rate = <60000>;
 			};
 		};
 	};
