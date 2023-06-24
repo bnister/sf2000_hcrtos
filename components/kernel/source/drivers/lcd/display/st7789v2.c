@@ -184,12 +184,12 @@ static void lcd_configure_gpio_output(void) {
 static void vsync_irq(uint32_t param) {
     lcd_pinmux_rgb(0);
     lcd_configure_gpio_output();
-    st7789v2_write_command(0x2B);
+    st7789v2_write_command(0x2A);
     st7789v2_write_data(0x00);
     st7789v2_write_data(0x00);
     st7789v2_write_data(0x01);
     st7789v2_write_data(0x3F);
-    st7789v2_write_command(0x2A);
+    st7789v2_write_command(0x2B);
     st7789v2_write_data(0x00);
     st7789v2_write_data(0x00);
     st7789v2_write_data(0x00);
