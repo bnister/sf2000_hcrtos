@@ -367,8 +367,7 @@ static const uint8_t st7789v2_init_dy12[] = { // XG-3.2LCD134-24PIN TN+film
 	0
 };
 static const uint8_t st7789v2_init_sf2000[] = { // WL-28G105-A1 IPS
-	RGB_CLK_NORMAL,
-		1, SLPOUT, // sleep out
+	RGB_CLK_NORMAL, 1, SLPOUT, // sleep out
 	99, 2, MADCTL, 0x60, // memory data access control (order setup)
 	0, 2, COLMOD, 0x55, // 16 bit / 65k of rgb
 	0, 4, 0xb1, 0x40, 0x04, 0x14, // RGBCTRL RGB Interface Control
@@ -439,7 +438,7 @@ static int st7789v2_display_init(void)
 	msleep(120);
 
 	if (*pinit++ == RGB_CLK_SKEW) {
-		*(volatile unsigned *)0xb8800078 |= 0x8000; // SYS_CLK_CTR FIXME HAL
+		*(volatile unsigned *)0xb8800078 |= 1 << 15; // SYS_CLK_CTR FIXME HAL
 	}
 	while (pinit < pinit_end) {
 		count = *pinit++;
