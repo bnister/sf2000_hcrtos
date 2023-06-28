@@ -31,7 +31,7 @@
 //#define GPIO_HARDCODED
 //#defien PINMUX_HARDCODED
 #define GPIO_FAST_WRITE
-//#define X60_INIT
+#define INIT_SEQUENCE_INDEX INIT_SF2000 // TODO config file for a common binary
 
 
 /*
@@ -226,27 +226,195 @@ static void lcd_configure_gpio_output(void) {
     gpio_configure(st7789v2dev.lcd_reset_num, GPIO_DIR_OUTPUT);
 }
 #endif
+
+enum st7789v2_command { // some common ones
+	SLPOUT	= 0x11, // Sleep Out
+	NORON	= 0x13, // Normal Display Mode On
+
+	INVON	= 0x21, // Display Inversion On
+	DISPON	= 0x29, // Display On
+	CASET	= 0x2a, // Column Address Set
+	RASET	= 0x2b, // Row Address Set
+	RAMWR	= 0x2c, // Memory Write
+
+	TEON	= 0x35, // Tearing Effect Line On
+	MADCTL	= 0x36, // Memory Data Access Control
+	COLMOD	= 0x3a  // Interface Pixel Format
+};
+
+// TODO these should come from the device tree
+#define COLUMN_COUNT	320
+#define ROW_COUNT	240
+
 static void vsync_irq(uint32_t param) {
     lcd_pinmux_rgb(0);
     lcd_configure_gpio_output();
-    st7789v2_write_command(0x2A);
+    st7789v2_write_command(CASET);
     st7789v2_write_data(0x00);
     st7789v2_write_data(0x00);
-    st7789v2_write_data(0x01);
-    st7789v2_write_data(0x3F);
-    st7789v2_write_command(0x2B);
+    st7789v2_write_data((COLUMN_COUNT - 1) >> 8);
+    st7789v2_write_data((COLUMN_COUNT - 1) & 255);
+    st7789v2_write_command(RASET);
     st7789v2_write_data(0x00);
     st7789v2_write_data(0x00);
-    st7789v2_write_data(0x00);
-    st7789v2_write_data(0xEF);
-    st7789v2_write_command( 0x2C); //memory write
-    //*(volatile unsigned *)0xb8808084 &= 0xfffffeff;
-    //*(volatile unsigned *)0xb8808000 = *(volatile unsigned *)0xb8808000 & 0xffffff00 | 0x15;
+    st7789v2_write_data((ROW_COUNT - 1) >> 8);
+    st7789v2_write_data((ROW_COUNT - 1) & 255);
+    st7789v2_write_command(RAMWR);
     lcd_pinmux_rgb(1);
 }
 
+#define RGB_CLK_NORMAL	0
+#define RGB_CLK_SKEW	1
+
+// TODO Linux kernels 4+ prefer these in the device tree, too
+static const uint8_t st7789v2_init_x60_old[] = { // YSGD-32-134-24 TN+film
+	RGB_CLK_NORMAL, 1, SLPOUT,
+	99, 3, 0xcf, 0x00, 0xa1,
+	0, 3, 0xb1, 0x00, 0x1e,
+	0, 2, 0xb4, 0x02,
+	0, 2, 0xb6, 0x02,
+	0, 3, 0xc0, 0x0f, 0x0d,
+	0, 2, 0xc1, 0x00,
+	0, 2, 0xc5, 0xe7,
+	0, 16, 0xe0, 0x05, 0x08, 0x0d, 0x07, 0x10, 0x08, 0x33, 0x35,
+		0x45, 0x04, 0x0b, 0x08, 0x1a, 0x1d, 0x0f,
+	0, 16, 0xe1, 0x06, 0x23, 0x26, 0x00, 0x0c, 0x01, 0x39, 0x02,
+		0x4a, 0x02, 0x0c, 0x07, 0x31, 0x36, 0x0f,
+	0, 2, COLMOD, 0x55,
+	0, 2, MADCTL, 0xa8,
+	0
+};
+static const uint8_t st7789v2_init_x60_new[] = { // no FPC picture available
+	RGB_CLK_SKEW, 3, 0xf0, 0x5a, 0x5a,
+	0, 6, 0xf3, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0, 1, SLPOUT,
+	16, 1, NORON,
+	128, 12, 0xf4, 0x07, 0x00, 0x00, 0x00, 0x21, 0x47, 0x01, 0x02,
+		0x2a, 0x66, 0x05,
+	0, 11, 0xf5, 0x00, 0x4d, 0x66, 0x00, 0x00, 0x12, 0x00, 0x00, 0x0d, 0x01,
+	0, 2, TEON, 0x00,
+	0, 2, MADCTL, 0x88,
+	0, 2, COLMOD, 0x55,
+	0, 6, 0xf3, 0x00, 0x03, 0x00, 0x00, 0x00,
+	16, 4, 0xf3, 0x00, 0x0f, 0x01,
+	16, 3, 0xf3, 0x00, 0x1f,
+	16, 3, 0xf3, 0x00, 0x3f,
+	16, 4, 0xf3, 0x00, 0x3f, 0x03,
+	48, 3, 0xf3, 0x00, 0x7f,
+	48, 3, 0xf3, 0x00, 0xff,
+	32, 6, 0xf3, 0x00, 0xff, 0x1f, 0x00, 0x02,
+	0, 12, 0xf4, 0x07, 0x00, 0x00, 0x00, 0x21, 0x47, 0x04, 0x02,
+		0x2a, 0x66, 0x05,
+	16, 2, 0xf3, 0x01,
+	0, 18, 0xf2, 0x28, 0x65, 0x7f, 0x08, 0x08, 0x00, 0x00, 0x15,
+		0x48, 0x00, 0x07, 0x01, 0x00, 0x00, 0x94, 0x08, 0x08,
+	0, 2, TEON, 0x00,
+	0, 2, MADCTL, 0xe8,
+	0, 2, COLMOD, 0x55,
+	0, 1, NORON,
+	0, 3, 0xf0, 0xa5, 0xa5,
+	0
+};
+static const uint8_t st7789v2_init_q19[] = { // XG-3.2LCD134-24PIN TN+film
+	RGB_CLK_SKEW, 3, 0xf0, 0x5a, 0x5a,
+	0, 6, 0xf3, 0x00, 0x00, 0x00, 0x00, 0x00,
+	0, 1, SLPOUT,
+	16, 1, NORON,
+	128, 12, 0xf4, 0x07, 0x00, 0x00, 0x00, 0x21, 0x47, 0x01, 0x02,
+		0x2a, 0x66, 0x05,
+	0, 11, 0xf5, 0x00, 0x4d, 0x66, 0x00, 0x00, 0x12, 0x00, 0x00, 0x0d, 0x01,
+	0, 2, TEON, 0x00,
+	0, 2, MADCTL, 0x88,
+	0, 2, COLMOD, 0x55,
+	0, 6, 0xf3, 0x00, 0x03, 0x00, 0x00, 0x00,
+	16, 4, 0xf3, 0x00, 0x0f, 0x01,
+	16, 3, 0xf3, 0x00, 0x1f,
+	16, 3, 0xf3, 0x00, 0x3f,
+	16, 4, 0xf3, 0x00, 0x3f, 0x03,
+	48, 3, 0xf3, 0x00, 0x7f,
+	48, 3, 0xf3, 0x00, 0xff,
+	32, 6, 0xf3, 0x00, 0xff, 0x1f, 0x00, 0x02,
+	0, 12, 0xf4, 0x07, 0x00, 0x00, 0x00, 0x21, 0x47, 0x04, 0x02,
+		0x2a, 0x66, 0x05,
+	16, 2, 0xf3, 0x01,
+	0, 18, 0xf2, 0x28, 0x65, 0x7f, 0x08, 0x08, 0x00, 0x00, 0x15,
+		0x48, 0x00, 0x07, 0x01, 0x00, 0x00, 0x94, 0x08, 0x08,
+	0, 2, TEON, 0x00,
+	0, 2, MADCTL, 0x28,
+	0, 2, COLMOD, 0x55,
+	0, 1, NORON,
+	0, 3, 0xf0, 0xa5, 0xa5,
+	0
+};
+static const uint8_t st7789v2_init_dy12[] = { // XG-3.2LCD134-24PIN TN+film
+	RGB_CLK_SKEW, 4, 0xb9, 0xff, 0x83, 0x47,
+	0, 1, SLPOUT,
+	99, 2, 0xcc, 0x08,
+	0, 5, 0xb3, 0x00, 0x00, 0x08, 0x04,
+	0, 2, MADCTL, 0x68,
+	0, 2, COLMOD, 0x55,
+	0, 4, 0xb6, 0x88, 0x2f, 0x57,
+	0, 2, 0xb0, 0x3b,
+	5, 8, 0xb1, 0x00, 0x01, 0x31, 0x03, 0x44, 0x44, 0xd4,
+	0, 8, 0xb4, 0x11, 0x8f, 0x00, 0x04, 0x04, 0x1d, 0x88,
+	0, 5, 0xe3, 0x10, 0x10, 0x10, 0x10,
+	0, 9, 0xbf, 0x00, 0x00, 0xc0, 0x70, 0x38, 0x3c, 0xc7, 0x00,
+	0, 4, 0xb6, 0x8a, 0x67, 0x57,
+	0, 28, 0xe0, 0x01, 0x07, 0x07, 0x1f, 0x1c, 0x3e, 0x1b, 0x6b,
+		0x07, 0x13, 0x19, 0x19, 0x16, 0x01, 0x23, 0x20,
+		0x38, 0x38, 0x3e, 0x14, 0x64, 0x09, 0x06, 0x06,
+		0x0c, 0x18, 0xcc,
+	0
+};
+static const uint8_t st7789v2_init_sf2000[] = { // WL-28G105-A1 IPS
+	RGB_CLK_NORMAL,
+		1, SLPOUT, // sleep out
+	99, 2, MADCTL, 0x60, // memory data access control (order setup)
+	0, 2, COLMOD, 0x55, // 16 bit / 65k of rgb
+	0, 4, 0xb1, 0x40, 0x04, 0x14, // RGBCTRL RGB Interface Control
+	0, 6, 0xb2, 0x0c, 0x0c, 0x00, 0x33, 0x33, // PORCTRL Porch Setting
+	0, 2, 0xb7, 0x71, // GCTRL Gate Control
+	0, 2, 0xbb, 0x3b, // VCOMS Setting
+	0, 2, 0xc0, 0x2c, // LCMCTRL LCM Control
+	0, 2, 0xc2, 0x01, // VDVVRHEN VDV and VRH Command Enable
+	0, 2, 0xc3, 0x13, // VRHS VRH Set: 4.5V
+	0, 2, 0xc4, 0x20, // VDVS VDV Set
+	0, 2, 0xc6, 0x0f, // FRCTRL2 Frame Rate Control in Normal Mode: 60Hz
+	0, 3, 0xd0, 0xa4, 0xa1, // PWCTRL1 Power Control 1
+	0, 2, 0xd6, 0xa1, // unknown command
+	0, 15, 0xe0, 0xd0, 0x06, 0x06, 0x0e, 0x0d, 0x06, 0x2f, 0x3a,
+		0x47, 0x08, 0x15, 0x14, 0x2c, 0x33, // PVGAMCTRL Positive Voltage Gamma Control
+	0, 15, 0xe1, 0xd0, 0x06, 0x06, 0x0e, 0x0d, 0x06, 0x2f, 0x3b,
+		0x47, 0x08, 0x15, 0x14, 0x2c, 0x33, // NVGAMCTRL Negative Voltage Gamma Control
+	0, 1, INVON, // display inversion on (21) off (20)
+	0
+};
+
+#define INIT_START_END(init) { init, init + sizeof init }
+static struct {
+	const uint8_t * const start;
+	const uint8_t * const end;
+} st7789v2_inits[] = {
+	INIT_START_END(st7789v2_init_x60_old),
+	INIT_START_END(st7789v2_init_x60_new),
+	INIT_START_END(st7789v2_init_q19),
+	INIT_START_END(st7789v2_init_dy12),
+	INIT_START_END(st7789v2_init_sf2000)
+};
+enum st7789v2_init_index {
+	INIT_X60_OLD,
+	INIT_X60_NEW,
+	INIT_Q19,
+	INIT_DY12,
+	INIT_SF2000
+};
+
 static int st7789v2_display_init(void)
 {
+	const uint8_t *pinit = st7789v2_inits[INIT_SEQUENCE_INDEX].start,
+		* const pinit_end = st7789v2_inits[INIT_SEQUENCE_INDEX].end;
+	unsigned ms, count;
+
     lcd_pinmux_rgb(0);
     printf("%s %d\n", __FUNCTION__,__LINE__);
 
@@ -270,190 +438,41 @@ static int st7789v2_display_init(void)
 
 	msleep(120);
 
-	st7789v2_write_command( 0x11);// sleep out
-	msleep(120);
-#ifdef X60_INIT
-	st7789v2_write_command(0xcf);
-	st7789v2_write_data(0);
-	st7789v2_write_data(0xa1);
+	if (*pinit++ == RGB_CLK_SKEW) {
+		*(volatile unsigned *)0xb8800078 |= 0x8000; // SYS_CLK_CTR FIXME HAL
+	}
+	while (pinit < pinit_end) {
+		count = *pinit++;
+		st7789v2_write_command(*pinit++);
+		while (--count) st7789v2_write_data(*pinit++);
+		ms = *pinit++;
+		if (ms) msleep(ms);
+	}
 
-	st7789v2_write_command(0xb1);
-	st7789v2_write_data(0);
-	st7789v2_write_data(0x1e);
-
-	st7789v2_write_command(0xb4);
-	st7789v2_write_data(2);
-
-	st7789v2_write_command(0xb6);
-	st7789v2_write_data(2);
-
-	st7789v2_write_command(0xc0);
-	st7789v2_write_data(0x0f);
-	st7789v2_write_data(0x0d);
-
-	st7789v2_write_command(0xc1);
-	st7789v2_write_data(0);
-
-	st7789v2_write_command(0xc5);
-	st7789v2_write_data(0xe7);
-
-	st7789v2_write_command(0xe0);
-	st7789v2_write_data(0x05);
-	st7789v2_write_data(0x08);
-	st7789v2_write_data(0x0d);
-	st7789v2_write_data(0x07);
-	st7789v2_write_data(0x10);
-	st7789v2_write_data(0x08);
-	st7789v2_write_data(0x33);
-	st7789v2_write_data(0x35);
-	st7789v2_write_data(0x45);
-	st7789v2_write_data(0x04);
-	st7789v2_write_data(0x0b);
-	st7789v2_write_data(0x08);
-	st7789v2_write_data(0x1a);
-	st7789v2_write_data(0x1d);
-	st7789v2_write_data(0x0f);
-
-	st7789v2_write_command(0xe1);
-	st7789v2_write_data(0x06);
-	st7789v2_write_data(0x23);
-	st7789v2_write_data(0x26);
-	st7789v2_write_data(0x00);
-	st7789v2_write_data(0x0c);
-	st7789v2_write_data(0x01);
-	st7789v2_write_data(0x39);
-	st7789v2_write_data(0x02);
-	st7789v2_write_data(0x4a);
-	st7789v2_write_data(0x02);
-	st7789v2_write_data(0x0c);
-	st7789v2_write_data(0x07);
-	st7789v2_write_data(0x31);
-	st7789v2_write_data(0x36);
-	st7789v2_write_data(0x0f);
-
-	st7789v2_write_command(0x3a);
-	st7789v2_write_data(0x55);
-
-	st7789v2_write_command(0x36);
-	st7789v2_write_data(0xa8);
-
-	st7789v2_write_command(0x2a);
-	st7789v2_write_data(0);
-	st7789v2_write_data(0);
-	st7789v2_write_data(0x01);
-	st7789v2_write_data(0x3F);
-
-	st7789v2_write_command(0x2b);
-	st7789v2_write_data(0);
-	st7789v2_write_data(0);
-	st7789v2_write_data(0x00);
-	st7789v2_write_data(0xef);
-#else
-	st7789v2_write_command( 0x36); //memory data access controll (order setup)
-	st7789v2_write_data(0x60);
-
-	st7789v2_write_command( 0x3A);
-	st7789v2_write_data(0x55); // 16 bit / 65k of rgb
-
-	st7789v2_write_command(0xB1); // RGB Control
-	st7789v2_write_data(0x40);
-	st7789v2_write_data(0x04);
-	st7789v2_write_data(0x14);
-
-	st7789v2_write_command( 0xB2);  //PORCTRL
-	st7789v2_write_data(0x0C);
-	st7789v2_write_data(0x0C);
-	st7789v2_write_data(0x00);
-	st7789v2_write_data(0x33);
-	st7789v2_write_data(0x33);
-
-	st7789v2_write_command( 0xB7); // Gate Controll
-	st7789v2_write_data(0x71);
-
-	st7789v2_write_command( 0xBB); //vcom setting
-	st7789v2_write_data(0x3B);
-
-	st7789v2_write_command( 0xC0); //lcom setting
-	st7789v2_write_data(0x2C);
-
-	st7789v2_write_command( 0xC2);  //vdv and vrh command enable
-	st7789v2_write_data(0x01);
-
-	st7789v2_write_command( 0xC3); //vrh set
-	st7789v2_write_data(0x13);//4.5V
-
-	st7789v2_write_command( 0xC4); //vdv set
-	st7789v2_write_data(0x20);
-
-	st7789v2_write_command( 0xC6); //framerate control
-	st7789v2_write_data(0x0F); //60hz
-
-	st7789v2_write_command( 0xD0); // Power controll
-	st7789v2_write_data(0xA4);
-	st7789v2_write_data(0xA1);
-
-	st7789v2_write_command( 0xD6); // unknown command
-	st7789v2_write_data(0xA1);
-
-	st7789v2_write_command( 0xE0); // positive voltage gama controll
-	st7789v2_write_data(0xD0);
-	st7789v2_write_data(0x06);
-	st7789v2_write_data(0x06);
-	st7789v2_write_data(0x0E);
-	st7789v2_write_data(0x0D);
-	st7789v2_write_data(0x06);
-	st7789v2_write_data(0x2F);
-	st7789v2_write_data(0x3A);
-	st7789v2_write_data(0x47);
-	st7789v2_write_data(0x08);
-	st7789v2_write_data(0x15);
-	st7789v2_write_data(0x14);
-	st7789v2_write_data(0x2C);
-	st7789v2_write_data(0x33);
-
-	st7789v2_write_command( 0xE1); // negative voltage gama control
-	st7789v2_write_data(0xD0);
-	st7789v2_write_data(0x06);
-	st7789v2_write_data(0x06);
-	st7789v2_write_data(0x0E);
-	st7789v2_write_data(0x0D);
-	st7789v2_write_data(0x06);
-	st7789v2_write_data(0x2F);
-	st7789v2_write_data(0x3B);
-	st7789v2_write_data(0x47);
-	st7789v2_write_data(0x08);
-	st7789v2_write_data(0x15);
-	st7789v2_write_data(0x14);
-	st7789v2_write_data(0x2C);
-	st7789v2_write_data(0x33);
-
-	st7789v2_write_command(0x2A); //CASET Colum adress Set
+	st7789v2_write_command(CASET);
 	st7789v2_write_data(0x00);
 	st7789v2_write_data(0x00);
-	st7789v2_write_data(0x01);
-	st7789v2_write_data(0x3F);
+	st7789v2_write_data((COLUMN_COUNT - 1) >> 8);
+	st7789v2_write_data((COLUMN_COUNT - 1) & 255);
 
-	st7789v2_write_command(0x2B); //RASET // Row adress Set
+	st7789v2_write_command(RASET);
 	st7789v2_write_data(0x00);
 	st7789v2_write_data(0x00);
-	st7789v2_write_data(0x00);
-	st7789v2_write_data(0xEF);
+	st7789v2_write_data((ROW_COUNT - 1) >> 8);
+	st7789v2_write_data((ROW_COUNT - 1) & 255);
 
-	st7789v2_write_command( 0x21); // display inversion on(21) off (20)
-#endif
+	st7789v2_write_command(DISPON);
 
-	st7789v2_write_command( 0x29); // display on
-
-	st7789v2_write_command( 0x2C); //Memory Write
+	st7789v2_write_command(RAMWR);
 
     //TestImage
-    for(int y = 0; y < 240;y++)
+    for(int y = 0; y < ROW_COUNT; y++)
     {
-        for(int x = 0; x < 320;x++)
+        for(int x = 0; x < COLUMN_COUNT; x++)
         {
             int r = x;
             int g = y;
-            int b = 320-x;
+            int b = COLUMN_COUNT - x;
             int data = ((r&0b11111000) << 8)
                     | ((g&0b11111100) << 3)
                     | ((b&0b11111000) >> 3);
