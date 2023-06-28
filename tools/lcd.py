@@ -38,7 +38,7 @@ pd -= 0x80000000 # image base
 
 ms = 0 # RGB_CLK_NORMAL
 if (
-	b'\x78\x00\x03\x36' # ori   v1, s0, 0x78 # 0xb8800094, SYS_CLK_CTR
+	b'\x78\x00\x03\x36' # ori   v1, s0, 0x78 # 0xb8800078, SYS_CLK_CTR
 	b'\x00\x00\x62\x8c' # lw    v0, 0(v1)
 	b'\x00\x80\x42\x34' # ori   v0, 0x8000 # RGB clock skew/invert?
 	b'\x00\x00\x62\xac' # sw    v0, 0(v1)
