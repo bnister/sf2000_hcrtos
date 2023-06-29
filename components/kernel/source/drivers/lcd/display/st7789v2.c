@@ -246,25 +246,31 @@ enum st7789v2_command { // some common ones
 #define COLUMN_COUNT	320
 #define ROW_COUNT	240
 
+static void st7789v2_restart_frame(void) {
+	st7789v2_write_command(CASET);
+	st7789v2_write_data(0);
+	st7789v2_write_data(0);
+	st7789v2_write_data((COLUMN_COUNT - 1) >> 8);
+	st7789v2_write_data((COLUMN_COUNT - 1) & 255);
+
+	st7789v2_write_command(RASET);
+	st7789v2_write_data(0);
+	st7789v2_write_data(0);
+	st7789v2_write_data((ROW_COUNT - 1) >> 8);
+	st7789v2_write_data((ROW_COUNT - 1) & 255);
+
+	st7789v2_write_command(RAMWR);
+}
+
 static void vsync_irq(uint32_t param) {
     lcd_pinmux_rgb(0);
     lcd_configure_gpio_output();
-    st7789v2_write_command(CASET);
-    st7789v2_write_data(0x00);
-    st7789v2_write_data(0x00);
-    st7789v2_write_data((COLUMN_COUNT - 1) >> 8);
-    st7789v2_write_data((COLUMN_COUNT - 1) & 255);
-    st7789v2_write_command(RASET);
-    st7789v2_write_data(0x00);
-    st7789v2_write_data(0x00);
-    st7789v2_write_data((ROW_COUNT - 1) >> 8);
-    st7789v2_write_data((ROW_COUNT - 1) & 255);
-    st7789v2_write_command(RAMWR);
+    st7789v2_restart_frame();
     lcd_pinmux_rgb(1);
 }
 
 #define RGB_CLK_NORMAL	0
-#define RGB_CLK_SKEW	1
+#define RGB_CLK_SKEWED	1
 
 // TODO Linux kernels 4+ prefer these in the device tree, too
 static const uint8_t st7789v2_init_x60_old[] = { // YSGD-32-134-24 TN+film
@@ -285,7 +291,7 @@ static const uint8_t st7789v2_init_x60_old[] = { // YSGD-32-134-24 TN+film
 	0
 };
 static const uint8_t st7789v2_init_x60_new[] = { // no FPC picture available
-	RGB_CLK_SKEW, 3, 0xf0, 0x5a, 0x5a,
+	RGB_CLK_SKEWED, 3, 0xf0, 0x5a, 0x5a,
 	0, 6, 0xf3, 0x00, 0x00, 0x00, 0x00, 0x00,
 	0, 1, SLPOUT,
 	16, 1, NORON,
@@ -316,7 +322,7 @@ static const uint8_t st7789v2_init_x60_new[] = { // no FPC picture available
 	0
 };
 static const uint8_t st7789v2_init_q19[] = { // XG-3.2LCD134-24PIN TN+film
-	RGB_CLK_SKEW, 3, 0xf0, 0x5a, 0x5a,
+	RGB_CLK_SKEWED, 3, 0xf0, 0x5a, 0x5a,
 	0, 6, 0xf3, 0x00, 0x00, 0x00, 0x00, 0x00,
 	0, 1, SLPOUT,
 	16, 1, NORON,
@@ -347,7 +353,7 @@ static const uint8_t st7789v2_init_q19[] = { // XG-3.2LCD134-24PIN TN+film
 	0
 };
 static const uint8_t st7789v2_init_dy12[] = { // XG-3.2LCD134-24PIN TN+film
-	RGB_CLK_SKEW, 4, 0xb9, 0xff, 0x83, 0x47,
+	RGB_CLK_SKEWED, 4, 0xb9, 0xff, 0x83, 0x47,
 	0, 1, SLPOUT,
 	99, 2, 0xcc, 0x08,
 	0, 5, 0xb3, 0x00, 0x00, 0x08, 0x04,
@@ -437,7 +443,7 @@ static int st7789v2_display_init(void)
 
 	msleep(120);
 
-	if (*pinit++ == RGB_CLK_SKEW) {
+	if (*pinit++ == RGB_CLK_SKEWED) {
 		*(volatile unsigned *)0xb8800078 |= 1 << 15; // SYS_CLK_CTR FIXME HAL
 	}
 	while (pinit < pinit_end) {
@@ -447,22 +453,8 @@ static int st7789v2_display_init(void)
 		ms = *pinit++;
 		if (ms) msleep(ms);
 	}
-
-	st7789v2_write_command(CASET);
-	st7789v2_write_data(0x00);
-	st7789v2_write_data(0x00);
-	st7789v2_write_data((COLUMN_COUNT - 1) >> 8);
-	st7789v2_write_data((COLUMN_COUNT - 1) & 255);
-
-	st7789v2_write_command(RASET);
-	st7789v2_write_data(0x00);
-	st7789v2_write_data(0x00);
-	st7789v2_write_data((ROW_COUNT - 1) >> 8);
-	st7789v2_write_data((ROW_COUNT - 1) & 255);
-
 	st7789v2_write_command(DISPON);
-
-	st7789v2_write_command(RAMWR);
+	st7789v2_restart_frame();
 
     //TestImage
     for(int y = 0; y < ROW_COUNT; y++)
