@@ -8,6 +8,11 @@ cflags-y += $(INC)
 
 include $(PROJECTOR_DIR)/sf2000_app/sf2000.rtos.mk
 
+CSRCS += $(shell find -L $(PROJECTOR_DIR)/salamander -name "*.c")
+INCLUDE := -I$(PROJECTOR_DIR)/salamander/include -I$(PROJECTOR_DIR)/salamander
+CFLAGS += $(INCLUDE)
+CFLAGS += -DIS_SALAMANDER -DRARCH_CONSOLE -DHAVE_RARCH_EXEC -DGEKKO -DHAVE_MAIN
+
 COBJS = $(CSRCS:.c=.o)
 
 OBJS = $(patsubst $(PROJECTOR_DIR)/%,%,$(COBJS))

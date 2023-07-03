@@ -33,9 +33,17 @@ COBJS = $(CSRCS:.c=$(OBJEXT))
 SF2000_OBJS = $(SF2000_SRC:.c=$(OBJEXT))
 SF2000_OBJS += $(SF2000_CPP_SRC:.cpp=$(OBJEXT))
 
+INCLUDE := -I$(LVGL_DIR)/salamander/include -I$(LVGL_DIR)/salamander
+CFLAGS += $(INCLUDE)
+CFLAGS += -DIS_SALAMANDER -DRARCH_CONSOLE -DHAVE_RARCH_EXEC -DGEKKO -DHAVE_MAIN
+
+
+SALAMANDER_SRC += $(shell find -L $(LVGL_DIR)/salamander -name "*.c")
+SALAMANDER_OBJS = $(SALAMANDER_SRC:.c=$(OBJEXT))
+
 ## MAINOBJ -> OBJFILES
 
-all_depends := $(patsubst %.c,%.d,$(CSRCS) $(SF2000_SRC))
+all_depends := $(patsubst %.c,%.d,$(CSRCS) $(SF2000_SRC), $(SALAMANDER_SRC))
 all_depends +=$(patsubst %.cpp,%.d,$(SF2000_CPP_SRC))
 all_depends += $(patsubst %.S,%.d,$(ASRCS))
 
@@ -59,11 +67,11 @@ all: sf2000_app
 
 -include $(all_depends)
 
-sf2000_app:	$(COBJS) $(SF2000_OBJS)
-	@$(CC) -o $(DEMO_NAME) $(SF2000_OBJS) $(COBJS) $(LDFLAGS) $(DEMO_LIBS)
+sf2000_app:	$(COBJS) $(SF2000_OBJS) $(SALAMANDER_OBJS)
+	@$(CC) -o $(DEMO_NAME) $(SF2000_OBJS) $(SALAMANDER_OBJS) $(COBJS) $(LDFLAGS) $(DEMO_LIBS)
 	
 clean: 
-	rm -f $(AOBJS) $(COBJS) $(SF2000_OBJS)
+	rm -f $(AOBJS) $(COBJS) $(SF2000_OBJS) $(SALAMANDER_OBJS)
 	@find ./ -type f -name "*.o" |xargs rm -rf
 	rm -rf $(DEMO_NAME)
 
