@@ -10,6 +10,7 @@ include $(PROJECTOR_DIR)/sf2000_app/sf2000.rtos.mk
 include $(PROJECTOR_DIR)/RetroArch/Makefile.sf2000
 
 COBJS = $(CSRCS:.c=.o)
+INC += $(INCLUDE)
 
 OBJS = $(patsubst $(PROJECTOR_DIR)/%,%,$(COBJS))
 
