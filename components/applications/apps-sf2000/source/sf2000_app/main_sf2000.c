@@ -14,8 +14,6 @@
 #include "hcuapi/pinpad.h"
 #include <ffplayer.h>
 
-extern int salamander_main(int argc, char *argv[]);
-
 
 static void exit_console(int signo)
 {
@@ -171,8 +169,6 @@ void * main_sf2000(void *arg)
     printf("%s %d\n", __FUNCTION__,__LINE__);
     //playVideo();
     printf("After Logo!\n");
-
-    salamander_main(0,NULL);
 
     //api_lvgl_init(OSD_MAX_WIDTH, OSD_MAX_HEIGHT);
 
