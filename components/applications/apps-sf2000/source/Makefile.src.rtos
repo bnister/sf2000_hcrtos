@@ -11,6 +11,7 @@ include $(PROJECTOR_DIR)/RetroArch/Makefile.sf2000
 
 COBJS = $(CSRCS:.c=.o)
 INC += $(INCLUDE)
+cflags-y += $(CFLAGS)
 
 OBJS = $(patsubst $(PROJECTOR_DIR)/%,%,$(COBJS))
 
