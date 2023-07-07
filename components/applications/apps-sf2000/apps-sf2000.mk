@@ -1,6 +1,7 @@
 APPS_SF2000_SUPPORT_SEPARATE_OUTPUT = YES
 APPS_SF2000_DEPENDENCIES += $(apps_deps-y)
 APPS_SF2000_ALWAYS_BUILD = yes
+#APPS_SF2000_MAKE_FLAGS = -n
 
 APPS_SF2000_DTS_NAME = $(basename $(filter %.dts,$(notdir $(call qstrip,$(CONFIG_CUSTOM_DTS_PATH)))))
 
