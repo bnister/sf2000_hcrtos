@@ -14,6 +14,7 @@
 #include "hcuapi/pinpad.h"
 #include <ffplayer.h>
 
+extern rarch_main(int argc, char *argv[], void *data);
 
 static void exit_console(int signo)
 {
@@ -169,6 +170,9 @@ void * main_sf2000(void *arg)
     printf("%s %d\n", __FUNCTION__,__LINE__);
     //playVideo();
     printf("After Logo!\n");
+
+    printf("Init Retroarch!\n");
+    rarch_main(0, NULL, NULL);
 
     //api_lvgl_init(OSD_MAX_WIDTH, OSD_MAX_HEIGHT);
 
