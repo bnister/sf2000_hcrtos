@@ -1,7 +1,7 @@
 APPS_SF2000_SUPPORT_SEPARATE_OUTPUT = YES
 APPS_SF2000_DEPENDENCIES += $(apps_deps-y)
 APPS_SF2000_ALWAYS_BUILD = yes
-#APPS_SF2000_MAKE_FLAGS = -n
+#APPS_SF2000_MAKE_FLAGS = V=1
 
 APPS_SF2000_DTS_NAME = $(basename $(filter %.dts,$(notdir $(call qstrip,$(CONFIG_CUSTOM_DTS_PATH)))))
 
@@ -14,7 +14,7 @@ APPS_SF2000_BUILD_CMDS = rsync -au --chmod=u=rwX,go=rX  --exclude .svn --exclude
 			 mkdir -p $(@D)/src;\
 			 ln -sf $(@D)/Makefile.src.rtos $(@D)/src/Makefile;\
 			 ln -sf $(@D)/sf2000_app $(@D)/src/;\
-			 ln -sf $(@D)/RetroArch $(@D)/src/;\
+			 ln -sf $(@D)/RetroArch $(@D)/src/;\git stat
 		     $(TARGET_MAKE_ENV) $(APPS_SF2000_MAKE_ENV) $(MAKE) $(APPS_SF2000_MAKE_FLAGS) -C $(@D) all
 
 APPS_SF2000_INSTALL_STAGING_CMDS = $(TARGET_MAKE_ENV) $(APPS_SF2000_MAKE_ENV) $(MAKE) $(APPS_SF2000_MAKE_FLAGS) -C $(@D) install
