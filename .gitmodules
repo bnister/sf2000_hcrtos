@@ -1,3 +1,6 @@
 [submodule "components/applications/apps-sf2000/source/RetroArch"]
 	path = components/applications/apps-sf2000/source/RetroArch
 	url = https://git.maschath.de/ignatz/RetroArch.git
+[submodule "components/applications/apps-sf2000/source/cores/tgbdual-libretro"]
+	path = components/applications/apps-sf2000/source/cores/tgbdual-libretro
+	url = https://git.maschath.de/ignatz/tgbdual-libretro.git

@@ -8,6 +8,7 @@ cflags-y += $(INC)
 
 include $(PROJECTOR_DIR)/sf2000_app/sf2000.rtos.mk
 include $(PROJECTOR_DIR)/RetroArch/Makefile.sf2000
+include $(PROJECTOR_DIR)/cores/Makefile
 
 COBJS = $(CSRCS:.c=.o)
 INC += $(INCLUDE)
@@ -16,7 +17,7 @@ cflags-y += -Wno-error
 
 OBJS = $(patsubst $(PROJECTOR_DIR)/%,%,$(COBJS))
 
-sf2000-y = $(OBJS)
+sf2000-y := $(OBJS) $(CORE_OBJS)
 obj-y += sf2000.o
 debug_p: FORCE
 	echo $(OBJS)
