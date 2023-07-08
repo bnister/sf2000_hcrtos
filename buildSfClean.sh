@@ -1,4 +1,4 @@
 make clean
 rm -r bl
-rm -r output
+rm -r output/*
 ./buildSf.sh
