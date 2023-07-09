@@ -41,6 +41,8 @@ obj-y += main.o
 #for some reason this works, instead of include src/Makefile, which would be required to have the correct includes for the retroarch headers.
 obj-y += src/
 
+ldlibs-y += -lstdc++
+
 $(target-y).bin: $(target-y).out
 	$(OBJCOPY) -O binary $< $@
 
