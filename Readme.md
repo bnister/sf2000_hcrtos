@@ -41,8 +41,6 @@ We also don't need any funding at the moment. We have the tools we need to work,
 
 <b>Ignatz:</b> <br>
 https://www.paypal.com/paypalme/ignatzDraconis
-<br><b>Osaka:</b> <br>
-(Coming Soon)
 <br><b>xTxNinjaZx AKA Kev:</b><br>
 https://www.paypal.com/paypalme/kkestner91
 
