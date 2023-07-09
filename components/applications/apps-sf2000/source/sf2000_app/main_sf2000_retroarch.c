@@ -3,45 +3,15 @@
 #include <errno.h>
 #include <pthread.h>
 #include <dirent.h>
-
-#include <hcuapi/audsink.h>
 #include <time.h>
-#include "hcuapi/gpio.h"
-#include "hcuapi/pinpad.h"
+#include <stdio.h>
+#include <unistd.h>
+#include <kernel/delay.h>
 
-// TODO: proper include
-extern rarch_main(int argc, char *argv[], void *data);
+// TODO: include the proper headers that declares these functions
+extern int rarch_main(int argc, char *argv[], void *data);
 extern void verbosity_enable(void);
 
-
-static void exit_console(int signo)
-{
-    printf("%s(), signo: %d, error: %s\n", __FUNCTION__, signo, strerror(errno));
-
-    api_watchdog_stop();
-
-    exit(0);
-}
-
-static void *watchdog_task(void *arg)
-{
-    while (1)
-    {
-        usleep(3 * 1000 * 1000);
-        api_watchdog_feed();
-    }
-}
-
-static void start_watchdog_task()
-{
-    pthread_t pid;
-
-#ifdef WATCHDOG_KERNEL_FEED
-    return ;
-#endif
-
-    pthread_create(&pid, NULL, watchdog_task, NULL);
-}
 
 void * main_sf2000(void *arg)
 {
