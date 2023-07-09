@@ -6,9 +6,8 @@ INC = -I$(PROJECTOR_DIR)/sf2000_app \
 cflags-y += -Wno-strict-prototypes -Wno-sign-compare -Wno-discarded-qualifiers -Wno-error=format=
 cflags-y += $(INC)
 
-include $(PROJECTOR_DIR)/sf2000_app/sf2000.rtos.mk
 include $(PROJECTOR_DIR)/RetroArch/Makefile.sf2000
-include $(PROJECTOR_DIR)/cores/Makefile
+#include $(PROJECTOR_DIR)/cores/Makefile
 
 COBJS = $(CSRCS:.c=.o)
 INC += $(INCLUDE)
