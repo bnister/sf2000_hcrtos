@@ -13,11 +13,47 @@
 #include <kernel/lib/console.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
+#include <kernel/delay.h>
 
 #include <pthread.h>
 
 static void app_main(void *pvParameters);
-extern void* main_sf2000(void* arg);
+
+//TODO: Check if there is a correct way to include retroarch headers. Current inclusion causes compile issues.
+int rarch_main(int argc, char *argv[], void *data);
+void verbosity_enable(void);
+
+//TODO: Check if all these different main and start functions are needed
+void * main_sf2000(void *arg)
+{
+    //TODO: Reove need for sleep, by adding a buffer to fileuart
+    msleep(2000); //Initial delay to allow fileuart to catch up. Tests has shown that 600 is at least needed, but might be more.
+
+    printf("Init Retroarch!\n");
+
+    /*
+    char *argv[] = {
+        "retroarch",
+        "--menu",
+        "-v"
+    };
+    int argc = sizeof(argv) / sizeof(argv[0]);
+
+    rarch_main(argc, argv, NULL);
+    */
+
+    // TODO: learn how to properly pass startup params to retroarch
+    // or maybe better to pass via retroarch.cfg file instead
+    // for now just force logging verbosity and dont pass anything
+    verbosity_enable();
+    rarch_main(0, NULL, NULL);
+
+    // TODO: Check if this is required.
+    while (1)
+    {
+        usleep(1000);//frank, the sleep time will result in the OSD UI flush
+    }
+}
 
 int main(void)
 {

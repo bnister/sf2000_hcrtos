@@ -52,7 +52,7 @@ BR2_TARGET_CROSS="/opt/mips32-mti-elf/2019.09-03-2/bin/mips-mti-elf-"
 BR2_JLEVEL=0
 BR2_TARGET_CFLAGS="-g -EL -mips2 -Os -msoft-float -fsigned-char -W -ffunction-sections -Wformat=2 -D_FORTIFY_SOURCE=0 -fdata-sections -G0"
 BR2_TARGET_CXXFLAGS="-g -EL -mips2 -Os -msoft-float -fsigned-char -W -ffunction-sections -Wformat=2 -D_FORTIFY_SOURCE=0 -fdata-sections -G0"
-BR2_TARGET_LDFLAGS="-g -EL -Os --static"
+BR2_TARGET_LDFLAGS="-g -EL -Os --static -lstdc++"
 
 #
 # System configuration
@@ -76,7 +76,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS=""
 #
 CONFIG_PREBUILT_SUBDIR=""
 BR2_PACKAGE_PREBUILTS=y
-BR2_PACKAGE_PREBUILTS_FFPLAYER=y
+# BR2_PACKAGE_PREBUILTS_FFPLAYER is not set
 BR2_PACKAGE_PREBUILTS_AUDDRIVER=y
 BR2_PACKAGE_PREBUILTS_VIDDRIVER=y
 BR2_PACKAGE_PREBUILTS_PLUGINS=y
@@ -93,13 +93,13 @@ BR2_PACKAGE_PREBUILTS_WMAPRODEC=y
 BR2_PACKAGE_PREBUILTS_OPUSDEC=y
 BR2_PACKAGE_PREBUILTS_RADEC=y
 # BR2_PACKAGE_PREBUILTS_APEDEC is not set
-BR2_PACKAGE_PREBUILTS_AMRDEC=y
+# BR2_PACKAGE_PREBUILTS_AMRDEC is not set
 # BR2_PACKAGE_PREBUILTS_PCMDVDDEC is not set
 # BR2_PACKAGE_PREBUILTS_ALACDEC is not set
 BR2_PACKAGE_PREBUILTS_MPEG2DEC=y
 BR2_PACKAGE_PREBUILTS_IMAGEDEC=y
 BR2_PACKAGE_PREBUILTS_H264DEC=y
-BR2_PACKAGE_PREBUILTS_RVDEC=y
+# BR2_PACKAGE_PREBUILTS_RVDEC is not set
 BR2_PACKAGE_PREBUILTS_VC1DEC=y
 BR2_PACKAGE_PREBUILTS_VP8DEC=y
 BR2_PACKAGE_PREBUILTS_MPEG4DEC=y
@@ -424,35 +424,12 @@ CONFIG_DEFAULT_DEVICE_TREE="sf2000_min.dtb"
 # BR2_PACKAGE_CMDS is not set
 BR2_PACKAGE_PTHREAD=y
 BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS=y
-BR2_PACKAGE_FFMPEG=y
-# BR2_PACKAGE_FFMPEG_GPL is not set
-# BR2_PACKAGE_FFMPEG_NONFREE is not set
-BR2_PACKAGE_FFMPEG_FFMPEG=y
-
-#
-# ffplay needs a toolchain w/ dynamic library
-#
-# BR2_PACKAGE_FFMPEG_FFPROBE is not set
-# BR2_PACKAGE_FFMPEG_AVRESAMPLE is not set
-BR2_PACKAGE_FFMPEG_SWSCALE=y
-BR2_PACKAGE_FFMPEG_ENCODERS=""
-BR2_PACKAGE_FFMPEG_DECODERS="bmp mp3"
-BR2_PACKAGE_FFMPEG_MUXERS=""
-BR2_PACKAGE_FFMPEG_DEMUXERS="mp3 aac ac3 avi asf amr ape amrnb amrwb dts dvbsub dvbtxt eac3 flac flv h261 h263 h264 hevc hls mjpeg m4v mov mpegps mpegts mpegtsraw mjpeg_2000 mpegvideo mpjpeg matroska ogg pcm_alaw pcm_f32be pcm_f32le pcm_f64be pcm_f64le pcm_mulaw pcm_s16be pcm_s16le pcm_s24be pcm_s24le pcm_s32be pcm_s32le pcm_s8 pcm_u16be pcm_u16le pcm_u24be pcm_u24le pcm_u32be pcm_u32le pcm_u8 rm rtp rtsp spdif wav"
-BR2_PACKAGE_FFMPEG_PARSERS="aac aac_latm ac3 flac gif h261 h263 h264 hevc jpeg2000 mjpeg mpeg4video mpegaudio mpegvideo opus vc1 vorbis"
-BR2_PACKAGE_FFMPEG_BSFS=""
-BR2_PACKAGE_FFMPEG_PROTOCOLS="file ftp data hls http httpproxy mmsh mmst rtmp rtmpt rtp tcp srtp udp"
-BR2_PACKAGE_FFMPEG_FILTERS=""
-# BR2_PACKAGE_FFMPEG_INDEVS is not set
-BR2_PACKAGE_FFMPEG_OUTDEVS=y
-BR2_PACKAGE_FFMPEG_EXTRACONF="--disable-decklink --disable-avfilter --disable-avdevice --disable-swresample --disable-fft --disable-doc --disable-hwaccels"
-# BR2_PACKAGE_FFMPEG_GDB_DBG is not set
+# BR2_PACKAGE_FFMPEG is not set
 # BR2_PACKAGE_HC_EXAMPLES is not set
-BR2_PACKAGE_OPENCORE_AMR=y
+# BR2_PACKAGE_OPENCORE_AMR is not set
 # BR2_PACKAGE_LIBUSB is not set
 # BR2_PACKAGE_HCFOTA is not set
-BR2_PACKAGE_LIBLVGL=y
-BR2_PACKAGE_LIBLVGL_CONFIG="$(TOPDIR)/components/liblvgl/liblvgl.config"
+# BR2_PACKAGE_LIBLVGL is not set
 # BR2_PACKAGE_BLUETOOTH is not set
 # BR2_PACKAGE_QUICKLZ is not set
 # BR2_PACKAGE_LIBLZO is not set
