@@ -22,6 +22,7 @@ static void app_main(void *pvParameters);
 //TODO: Check if there is a correct way to include retroarch headers. Current inclusion causes compile issues.
 int rarch_main(int argc, char *argv[], void *data);
 void verbosity_enable(void);
+void verbosity_set_log_level(unsigned level);
 
 //TODO: Check if all these different main and start functions are needed
 void * main_sf2000(void *arg)
@@ -45,7 +46,10 @@ void * main_sf2000(void *arg)
     // TODO: learn how to properly pass startup params to retroarch
     // or maybe better to pass via retroarch.cfg file instead
     // for now just force logging verbosity and dont pass anything
+
     verbosity_enable();
+	verbosity_set_log_level(0);	// 0-DGB, 1-INFO, 2-WARN, 3-ERR
+
     rarch_main(0, NULL, NULL);
 
     // TODO: Check if this is required.
