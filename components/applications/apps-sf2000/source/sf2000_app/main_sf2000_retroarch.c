@@ -8,9 +8,12 @@
 #include <unistd.h>
 #include <kernel/delay.h>
 
+//#include <retro_miscellaneous.h>
+
 // TODO: include the proper headers that declares these functions
 extern int rarch_main(int argc, char *argv[], void *data);
 extern void verbosity_enable(void);
+extern void verbosity_set_log_level(unsigned level);
 
 
 void * main_sf2000(void *arg)
@@ -36,7 +39,10 @@ void * main_sf2000(void *arg)
 	// TODO: learn how to properly pass startup params to retroarch
 	// or maybe better to pass via retroarch.cfg file instead
 	// for now just force logging verbosity and dont pass anything
+
 	verbosity_enable();
+	verbosity_set_log_level(0);	// 0-DGB, 1-INFO, 2-WARN, 3-ERR
+
     rarch_main(0, NULL, NULL);
 
 
