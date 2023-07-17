@@ -17,6 +17,30 @@
 
 #include <pthread.h>
 
+#include <hcuapi/gpio.h>
+#include <hcuapi/pinpad.h>
+
+
+// TODO: what kind magic goes here?
+// without that the audio output is silent. can it be done in dts instead?
+// the i2so driver in "i2so_platform_init" function reads "pinmux-data" and
+// "pinmux-mute" settings from the dts. might be related?
+void setUpPins(void)
+{
+    gpio_configure(PINPAD_R07, GPIO_DIR_OUTPUT); //Speaker Disable
+    gpio_set_output(PINPAD_R07, false); // high = disable, low = enable;
+
+    gpio_configure(PINPAD_R05, GPIO_DIR_OUTPUT); //AV / LCD switch
+    gpio_set_output(PINPAD_R05, false); // high = LCD, low = AV;
+
+    gpio_configure(PINPAD_L00, GPIO_DIR_OUTPUT); //Charging LED
+    gpio_set_output(PINPAD_L00, false); // high = off, low = on;
+
+    gpio_configure(PINPAD_T07, GPIO_DIR_OUTPUT); //Speaker fix?
+    gpio_set_output(PINPAD_T07, true); // high = off, low = on;
+}
+
+
 static void app_main(void *pvParameters);
 
 //TODO: Check if there is a correct way to include retroarch headers. Current inclusion causes compile issues.
@@ -25,10 +49,12 @@ void verbosity_enable(void);
 void verbosity_set_log_level(unsigned level);
 
 //TODO: Check if all these different main and start functions are needed
-void * main_sf2000(void *arg)
+void *main_sf2000(void *arg)
 {
-    //TODO: Reove need for sleep, by adding a buffer to fileuart
+    //TODO: Remove need for sleep, by adding a buffer to fileuart
     msleep(2000); //Initial delay to allow fileuart to catch up. Tests has shown that 600 is at least needed, but might be more.
+
+	setUpPins();
 
     printf("Init Retroarch!\n");
 
