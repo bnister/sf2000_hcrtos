@@ -33,6 +33,7 @@
 #define GPIO_FAST_WRITE
 #define INIT_SEQUENCE_INDEX INIT_SF2000 // TODO config file for a common binary
 
+#define SHOW_TESTIMAGE	2		// show test image at init for X seconds
 
 /*
 *	TIME: 2023 04 23
@@ -456,6 +457,7 @@ static int st7789v2_display_init(void)
 	st7789v2_write_command(DISPON);
 	st7789v2_restart_frame();
 
+#if SHOW_TESTIMAGE
     //TestImage
     for(int y = 0; y < ROW_COUNT; y++)
     {
@@ -471,7 +473,8 @@ static int st7789v2_display_init(void)
         }
     }
 
-    usleep(5 * 1000 * 1000); // 5 seconds delay;
+    usleep(SHOW_TESTIMAGE * 1000 * 1000);
+#endif
 
     printf("%s %d\n", __FUNCTION__,__LINE__);
 
