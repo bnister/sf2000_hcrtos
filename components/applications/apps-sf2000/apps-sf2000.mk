@@ -11,7 +11,6 @@ APPS_SF2000_BUILD_CMDS = rsync -au --chmod=u=rwX,go=rX  --exclude .svn --exclude
 		     mv $(@D)/Makefile $(@D)/Makefile.old; fi && \
 		     cp $(@D)/Makefile.rtos $(@D)/Makefile;\
 		     cp $(@D)/main.rtos.c $(@D)/main.c;\
-		     cp /opt/mips32-mti-elf/2019.09-03-2/mips-mti-elf/lib/mips2/el/sof/libstdc++.a $(STAGING_DIR)/usr/lib/;\
 			 mkdir -p $(@D)/src;\
 			 ln -sf $(@D)/Makefile.src.rtos $(@D)/src/Makefile;\
 			 ln -sf $(@D)/RetroArch $(@D)/src/;\

@@ -42,6 +42,7 @@ TARGET_CPPFLAGS        += -I$(STAGING_DIR)/usr/include_fix -I$(STAGING_DIR)/usr/
 TARGET_LDFLAGS         := $(call qstrip,$(BR2_TARGET_LDFLAGS))
 TARGET_LDFLAGS         += -L$(STAGING_DIR)/usr/lib -L$(PREBUILT_DIR)/usr/lib
 TARGET_LDFLAGS         += -L$(dir $(shell $(TARGET_CC) $(TARGET_CFLAGS) -print-file-name=libgcc.a))
+TARGET_LDFLAGS         += -L$(dir $(shell $(TARGET_CXX) $(TARGET_CFLAGS) -print-file-name=libstdc++.a))
 
 TARGET_FCFLAGS         :=
 PKG_CONFIG_HOST_BINARY := $(HOST_DIR)/usr/bin/pkg-config
